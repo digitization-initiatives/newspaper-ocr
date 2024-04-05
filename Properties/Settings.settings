@@ -11,5 +11,8 @@
     <Setting Name="ConcurrentOCRJobs" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="OCRLang" Type="System.String" Scope="User">
+      <Value Profile="(Default)">eng</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

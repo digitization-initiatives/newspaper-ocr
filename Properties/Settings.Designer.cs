@@ -58,5 +58,17 @@ namespace NewspaperOCR.Properties {
                 this["ConcurrentOCRJobs"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("eng")]
+        public string OCRLang {
+            get {
+                return ((string)(this["OCRLang"]));
+            }
+            set {
+                this["OCRLang"] = value;
+            }
+        }
     }
 }

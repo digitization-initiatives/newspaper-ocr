@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using NewspaperOCR.src;
+using System.Runtime.CompilerServices;
 
 namespace NewspaperOCR
 {
@@ -30,8 +31,8 @@ namespace NewspaperOCR
         /// </summary>
         private void InitializeComponent()
         {
-            browseButton = new Button();
-            browseButton_TextBox = new TextBox();
+            browse_Button = new Button();
+            browse_TextBox = new TextBox();
             exitButton = new Button();
             imageFilesListView = new ListView();
             filenameCol = new ColumnHeader();
@@ -39,32 +40,33 @@ namespace NewspaperOCR
             optionsButton = new Button();
             beginOCRButton = new Button();
             viewLogsButton = new Button();
-            browseButton_folderBrowserDialog = new FolderBrowserDialog();
+            browse_folderBrowserDialog = new FolderBrowserDialog();
             loadImagesButton = new Button();
             numberOfImagesLoadedLabel = new Label();
             numberOfImages = new Label();
+            startOverButton = new Button();
             SuspendLayout();
             // 
-            // browseButton
+            // browse_Button
             // 
-            browseButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            browseButton.Location = new Point(974, 7);
-            browseButton.Name = "browseButton";
-            browseButton.Size = new Size(120, 31);
-            browseButton.TabIndex = 0;
-            browseButton.Text = "... Browse ...";
-            browseButton.UseVisualStyleBackColor = true;
-            browseButton.Click += browseButton_Click;
+            browse_Button.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            browse_Button.Location = new Point(974, 7);
+            browse_Button.Name = "browse_Button";
+            browse_Button.Size = new Size(120, 31);
+            browse_Button.TabIndex = 0;
+            browse_Button.Text = "... Browse ...";
+            browse_Button.UseVisualStyleBackColor = true;
+            browse_Button.Click += browse_Button_Click;
             // 
-            // browseButton_TextBox
+            // browse_TextBox
             // 
-            browseButton_TextBox.AcceptsReturn = true;
-            browseButton_TextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            browseButton_TextBox.Location = new Point(12, 9);
-            browseButton_TextBox.Name = "browseButton_TextBox";
-            browseButton_TextBox.ReadOnly = true;
-            browseButton_TextBox.Size = new Size(956, 27);
-            browseButton_TextBox.TabIndex = 1;
+            browse_TextBox.AcceptsReturn = true;
+            browse_TextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            browse_TextBox.Location = new Point(12, 9);
+            browse_TextBox.Name = "browse_TextBox";
+            browse_TextBox.ReadOnly = true;
+            browse_TextBox.Size = new Size(956, 27);
+            browse_TextBox.TabIndex = 1;
             // 
             // exitButton
             // 
@@ -146,7 +148,7 @@ namespace NewspaperOCR
             // 
             numberOfImagesLoadedLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             numberOfImagesLoadedLabel.AutoSize = true;
-            numberOfImagesLoadedLabel.Location = new Point(604, 636);
+            numberOfImagesLoadedLabel.Location = new Point(218, 636);
             numberOfImagesLoadedLabel.Name = "numberOfImagesLoadedLabel";
             numberOfImagesLoadedLabel.Size = new Size(159, 20);
             numberOfImagesLoadedLabel.TabIndex = 8;
@@ -156,17 +158,29 @@ namespace NewspaperOCR
             // 
             numberOfImages.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             numberOfImages.AutoSize = true;
-            numberOfImages.Location = new Point(769, 636);
+            numberOfImages.Location = new Point(383, 636);
             numberOfImages.Name = "numberOfImages";
             numberOfImages.Size = new Size(15, 20);
             numberOfImages.TabIndex = 9;
             numberOfImages.Text = "-";
+            // 
+            // startOverButton
+            // 
+            startOverButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            startOverButton.Location = new Point(752, 632);
+            startOverButton.Name = "startOverButton";
+            startOverButton.Size = new Size(120, 29);
+            startOverButton.TabIndex = 10;
+            startOverButton.Text = "Start Over";
+            startOverButton.UseVisualStyleBackColor = true;
+            startOverButton.Click += startOverButton_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1262, 673);
+            Controls.Add(startOverButton);
             Controls.Add(numberOfImages);
             Controls.Add(numberOfImagesLoadedLabel);
             Controls.Add(loadImagesButton);
@@ -175,8 +189,8 @@ namespace NewspaperOCR
             Controls.Add(optionsButton);
             Controls.Add(imageFilesListView);
             Controls.Add(exitButton);
-            Controls.Add(browseButton_TextBox);
-            Controls.Add(browseButton);
+            Controls.Add(browse_TextBox);
+            Controls.Add(browse_Button);
             MinimumSize = new Size(1280, 720);
             Name = "MainForm";
             Text = "Newspaper OCR";
@@ -190,6 +204,7 @@ namespace NewspaperOCR
         private LogForm logForm;
         private OptionsForm optionsForm;
         public Button viewLogsButton;
+        private List<DirectoryStructure> directoryStructure;
 
         private void CustomInitializations()
         {
@@ -204,10 +219,14 @@ namespace NewspaperOCR
 
             optionsForm = new OptionsForm();
             optionsForm.mainForm = this;
+            optionsForm.logForm = logForm;
             optionsForm.StartPosition = FormStartPosition.Manual;
             optionsForm.Location = new Point(this.Location.X + 50, this.Location.Y + 50);
 
             //Other initializations:
+            directoryStructure = new List<DirectoryStructure>();
+
+            loadImagesButton.Enabled = false;
             filenameCol.Width = imageFilesListView.Width - 150;
             
             imageFilesListView.SizeChanged += imageFilesListView_SizeChanged;
@@ -216,17 +235,18 @@ namespace NewspaperOCR
         }
         #endregion
 
-        private Button browseButton;
-        private TextBox browseButton_TextBox;
+        private Button browse_Button;
+        private TextBox browse_TextBox;
         private Button exitButton;
         private ListView imageFilesListView;
         private ColumnHeader filenameCol;
         private Button optionsButton;
         private Button beginOCRButton;
         private ColumnHeader ocrStatusCol;
-        private FolderBrowserDialog browseButton_folderBrowserDialog;
+        private FolderBrowserDialog browse_folderBrowserDialog;
         private Button loadImagesButton;
         private Label numberOfImagesLoadedLabel;
         private Label numberOfImages;
+        private Button startOverButton;
     }
 }

@@ -20,6 +20,7 @@ namespace NewspaperOCR
 
         public void appendTextsToLog(string logText, string logType)
         {
+            LOG_TIMESTAMP = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             logsTextBox.AppendText(LOG_TIMESTAMP + logType + logText);
             logsTextBox.AppendText(Environment.NewLine);
             logsTextBox.ScrollToCaret();

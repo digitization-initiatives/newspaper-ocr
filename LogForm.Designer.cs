@@ -36,6 +36,7 @@
             // 
             // logsTextBox
             // 
+            logsTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             logsTextBox.BackColor = Color.FromArgb(64, 64, 64);
             logsTextBox.ForeColor = Color.FromArgb(0, 192, 0);
             logsTextBox.Location = new Point(12, 12);
@@ -47,6 +48,7 @@
             // 
             // saveLogsButton
             // 
+            saveLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             saveLogsButton.Location = new Point(98, 632);
             saveLogsButton.Name = "saveLogsButton";
             saveLogsButton.Size = new Size(120, 29);
@@ -57,6 +59,7 @@
             // 
             // hideLogsButton
             // 
+            hideLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             hideLogsButton.Location = new Point(350, 632);
             hideLogsButton.Name = "hideLogsButton";
             hideLogsButton.Size = new Size(120, 29);
@@ -67,6 +70,7 @@
             // 
             // clearLogsButton
             // 
+            clearLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             clearLogsButton.Location = new Point(224, 632);
             clearLogsButton.Name = "clearLogsButton";
             clearLogsButton.Size = new Size(120, 29);
