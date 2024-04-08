@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.6.0" />
     <PackageReference Include="TesseractOCR" Version="5.3.5" />
   </ItemGroup>
 

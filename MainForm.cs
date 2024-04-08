@@ -1,3 +1,4 @@
+using ImageMagick;
 using NewspaperOCR.src;
 using System.Windows.Forms;
 using TesseractOCR;
@@ -19,16 +20,28 @@ namespace NewspaperOCR
         private void imageFilesListView_SizeChanged(object sender, EventArgs e)
         {
             filenameCol.Width = imageFilesListView.Width - 150;
-
         }
 
         public void setDefaultOptions()
         {
             Properties.Settings.Default.TessdataLocation = Path.GetFullPath(".") + "\\tessdata";
-            Properties.Settings.Default.OCROutputLocation = Path.GetFullPath(".") + "\\output";
+
+            if (optionsForm.getOcrOutputLocation() != String.Empty)
+            {
+                Properties.Settings.Default.OCROutputLocation = optionsForm.getOcrOutputLocation();
+            }
+            else
+            {
+                Properties.Settings.Default.OCROutputLocation = Path.GetFullPath(".") + "\\output";
+            }
             Properties.Settings.Default.ConcurrentOCRJobs = 1;
             Properties.Settings.Default.OCRLang = "eng";
             Properties.Settings.Default.Save();
+
+            logForm.appendTextsToLog("\"Tessdata Location\": " + Properties.Settings.Default.TessdataLocation, logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog("\"OCR Output Location\": " + Properties.Settings.Default.OCROutputLocation, logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog("\"Concurrent OCR Jobs\": " + Properties.Settings.Default.ConcurrentOCRJobs.ToString(), logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog("\"OCR Language\": " + Properties.Settings.Default.OCRLang, logForm.LOG_TYPE_INFO);
         }
         private void startOver()
         {
@@ -48,7 +61,7 @@ namespace NewspaperOCR
             {
                 //Construct issueDateFolder:
                 string issueDateFolder = imageFileListViewItem.SubItems[0].Text;
-                issueDateFolder = issueDateFolder.Replace(browse_TextBox.Text,"");
+                issueDateFolder = issueDateFolder.Replace(browse_TextBox.Text, "");
                 var segments = issueDateFolder.Split(Path.DirectorySeparatorChar);
                 if (segments.Length > 0)
                 {
@@ -63,7 +76,7 @@ namespace NewspaperOCR
             }
         }
 
-        private void ocr(string sourceImageFileFullpath, string sourceImageFileName, string outputPdfFileFullPath, string outputAltoFileFullPath)
+        private void ocr(string sourceImageFileFullpath, string sourceImageFileName, string outputPdfFileFullPath, string outputAltoFileFullPath, string outputJp2FileFullPath)
         {
             string tessdataLoc = Properties.Settings.Default.TessdataLocation;
 
@@ -73,7 +86,7 @@ namespace NewspaperOCR
                 {
                     using (var page = engine.Process(img))
                     {
-                        using (var pdfRenderer = new PdfResult(outputPdfFileFullPath, tessdataLoc, false))
+                        using (var pdfRenderer = new PdfResult(outputPdfFileFullPath, tessdataLoc, true))
                         {
                             pdfRenderer.BeginDocument(sourceImageFileName);
                             pdfRenderer.AddPage(page);
@@ -87,7 +100,26 @@ namespace NewspaperOCR
                     }
                 }
             }
+
+            using (var sourceImage = new MagickImage(sourceImageFileFullpath))
+            {
+                sourceImage.Format = MagickFormat.Jp2;
+                sourceImage.Settings.Compression = CompressionMethod.JPEG2000;
+                
+                //sourceImage.ColorSpace = ColorSpace.Gray;
+                //sourceImage.Settings.SetDefine(MagickFormat.Jp2, "number-resolutions", 5);
+                //sourceImage.Settings.SetDefine(MagickFormat.Jp2, "Quality", "20,40,60,80");
+                //sourceImage.Settings.SetDefine(MagickFormat.Jp2, "rate", "20,10,5,2,1");
+                sourceImage.Settings.SetDefine(MagickFormat.Jp2, "progression-order", "RLCP");
+
+                sourceImage.CropToTiles(1024, 1024);
+
+                sourceImage.Quality = 40;
+
+                sourceImage.Write(outputJp2FileFullPath);
+            }
         }
+
 
         #endregion
 
@@ -150,7 +182,7 @@ namespace NewspaperOCR
 
             foreach (DirectoryStructure item in directoryStructure)
             {
-                Task ocrTask = Task.Run(() => ocr(item.SourceImageFileFullPath, item.SourceImageFileNameWithoutExtension, item.OutputPdfFileFullPath, item.OutputAltoFileFullPath));
+                Task ocrTask = Task.Run(() => ocr(item.SourceImageFileFullPath, item.SourceImageFileNameWithoutExtension, item.OutputPdfFileFullPath, item.OutputAltoFileFullPath, item.OutputJp2ImageFileFullPath));
 
                 while (!ocrTask.IsCompleted)
                 {
@@ -190,5 +222,6 @@ namespace NewspaperOCR
         {
             startOver();
         }
+
     }
 }

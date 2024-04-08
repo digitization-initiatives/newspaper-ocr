@@ -19,6 +19,10 @@ namespace NewspaperOCR
         }
 
         #region Custom Functions
+        public string getOcrOutputLocation()
+        {
+            return ocrOutputLocationTextBox.Text;
+        }
 
         #endregion
 

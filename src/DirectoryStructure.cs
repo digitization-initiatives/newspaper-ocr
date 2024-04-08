@@ -16,6 +16,10 @@ namespace NewspaperOCR.src
         public string OutputDirectory { get; set; }
         public string OutputJp2ImageFileName { get; set; }
         public string OutputJp2ImageFileFullPath { get; set; }
+        public string OutputJpgFileName { get; set; }
+        public string OutputJpgImageFileFullPath { get; set; }
+        public string OutputTextOnlyPdfFileName { get; set; }
+        public string OutputTextOnlyPdfFileFullPath { get; set; }
         public string OutputPdfFileName { get; set; }
         public string OutputPdfFileFullPath { get; set; }
         public string OutputAltoFileName { get; set; }
@@ -33,6 +37,10 @@ namespace NewspaperOCR.src
             OutputDirectory = outputDirectory;
             OutputJp2ImageFileName = SourceImageFileNameWithoutExtension + ".jp2";
             OutputJp2ImageFileFullPath = Path.Combine(outputDirectory, batchNameFolder, issueDateFolder, OutputJp2ImageFileName);
+            OutputJpgFileName = SourceImageFileNameWithoutExtension + ".jpg";
+            OutputJpgImageFileFullPath = Path.Combine(outputDirectory, batchNameFolder, issueDateFolder, OutputJpgFileName);
+            OutputTextOnlyPdfFileName = SourceImageFileNameWithoutExtension;
+            OutputPdfFileFullPath = Path.Combine(outputDirectory, batchNameFolder, issueDateFolder, OutputTextOnlyPdfFileName);
             OutputPdfFileName = SourceImageFileNameWithoutExtension;
             OutputPdfFileFullPath = Path.Combine(outputDirectory, batchNameFolder, issueDateFolder, OutputPdfFileName);
             OutputAltoFileName = SourceImageFileNameWithoutExtension;
