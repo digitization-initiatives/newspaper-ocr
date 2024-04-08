@@ -86,7 +86,7 @@ namespace NewspaperOCR
                 {
                     using (var page = engine.Process(img))
                     {
-                        using (var pdfRenderer = new PdfResult(outputPdfFileFullPath, tessdataLoc, true))
+                        using (var pdfRenderer = new PdfResult(outputPdfFileFullPath, tessdataLoc, false))
                         {
                             pdfRenderer.BeginDocument(sourceImageFileName);
                             pdfRenderer.AddPage(page);

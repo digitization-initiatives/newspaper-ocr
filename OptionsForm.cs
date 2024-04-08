@@ -80,6 +80,8 @@ namespace NewspaperOCR
             logForm.appendTextsToLog("\"OCR Output Location\" has been changed to: " + Properties.Settings.Default.OCROutputLocation, logForm.LOG_TYPE_INFO);
             logForm.appendTextsToLog("\"Concurrent OCR Jobs\" has been changed to: " + Properties.Settings.Default.ConcurrentOCRJobs.ToString(), logForm.LOG_TYPE_INFO);
             logForm.appendTextsToLog("\"OCR Language\" has been changed to: " + Properties.Settings.Default.OCRLang, logForm.LOG_TYPE_INFO);
+
+            this.Hide();
         }
 
     }
