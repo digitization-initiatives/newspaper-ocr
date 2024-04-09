@@ -14,5 +14,8 @@
     <Setting Name="OCRLang" Type="System.String" Scope="User">
       <Value Profile="(Default)">eng</Value>
     </Setting>
+    <Setting Name="TileSize" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

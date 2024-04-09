@@ -43,6 +43,8 @@
             saveChangesButton = new Button();
             ocrLangComboBox = new ComboBox();
             ocrLangLabel = new Label();
+            tileSizeComboBox = new ComboBox();
+            tileSizeLabel = new Label();
             SuspendLayout();
             // 
             // tessdataLocationLabel
@@ -102,7 +104,7 @@
             // concurrentOCRJobsLabel
             // 
             concurrentOCRJobsLabel.AutoSize = true;
-            concurrentOCRJobsLabel.Location = new Point(345, 158);
+            concurrentOCRJobsLabel.Location = new Point(222, 150);
             concurrentOCRJobsLabel.Name = "concurrentOCRJobsLabel";
             concurrentOCRJobsLabel.Size = new Size(150, 20);
             concurrentOCRJobsLabel.TabIndex = 6;
@@ -113,9 +115,9 @@
             concurrentOCRJobsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             concurrentOCRJobsComboBox.FormattingEnabled = true;
             concurrentOCRJobsComboBox.Items.AddRange(new object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
-            concurrentOCRJobsComboBox.Location = new Point(501, 150);
+            concurrentOCRJobsComboBox.Location = new Point(223, 173);
             concurrentOCRJobsComboBox.Name = "concurrentOCRJobsComboBox";
-            concurrentOCRJobsComboBox.Size = new Size(70, 28);
+            concurrentOCRJobsComboBox.Size = new Size(150, 28);
             concurrentOCRJobsComboBox.TabIndex = 7;
             // 
             // closeButton
@@ -153,7 +155,7 @@
             ocrLangComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             ocrLangComboBox.FormattingEnabled = true;
             ocrLangComboBox.Items.AddRange(new object[] { "eng - English", "spa - Spanish; Castilian", "fra - French", "jpn - Japanese" });
-            ocrLangComboBox.Location = new Point(133, 150);
+            ocrLangComboBox.Location = new Point(17, 173);
             ocrLangComboBox.Name = "ocrLangComboBox";
             ocrLangComboBox.Size = new Size(200, 28);
             ocrLangComboBox.TabIndex = 12;
@@ -161,17 +163,38 @@
             // ocrLangLabel
             // 
             ocrLangLabel.AutoSize = true;
-            ocrLangLabel.Location = new Point(17, 158);
+            ocrLangLabel.Location = new Point(17, 150);
             ocrLangLabel.Name = "ocrLangLabel";
             ocrLangLabel.Size = new Size(110, 20);
             ocrLangLabel.TabIndex = 11;
             ocrLangLabel.Text = "OCR Language:";
+            // 
+            // tileSizeComboBox
+            // 
+            tileSizeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            tileSizeComboBox.FormattingEnabled = true;
+            tileSizeComboBox.Items.AddRange(new object[] { "[256x256]", "[512x512]", "[1024x1024]" });
+            tileSizeComboBox.Location = new Point(379, 173);
+            tileSizeComboBox.Name = "tileSizeComboBox";
+            tileSizeComboBox.Size = new Size(150, 28);
+            tileSizeComboBox.TabIndex = 14;
+            // 
+            // tileSizeLabel
+            // 
+            tileSizeLabel.AutoSize = true;
+            tileSizeLabel.Location = new Point(377, 150);
+            tileSizeLabel.Name = "tileSizeLabel";
+            tileSizeLabel.Size = new Size(150, 20);
+            tileSizeLabel.TabIndex = 13;
+            tileSizeLabel.Text = "Concurrent OCR Jobs:";
             // 
             // OptionsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(782, 673);
+            Controls.Add(tileSizeComboBox);
+            Controls.Add(tileSizeLabel);
             Controls.Add(ocrLangComboBox);
             Controls.Add(ocrLangLabel);
             Controls.Add(saveChangesButton);
@@ -203,6 +226,7 @@
             ocrOutputLocationTextBox.Text = Properties.Settings.Default.OCROutputLocation;
             concurrentOCRJobsComboBox.SelectedIndex = 0;
             ocrLangComboBox.SelectedIndex = 0;
+            tileSizeComboBox.SelectedIndex = 2;
         }
 
         #endregion
@@ -222,5 +246,7 @@
         private Button saveChangesButton;
         private ComboBox ocrLangComboBox;
         private Label ocrLangLabel;
+        private ComboBox tileSizeComboBox;
+        private Label tileSizeLabel;
     }
 }

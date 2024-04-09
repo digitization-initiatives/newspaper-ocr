@@ -70,5 +70,17 @@ namespace NewspaperOCR.Properties {
                 this["OCRLang"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TileSize {
+            get {
+                return ((string)(this["TileSize"]));
+            }
+            set {
+                this["TileSize"] = value;
+            }
+        }
     }
 }

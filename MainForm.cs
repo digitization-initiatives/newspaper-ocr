@@ -1,4 +1,5 @@
 using ImageMagick;
+using ImageMagick.Formats;
 using NewspaperOCR.src;
 using System.Windows.Forms;
 using TesseractOCR;
@@ -37,12 +38,14 @@ namespace NewspaperOCR
             }
             Properties.Settings.Default.ConcurrentOCRJobs = 1;
             Properties.Settings.Default.OCRLang = "eng";
+            Properties.Settings.Default.TileSize = "[1024x1024]";
             Properties.Settings.Default.Save();
 
             logForm.appendTextsToLog("\"Tessdata Location\": " + Properties.Settings.Default.TessdataLocation, logForm.LOG_TYPE_INFO);
             logForm.appendTextsToLog("\"OCR Output Location\": " + Properties.Settings.Default.OCROutputLocation, logForm.LOG_TYPE_INFO);
             logForm.appendTextsToLog("\"Concurrent OCR Jobs\": " + Properties.Settings.Default.ConcurrentOCRJobs.ToString(), logForm.LOG_TYPE_INFO);
             logForm.appendTextsToLog("\"OCR Language\": " + Properties.Settings.Default.OCRLang, logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog("\"Tile Size\": " + Properties.Settings.Default.TileSize, logForm.LOG_TYPE_INFO);
         }
         private void startOver()
         {
@@ -86,43 +89,47 @@ namespace NewspaperOCR
         {
             string tessdataLoc = Properties.Settings.Default.TessdataLocation;
 
-            using (var engine = new TesseractOCR.Engine(tessdataLoc, Language.English, EngineMode.LstmOnly))
-            {
-                using (var img = TesseractOCR.Pix.Image.LoadFromFile(sourceImageFileFullpath))
-                {
-                    using (var page = engine.Process(img))
-                    {
-                        using (var pdfRenderer = new PdfResult(outputPdfFileFullPath, tessdataLoc, false))
-                        {
-                            pdfRenderer.BeginDocument(sourceImageFileName);
-                            pdfRenderer.AddPage(page);
-                        }
+            //using (var engine = new TesseractOCR.Engine(tessdataLoc, Language.English, EngineMode.LstmOnly))
+            //{
+            //    using (var img = TesseractOCR.Pix.Image.LoadFromFile(sourceImageFileFullpath))
+            //    {
+            //        using (var page = engine.Process(img))
+            //        {
+            //            using (var pdfRenderer = new PdfResult(outputPdfFileFullPath, tessdataLoc, false))
+            //            {
+            //                pdfRenderer.BeginDocument(sourceImageFileName);
+            //                pdfRenderer.AddPage(page);
+            //            }
 
-                        using (var altoRenderer = new AltoResult(outputAltoFileFullPath))
-                        {
-                            altoRenderer.BeginDocument(sourceImageFileName);
-                            altoRenderer.AddPage(page);
-                        }
-                    }
-                }
-            }
+            //            using (var altoRenderer = new AltoResult(outputAltoFileFullPath))
+            //            {
+            //                altoRenderer.BeginDocument(sourceImageFileName);
+            //                altoRenderer.AddPage(page);
+            //            }
+            //        }
+            //    }
+            //}
 
             using (var sourceImage = new MagickImage(sourceImageFileFullpath))
             {
                 sourceImage.Format = MagickFormat.Jp2;
                 sourceImage.Settings.Compression = CompressionMethod.JPEG2000;
-                
+
                 //sourceImage.ColorSpace = ColorSpace.Gray;
                 //sourceImage.Settings.SetDefine(MagickFormat.Jp2, "number-resolutions", 5);
                 //sourceImage.Settings.SetDefine(MagickFormat.Jp2, "Quality", "20,40,60,80");
                 //sourceImage.Settings.SetDefine(MagickFormat.Jp2, "rate", "20,10,5,2,1");
                 sourceImage.Settings.SetDefine(MagickFormat.Jp2, "progression-order", "RLCP");
-
-                sourceImage.CropToTiles(1024, 1024);
-
                 sourceImage.Quality = 40;
 
-                sourceImage.Write(outputJp2FileFullPath);
+                string tiledJp2FileFullPath = outputJp2FileFullPath + Properties.Settings.Default.TileSize;
+
+                sourceImage.Write(tiledJp2FileFullPath);
+
+                if (File.Exists(tiledJp2FileFullPath))
+                {
+                    File.Move(tiledJp2FileFullPath, outputJp2FileFullPath);
+                }
             }
         }
 
@@ -205,12 +212,13 @@ namespace NewspaperOCR
             foreach (DirectoryStructure item in directoryStructure)
             {
                 ListViewItem imageFileListViewItem = imageFilesListView.Items[item.Index];
+                imageFileListViewItem.EnsureVisible();
 
                 Task ocrTask = Task.Run(() => ocr(item.SourceImageFileFullPath, item.SourceImageFileNameWithoutExtension, item.OutputPdfFileFullPath, item.OutputAltoFileFullPath, item.OutputJp2ImageFileFullPath));
 
                 while (!ocrTask.IsCompleted)
                 {
-                    if (imageFileListViewItem.SubItems[1].Text.Length < 6)
+                    if (imageFileListViewItem.SubItems[1].Text.Length < 8)
                     {
                         imageFileListViewItem.SubItems[1].Text += "..";
                     }
