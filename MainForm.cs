@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using TesseractOCR;
 using TesseractOCR.Enums;
 using TesseractOCR.Renderers;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace NewspaperOCR
 {
@@ -50,7 +51,9 @@ namespace NewspaperOCR
 
             browse_folderBrowserDialog.SelectedPath = String.Empty;
             browse_TextBox.Text = String.Empty;
+
             loadImagesButton.Enabled = false;
+            beginOCRButton.Enabled = false;
         }
 
         public void constructOutputDirectoryStructure()
@@ -59,6 +62,9 @@ namespace NewspaperOCR
 
             foreach (ListViewItem imageFileListViewItem in imageFilesListView.Items)
             {
+                //Get the item index:
+                int index = imageFileListViewItem.Index;
+
                 //Construct issueDateFolder:
                 string issueDateFolder = imageFileListViewItem.SubItems[0].Text;
                 issueDateFolder = issueDateFolder.Replace(browse_TextBox.Text, "");
@@ -71,7 +77,7 @@ namespace NewspaperOCR
                 //Extract imageFileName:
                 string imageFileName = Path.GetFileName(imageFileListViewItem.SubItems[0].Text);
 
-                DirectoryStructure directoryStructureItem = new DirectoryStructure(batchNameFolder, issueDateFolder, imageFileName, imageFileListViewItem.SubItems[0].Text, Properties.Settings.Default.OCROutputLocation);
+                DirectoryStructure directoryStructureItem = new DirectoryStructure(index, batchNameFolder, issueDateFolder, imageFileName, imageFileListViewItem.SubItems[0].Text, Properties.Settings.Default.OCROutputLocation);
                 directoryStructure.Add(directoryStructureItem);
             }
         }
@@ -120,6 +126,17 @@ namespace NewspaperOCR
             }
         }
 
+        public void updateStatusBar(string status, string message)
+        {
+            statusBarItem_Status.Text = status;
+            statusBarItem_Message.Text = message;
+        }
+
+        public void clearStatusBar()
+        {
+            statusBarItem_Status.Text = "No Image Files Loaded";
+            statusBarItem_Message.Text = String.Empty;
+        }
 
         #endregion
 
@@ -133,10 +150,15 @@ namespace NewspaperOCR
 
                 foreach (string imageFile in imageFiles)
                 {
-                    imageFilesListView.Items.Add(imageFile);
+                    ListViewItem item = new ListViewItem(imageFile);
+                    item.SubItems.Add("...");
+
+                    imageFilesListView.Items.Add(item);
                 }
 
                 numberOfImages.Text = imageFiles.Count.ToString();
+
+                beginOCRButton.Enabled = true;
             }
         }
 
@@ -182,25 +204,41 @@ namespace NewspaperOCR
 
             foreach (DirectoryStructure item in directoryStructure)
             {
+                ListViewItem imageFileListViewItem = imageFilesListView.Items[item.Index];
+
                 Task ocrTask = Task.Run(() => ocr(item.SourceImageFileFullPath, item.SourceImageFileNameWithoutExtension, item.OutputPdfFileFullPath, item.OutputAltoFileFullPath, item.OutputJp2ImageFileFullPath));
 
                 while (!ocrTask.IsCompleted)
                 {
-                    logForm.appendTextsToLog(item.SourceImageFileFullPath + " is being OCR'd ... ", logForm.LOG_TYPE_INFO);
+                    if (imageFileListViewItem.SubItems[1].Text.Length < 6)
+                    {
+                        imageFileListViewItem.SubItems[1].Text += "..";
+                    }
+                    else
+                    {
+                        imageFileListViewItem.SubItems[1].Text = "...";
+                    }
+
+                    logForm.appendTextsToLog(item.SourceImageFileFullPath + " is being OCR'd " + imageFileListViewItem.SubItems[1].Text, logForm.LOG_TYPE_INFO);
+                    updateStatusBar("File being processed: ", item.SourceImageFileFullPath);
+                    imageFileListViewItem.SubItems[1].Text = imageFileListViewItem.SubItems[1].Text;
                     await Task.Delay(2000);
                 }
 
                 if (ocrTask.Status == TaskStatus.RanToCompletion)
                 {
                     logForm.appendTextsToLog(item.SourceImageFileFullPath + " ocr has completed ... ", logForm.LOG_TYPE_INFO);
+                    imageFileListViewItem.SubItems[1].Text = "Finished";
                 }
                 else if (ocrTask.Status == TaskStatus.Canceled)
                 {
                     logForm.appendTextsToLog(item.SourceImageFileFullPath + " task cancelled ... ", logForm.LOG_TYPE_WARN);
+                    imageFileListViewItem.SubItems[1].Text = "Cancelled";
                 }
                 else if (ocrTask.Status == TaskStatus.Faulted)
                 {
                     logForm.appendTextsToLog(ocrTask.Exception.ToString(), logForm.LOG_TYPE_ERROR);
+                    imageFileListViewItem.SubItems[1].Text = "Faulted";
                 }
             }
 
@@ -221,6 +259,7 @@ namespace NewspaperOCR
         private void startOverButton_Click(object sender, EventArgs e)
         {
             startOver();
+            clearStatusBar();
         }
 
     }

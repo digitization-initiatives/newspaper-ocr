@@ -45,14 +45,18 @@ namespace NewspaperOCR
             numberOfImagesLoadedLabel = new Label();
             numberOfImages = new Label();
             startOverButton = new Button();
+            statusBar = new StatusStrip();
+            statusBarItem_Status = new ToolStripStatusLabel();
+            statusBarItem_Message = new ToolStripStatusLabel();
+            statusBar.SuspendLayout();
             SuspendLayout();
             // 
             // browse_Button
             // 
             browse_Button.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            browse_Button.Location = new Point(974, 7);
+            browse_Button.Location = new Point(944, 7);
             browse_Button.Name = "browse_Button";
-            browse_Button.Size = new Size(120, 31);
+            browse_Button.Size = new Size(150, 31);
             browse_Button.TabIndex = 0;
             browse_Button.Text = "... Browse ...";
             browse_Button.UseVisualStyleBackColor = true;
@@ -65,13 +69,13 @@ namespace NewspaperOCR
             browse_TextBox.Location = new Point(12, 9);
             browse_TextBox.Name = "browse_TextBox";
             browse_TextBox.ReadOnly = true;
-            browse_TextBox.Size = new Size(956, 27);
+            browse_TextBox.Size = new Size(926, 27);
             browse_TextBox.TabIndex = 1;
             // 
             // exitButton
             // 
             exitButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            exitButton.Location = new Point(1130, 632);
+            exitButton.Location = new Point(1130, 614);
             exitButton.Name = "exitButton";
             exitButton.Size = new Size(120, 29);
             exitButton.TabIndex = 2;
@@ -85,7 +89,7 @@ namespace NewspaperOCR
             imageFilesListView.Columns.AddRange(new ColumnHeader[] { filenameCol, ocrStatusCol });
             imageFilesListView.Location = new Point(12, 44);
             imageFilesListView.Name = "imageFilesListView";
-            imageFilesListView.Size = new Size(1238, 582);
+            imageFilesListView.Size = new Size(1238, 564);
             imageFilesListView.TabIndex = 3;
             imageFilesListView.UseCompatibleStateImageBehavior = false;
             imageFilesListView.View = View.Details;
@@ -103,7 +107,7 @@ namespace NewspaperOCR
             // optionsButton
             // 
             optionsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            optionsButton.Location = new Point(878, 632);
+            optionsButton.Location = new Point(878, 614);
             optionsButton.Name = "optionsButton";
             optionsButton.Size = new Size(120, 29);
             optionsButton.TabIndex = 4;
@@ -114,7 +118,7 @@ namespace NewspaperOCR
             // beginOCRButton
             // 
             beginOCRButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            beginOCRButton.Location = new Point(12, 632);
+            beginOCRButton.Location = new Point(12, 614);
             beginOCRButton.Name = "beginOCRButton";
             beginOCRButton.Size = new Size(200, 29);
             beginOCRButton.TabIndex = 5;
@@ -125,7 +129,7 @@ namespace NewspaperOCR
             // viewLogsButton
             // 
             viewLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            viewLogsButton.Location = new Point(1004, 632);
+            viewLogsButton.Location = new Point(1004, 614);
             viewLogsButton.Name = "viewLogsButton";
             viewLogsButton.Size = new Size(120, 29);
             viewLogsButton.TabIndex = 6;
@@ -146,9 +150,9 @@ namespace NewspaperOCR
             // 
             // numberOfImagesLoadedLabel
             // 
-            numberOfImagesLoadedLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            numberOfImagesLoadedLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             numberOfImagesLoadedLabel.AutoSize = true;
-            numberOfImagesLoadedLabel.Location = new Point(218, 636);
+            numberOfImagesLoadedLabel.Location = new Point(218, 618);
             numberOfImagesLoadedLabel.Name = "numberOfImagesLoadedLabel";
             numberOfImagesLoadedLabel.Size = new Size(159, 20);
             numberOfImagesLoadedLabel.TabIndex = 8;
@@ -156,9 +160,9 @@ namespace NewspaperOCR
             // 
             // numberOfImages
             // 
-            numberOfImages.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            numberOfImages.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             numberOfImages.AutoSize = true;
-            numberOfImages.Location = new Point(383, 636);
+            numberOfImages.Location = new Point(383, 618);
             numberOfImages.Name = "numberOfImages";
             numberOfImages.Size = new Size(15, 20);
             numberOfImages.TabIndex = 9;
@@ -167,7 +171,7 @@ namespace NewspaperOCR
             // startOverButton
             // 
             startOverButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            startOverButton.Location = new Point(752, 632);
+            startOverButton.Location = new Point(752, 614);
             startOverButton.Name = "startOverButton";
             startOverButton.Size = new Size(120, 29);
             startOverButton.TabIndex = 10;
@@ -175,11 +179,33 @@ namespace NewspaperOCR
             startOverButton.UseVisualStyleBackColor = true;
             startOverButton.Click += startOverButton_Click;
             // 
+            // statusBar
+            // 
+            statusBar.ImageScalingSize = new Size(20, 20);
+            statusBar.Items.AddRange(new ToolStripItem[] { statusBarItem_Status, statusBarItem_Message });
+            statusBar.Location = new Point(0, 647);
+            statusBar.Name = "statusBar";
+            statusBar.Size = new Size(1262, 26);
+            statusBar.TabIndex = 16;
+            statusBar.Text = "statusBar";
+            // 
+            // statusBarItem_Status
+            // 
+            statusBarItem_Status.Name = "statusBarItem_Status";
+            statusBarItem_Status.Size = new Size(162, 20);
+            statusBarItem_Status.Text = "No Image Files Loaded";
+            // 
+            // statusBarItem_Message
+            // 
+            statusBarItem_Message.Name = "statusBarItem_Message";
+            statusBarItem_Message.Size = new Size(0, 20);
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1262, 673);
+            Controls.Add(statusBar);
             Controls.Add(startOverButton);
             Controls.Add(numberOfImages);
             Controls.Add(numberOfImagesLoadedLabel);
@@ -194,6 +220,8 @@ namespace NewspaperOCR
             MinimumSize = new Size(1280, 720);
             Name = "MainForm";
             Text = "Newspaper OCR";
+            statusBar.ResumeLayout(false);
+            statusBar.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -227,11 +255,15 @@ namespace NewspaperOCR
             directoryStructure = new List<DirectoryStructure>();
 
             loadImagesButton.Enabled = false;
+            beginOCRButton.Enabled = false;
+            clearStatusBar();
+
             filenameCol.Width = imageFilesListView.Width - 150;
             
             imageFilesListView.SizeChanged += imageFilesListView_SizeChanged;
 
             setDefaultOptions();
+
         }
         #endregion
 
@@ -248,5 +280,9 @@ namespace NewspaperOCR
         private Label numberOfImagesLoadedLabel;
         private Label numberOfImages;
         private Button startOverButton;
+        private ToolStripStatusLabel statusStripItem_Status;
+        private StatusStrip statusBar;
+        private ToolStripStatusLabel statusBarItem_Status;
+        private ToolStripStatusLabel statusBarItem_Message;
     }
 }

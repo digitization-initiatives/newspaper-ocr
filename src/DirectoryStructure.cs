@@ -8,6 +8,7 @@ namespace NewspaperOCR.src
 {
     internal class DirectoryStructure
     {
+        public int Index { get; set; }
         public string BatchNameFolder { get; set; }
         public string IssueDateFolder { get; set; }
         public string SourceImageFileName { get; set; }
@@ -16,18 +17,16 @@ namespace NewspaperOCR.src
         public string OutputDirectory { get; set; }
         public string OutputJp2ImageFileName { get; set; }
         public string OutputJp2ImageFileFullPath { get; set; }
-        public string OutputJpgFileName { get; set; }
-        public string OutputJpgImageFileFullPath { get; set; }
-        public string OutputTextOnlyPdfFileName { get; set; }
-        public string OutputTextOnlyPdfFileFullPath { get; set; }
         public string OutputPdfFileName { get; set; }
         public string OutputPdfFileFullPath { get; set; }
         public string OutputAltoFileName { get; set; }
         public string OutputAltoFileFullPath { get; set; }
         public string OutputDirectoryFullPath { get; set; }
 
-        public DirectoryStructure(string batchNameFolder, string issueDateFolder, string sourceImageFileName, string sourceImageFileFullpath, string outputDirectory)
+        public DirectoryStructure(int index, string batchNameFolder, string issueDateFolder, string sourceImageFileName, string sourceImageFileFullpath, string outputDirectory)
         {
+            Index = index;
+
             BatchNameFolder = batchNameFolder;
             IssueDateFolder = issueDateFolder;
             SourceImageFileName = sourceImageFileName;
@@ -37,10 +36,6 @@ namespace NewspaperOCR.src
             OutputDirectory = outputDirectory;
             OutputJp2ImageFileName = SourceImageFileNameWithoutExtension + ".jp2";
             OutputJp2ImageFileFullPath = Path.Combine(outputDirectory, batchNameFolder, issueDateFolder, OutputJp2ImageFileName);
-            OutputJpgFileName = SourceImageFileNameWithoutExtension + ".jpg";
-            OutputJpgImageFileFullPath = Path.Combine(outputDirectory, batchNameFolder, issueDateFolder, OutputJpgFileName);
-            OutputTextOnlyPdfFileName = SourceImageFileNameWithoutExtension;
-            OutputPdfFileFullPath = Path.Combine(outputDirectory, batchNameFolder, issueDateFolder, OutputTextOnlyPdfFileName);
             OutputPdfFileName = SourceImageFileNameWithoutExtension;
             OutputPdfFileFullPath = Path.Combine(outputDirectory, batchNameFolder, issueDateFolder, OutputPdfFileName);
             OutputAltoFileName = SourceImageFileNameWithoutExtension;
