@@ -48,6 +48,8 @@ namespace NewspaperOCR
             statusBar = new StatusStrip();
             statusBarItem_Status = new ToolStripStatusLabel();
             statusBarItem_Message = new ToolStripStatusLabel();
+            numberOfCompletedOcr = new Label();
+            numberOfCompletedOcrLabel = new Label();
             statusBar.SuspendLayout();
             SuspendLayout();
             // 
@@ -152,7 +154,7 @@ namespace NewspaperOCR
             // 
             numberOfImagesLoadedLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             numberOfImagesLoadedLabel.AutoSize = true;
-            numberOfImagesLoadedLabel.Location = new Point(218, 618);
+            numberOfImagesLoadedLabel.Location = new Point(292, 618);
             numberOfImagesLoadedLabel.Name = "numberOfImagesLoadedLabel";
             numberOfImagesLoadedLabel.Size = new Size(159, 20);
             numberOfImagesLoadedLabel.TabIndex = 8;
@@ -162,7 +164,7 @@ namespace NewspaperOCR
             // 
             numberOfImages.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             numberOfImages.AutoSize = true;
-            numberOfImages.Location = new Point(383, 618);
+            numberOfImages.Location = new Point(457, 618);
             numberOfImages.Name = "numberOfImages";
             numberOfImages.Size = new Size(15, 20);
             numberOfImages.TabIndex = 9;
@@ -200,11 +202,33 @@ namespace NewspaperOCR
             statusBarItem_Message.Name = "statusBarItem_Message";
             statusBarItem_Message.Size = new Size(0, 20);
             // 
+            // numberOfCompletedOcr
+            // 
+            numberOfCompletedOcr.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            numberOfCompletedOcr.AutoSize = true;
+            numberOfCompletedOcr.Location = new Point(616, 618);
+            numberOfCompletedOcr.Name = "numberOfCompletedOcr";
+            numberOfCompletedOcr.Size = new Size(15, 20);
+            numberOfCompletedOcr.TabIndex = 18;
+            numberOfCompletedOcr.Text = "-";
+            // 
+            // numberOfCompletedOcrLabel
+            // 
+            numberOfCompletedOcrLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            numberOfCompletedOcrLabel.AutoSize = true;
+            numberOfCompletedOcrLabel.Location = new Point(524, 618);
+            numberOfCompletedOcrLabel.Name = "numberOfCompletedOcrLabel";
+            numberOfCompletedOcrLabel.Size = new Size(86, 20);
+            numberOfCompletedOcrLabel.TabIndex = 17;
+            numberOfCompletedOcrLabel.Text = "Completed:";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1262, 673);
+            Controls.Add(numberOfCompletedOcr);
+            Controls.Add(numberOfCompletedOcrLabel);
             Controls.Add(statusBar);
             Controls.Add(startOverButton);
             Controls.Add(numberOfImages);
@@ -284,5 +308,7 @@ namespace NewspaperOCR
         private StatusStrip statusBar;
         private ToolStripStatusLabel statusBarItem_Status;
         private ToolStripStatusLabel statusBarItem_Message;
+        private Label numberOfCompletedOcr;
+        private Label numberOfCompletedOcrLabel;
     }
 }

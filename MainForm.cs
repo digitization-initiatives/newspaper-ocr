@@ -208,6 +208,8 @@ namespace NewspaperOCR
         private async void beginOCRButton_Click(object sender, EventArgs e)
         {
             constructOutputDirectoryStructure();
+            int completedOcr = 0;
+            numberOfCompletedOcr.Text = completedOcr.ToString();
 
             foreach (DirectoryStructure item in directoryStructure)
             {
@@ -237,6 +239,9 @@ namespace NewspaperOCR
                 {
                     logForm.appendTextsToLog(item.SourceImageFileFullPath + " ocr has completed ... ", logForm.LOG_TYPE_INFO);
                     imageFileListViewItem.SubItems[1].Text = "Finished";
+
+                    completedOcr++;
+                    numberOfCompletedOcr.Text = completedOcr.ToString();
                 }
                 else if (ocrTask.Status == TaskStatus.Canceled)
                 {
