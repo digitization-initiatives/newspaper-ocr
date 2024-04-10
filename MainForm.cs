@@ -49,14 +49,21 @@ namespace NewspaperOCR
         }
         private void startOver()
         {
+            setDefaultOptions();
+
             imageFilesListView.Items.Clear();
+            directoryStructure.Clear();
+
             numberOfImages.Text = "-";
+            numberOfCompletedOcr.Text = "-";
 
             browse_folderBrowserDialog.SelectedPath = String.Empty;
             browse_TextBox.Text = String.Empty;
 
             loadImagesButton.Enabled = false;
             beginOCRButton.Enabled = false;
+
+            clearStatusBar();
         }
 
         public void constructOutputDirectoryStructure()
@@ -89,26 +96,26 @@ namespace NewspaperOCR
         {
             string tessdataLoc = Properties.Settings.Default.TessdataLocation;
 
-            //using (var engine = new TesseractOCR.Engine(tessdataLoc, Language.English, EngineMode.LstmOnly))
-            //{
-            //    using (var img = TesseractOCR.Pix.Image.LoadFromFile(sourceImageFileFullpath))
-            //    {
-            //        using (var page = engine.Process(img))
-            //        {
-            //            using (var pdfRenderer = new PdfResult(outputPdfFileFullPath, tessdataLoc, false))
-            //            {
-            //                pdfRenderer.BeginDocument(sourceImageFileName);
-            //                pdfRenderer.AddPage(page);
-            //            }
+            using (var engine = new TesseractOCR.Engine(tessdataLoc, Language.English, EngineMode.LstmOnly))
+            {
+                using (var img = TesseractOCR.Pix.Image.LoadFromFile(sourceImageFileFullpath))
+                {
+                    using (var page = engine.Process(img))
+                    {
+                        using (var pdfRenderer = new PdfResult(outputPdfFileFullPath, tessdataLoc, false))
+                        {
+                            pdfRenderer.BeginDocument(sourceImageFileName);
+                            pdfRenderer.AddPage(page);
+                        }
 
-            //            using (var altoRenderer = new AltoResult(outputAltoFileFullPath))
-            //            {
-            //                altoRenderer.BeginDocument(sourceImageFileName);
-            //                altoRenderer.AddPage(page);
-            //            }
-            //        }
-            //    }
-            //}
+                        using (var altoRenderer = new AltoResult(outputAltoFileFullPath))
+                        {
+                            altoRenderer.BeginDocument(sourceImageFileName);
+                            altoRenderer.AddPage(page);
+                        }
+                    }
+                }
+            }
 
             using (var sourceImage = new MagickImage(sourceImageFileFullpath))
             {
@@ -126,10 +133,12 @@ namespace NewspaperOCR
 
                 sourceImage.Write(tiledJp2FileFullPath);
 
-                if (File.Exists(tiledJp2FileFullPath))
+                if (File.Exists(outputJp2FileFullPath))
                 {
-                    File.Move(tiledJp2FileFullPath, outputJp2FileFullPath);
+                    File.Delete(outputJp2FileFullPath);
                 }
+
+                File.Move(tiledJp2FileFullPath, outputJp2FileFullPath);
             }
         }
 
@@ -208,54 +217,74 @@ namespace NewspaperOCR
         private async void beginOCRButton_Click(object sender, EventArgs e)
         {
             constructOutputDirectoryStructure();
+
             int completedOcr = 0;
             numberOfCompletedOcr.Text = completedOcr.ToString();
+            DateTime batchStartTime = DateTime.Now;
+            DateTime batchCompletionTime;
+            TimeSpan batchProcessingTime;
+
+            logForm.appendTextsToLog($"OCR of this batch started at: {batchStartTime.ToString(@"hh\:mm\:ss")}.", logForm.LOG_TYPE_INFO);
 
             foreach (DirectoryStructure item in directoryStructure)
             {
                 ListViewItem imageFileListViewItem = imageFilesListView.Items[item.Index];
-                imageFileListViewItem.EnsureVisible();
 
-                Task ocrTask = Task.Run(() => ocr(item.SourceImageFileFullPath, item.SourceImageFileNameWithoutExtension, item.OutputPdfFileFullPath, item.OutputAltoFileFullPath, item.OutputJp2ImageFileFullPath));
-
-                while (!ocrTask.IsCompleted)
+                if (File.Exists(item.OutputAltoFileFullPath + ".xml") || File.Exists(item.OutputPdfFileFullPath + ".pdf"))
                 {
-                    if (imageFileListViewItem.SubItems[1].Text.Length < 8)
-                    {
-                        imageFileListViewItem.SubItems[1].Text += "..";
-                    }
-                    else
-                    {
-                        imageFileListViewItem.SubItems[1].Text = "...";
-                    }
-
-                    logForm.appendTextsToLog(item.SourceImageFileFullPath + " is being OCR'd " + imageFileListViewItem.SubItems[1].Text, logForm.LOG_TYPE_INFO);
-                    updateStatusBar("File being processed: ", item.SourceImageFileFullPath);
-                    imageFileListViewItem.SubItems[1].Text = imageFileListViewItem.SubItems[1].Text;
-                    await Task.Delay(2000);
-                }
-
-                if (ocrTask.Status == TaskStatus.RanToCompletion)
-                {
-                    logForm.appendTextsToLog(item.SourceImageFileFullPath + " ocr has completed ... ", logForm.LOG_TYPE_INFO);
-                    imageFileListViewItem.SubItems[1].Text = "Finished";
-
+                    imageFileListViewItem.SubItems[1].Text = "Skipped";
+                    logForm.appendTextsToLog($"{item.SourceImageFileFullPath} skipped. Destinationa file exists.", logForm.LOG_TYPE_INFO);
                     completedOcr++;
                     numberOfCompletedOcr.Text = completedOcr.ToString();
+                    continue;
                 }
-                else if (ocrTask.Status == TaskStatus.Canceled)
+                else
                 {
-                    logForm.appendTextsToLog(item.SourceImageFileFullPath + " task cancelled ... ", logForm.LOG_TYPE_WARN);
-                    imageFileListViewItem.SubItems[1].Text = "Cancelled";
-                }
-                else if (ocrTask.Status == TaskStatus.Faulted)
-                {
-                    logForm.appendTextsToLog(ocrTask.Exception.ToString(), logForm.LOG_TYPE_ERROR);
-                    imageFileListViewItem.SubItems[1].Text = "Faulted";
+                    imageFileListViewItem.EnsureVisible();
+
+                    Task ocrTask = Task.Run(() => ocr(item.SourceImageFileFullPath, item.SourceImageFileNameWithoutExtension, item.OutputPdfFileFullPath, item.OutputAltoFileFullPath, item.OutputJp2ImageFileFullPath));
+
+                    while (!ocrTask.IsCompleted)
+                    {
+                        if (imageFileListViewItem.SubItems[1].Text.Length < 8)
+                        {
+                            imageFileListViewItem.SubItems[1].Text += "..";
+                        }
+                        else
+                        {
+                            imageFileListViewItem.SubItems[1].Text = "...";
+                        }
+
+                        logForm.appendTextsToLog(item.SourceImageFileFullPath + " is being OCR'd " + imageFileListViewItem.SubItems[1].Text, logForm.LOG_TYPE_INFO);
+                        updateStatusBar("File being processed: ", item.SourceImageFileFullPath);
+                        imageFileListViewItem.SubItems[1].Text = imageFileListViewItem.SubItems[1].Text;
+                        await Task.Delay(2000);
+                    }
+
+                    if (ocrTask.Status == TaskStatus.RanToCompletion)
+                    {
+                        logForm.appendTextsToLog(item.SourceImageFileFullPath + " ocr has completed ... ", logForm.LOG_TYPE_INFO);
+                        imageFileListViewItem.SubItems[1].Text = "Finished";
+                        completedOcr++;
+                        numberOfCompletedOcr.Text = completedOcr.ToString();
+                    }
+                    else if (ocrTask.Status == TaskStatus.Canceled)
+                    {
+                        logForm.appendTextsToLog(item.SourceImageFileFullPath + " task cancelled ... ", logForm.LOG_TYPE_WARN);
+                        imageFileListViewItem.SubItems[1].Text = "Cancelled";
+                    }
+                    else if (ocrTask.Status == TaskStatus.Faulted)
+                    {
+                        logForm.appendTextsToLog(ocrTask.Exception.ToString(), logForm.LOG_TYPE_ERROR);
+                        imageFileListViewItem.SubItems[1].Text = "Faulted";
+                    }
                 }
             }
 
-            string ocrCompleteMessage = "OCR of this batch has completed. Files from this batch will be cleared from the list.";
+            batchCompletionTime = DateTime.Now;
+            batchProcessingTime = batchCompletionTime - batchStartTime;
+
+            string ocrCompleteMessage = $"OCR of this batch has completed at {batchCompletionTime.ToString(@"hh\:mm\:ss")}. Time spent: {batchProcessingTime.ToString(@"hh\:mm\:ss")}. Files from this batch will be cleared from the list.";
 
             logForm.appendTextsToLog(ocrCompleteMessage, logForm.LOG_TYPE_INFO);
 
@@ -272,7 +301,6 @@ namespace NewspaperOCR
         private void startOverButton_Click(object sender, EventArgs e)
         {
             startOver();
-            clearStatusBar();
         }
 
     }
