@@ -184,9 +184,9 @@
             tileSizeLabel.AutoSize = true;
             tileSizeLabel.Location = new Point(377, 150);
             tileSizeLabel.Name = "tileSizeLabel";
-            tileSizeLabel.Size = new Size(150, 20);
+            tileSizeLabel.Size = new Size(67, 20);
             tileSizeLabel.TabIndex = 13;
-            tileSizeLabel.Text = "Concurrent OCR Jobs:";
+            tileSizeLabel.Text = "Tile Size:";
             // 
             // OptionsForm
             // 
