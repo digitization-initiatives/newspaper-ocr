@@ -24,33 +24,8 @@ namespace NewspaperOCR
             filenameCol.Width = imageFilesListView.Width - 150;
         }
 
-        public void setDefaultOptions()
-        {
-            Properties.Settings.Default.TessdataLocation = Path.GetFullPath(".") + "\\tessdata";
-
-            if (optionsForm.getOcrOutputLocation() != String.Empty)
-            {
-                Properties.Settings.Default.OCROutputLocation = optionsForm.getOcrOutputLocation();
-            }
-            else
-            {
-                Properties.Settings.Default.OCROutputLocation = Path.GetFullPath(".") + "\\output";
-            }
-            Properties.Settings.Default.ConcurrentOCRJobs = 1;
-            Properties.Settings.Default.OCRLang = "eng";
-            Properties.Settings.Default.TileSize = "[1024x1024]";
-            Properties.Settings.Default.Save();
-
-            logForm.appendTextsToLog("\"Tessdata Location\": " + Properties.Settings.Default.TessdataLocation, logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog("\"OCR Output Location\": " + Properties.Settings.Default.OCROutputLocation, logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog("\"Concurrent OCR Jobs\": " + Properties.Settings.Default.ConcurrentOCRJobs.ToString(), logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog("\"OCR Language\": " + Properties.Settings.Default.OCRLang, logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog("\"Tile Size\": " + Properties.Settings.Default.TileSize, logForm.LOG_TYPE_INFO);
-        }
         private void startOver()
         {
-            setDefaultOptions();
-
             imageFilesListView.Items.Clear();
             directoryStructure.Clear();
 

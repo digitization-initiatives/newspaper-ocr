@@ -32,6 +32,7 @@
             saveLogsButton = new Button();
             hideLogsButton = new Button();
             clearLogsButton = new Button();
+            verboseLogCheckBox = new CheckBox();
             SuspendLayout();
             // 
             // logsTextBox
@@ -43,13 +44,13 @@
             logsTextBox.Multiline = true;
             logsTextBox.Name = "logsTextBox";
             logsTextBox.ScrollBars = ScrollBars.Vertical;
-            logsTextBox.Size = new Size(458, 614);
+            logsTextBox.Size = new Size(758, 614);
             logsTextBox.TabIndex = 0;
             // 
             // saveLogsButton
             // 
             saveLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            saveLogsButton.Location = new Point(98, 632);
+            saveLogsButton.Location = new Point(398, 632);
             saveLogsButton.Name = "saveLogsButton";
             saveLogsButton.Size = new Size(120, 29);
             saveLogsButton.TabIndex = 2;
@@ -60,7 +61,7 @@
             // hideLogsButton
             // 
             hideLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            hideLogsButton.Location = new Point(350, 632);
+            hideLogsButton.Location = new Point(650, 632);
             hideLogsButton.Name = "hideLogsButton";
             hideLogsButton.Size = new Size(120, 29);
             hideLogsButton.TabIndex = 3;
@@ -71,7 +72,7 @@
             // clearLogsButton
             // 
             clearLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            clearLogsButton.Location = new Point(224, 632);
+            clearLogsButton.Location = new Point(524, 632);
             clearLogsButton.Name = "clearLogsButton";
             clearLogsButton.Size = new Size(120, 29);
             clearLogsButton.TabIndex = 4;
@@ -79,16 +80,30 @@
             clearLogsButton.UseVisualStyleBackColor = true;
             clearLogsButton.Click += clearLogsButton_Click;
             // 
+            // verboseLogCheckBox
+            // 
+            verboseLogCheckBox.AutoSize = true;
+            verboseLogCheckBox.Checked = true;
+            verboseLogCheckBox.CheckState = CheckState.Checked;
+            verboseLogCheckBox.Location = new Point(12, 637);
+            verboseLogCheckBox.Name = "verboseLogCheckBox";
+            verboseLogCheckBox.Size = new Size(84, 24);
+            verboseLogCheckBox.TabIndex = 5;
+            verboseLogCheckBox.Text = "Verbose";
+            verboseLogCheckBox.UseVisualStyleBackColor = true;
+            // 
             // LogForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(482, 673);
+            ClientSize = new Size(782, 673);
+            Controls.Add(verboseLogCheckBox);
             Controls.Add(clearLogsButton);
             Controls.Add(hideLogsButton);
             Controls.Add(saveLogsButton);
             Controls.Add(logsTextBox);
-            MinimumSize = new Size(500, 720);
+            MaximumSize = new Size(800, 720);
+            MinimumSize = new Size(800, 720);
             Name = "LogForm";
             Text = "View Logs";
             ResumeLayout(false);
@@ -116,5 +131,6 @@
         private Button hideLogsButton;
         private TextBox logsTextBox;
         private Button clearLogsButton;
+        private CheckBox verboseLogCheckBox;
     }
 }

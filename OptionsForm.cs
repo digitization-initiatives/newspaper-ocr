@@ -19,46 +19,84 @@ namespace NewspaperOCR
         }
 
         #region Custom Functions
-        public string getOcrOutputLocation()
+        private void printSettingsToLogs()
         {
-            return ocrOutputLocationTextBox.Text;
+            logForm.appendTextsToLog($"[Tessdata Location] has been changed to: {Properties.Settings.Default.TessdataLocation}.", logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog($"[OCR Output Location] has been changed to: {Properties.Settings.Default.OCROutputLocation}.", logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog($"[Log Location] has been changed to: {Properties.Settings.Default.LogLocation}.", logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog($"[Concurrent OCR Jobs] has been changed to: {Properties.Settings.Default.ConcurrentOCRJobs.ToString()}.", logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog($"[OCR Language] has been changed to: {Properties.Settings.Default.OCRLang}.", logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog($"[Tile Size] has been changed to: {Properties.Settings.Default.TileSize}.", logForm.LOG_TYPE_INFO);
+        }
+        private void updateOptionsFormUI()
+        {
+            // Update Directory Settings UI:
+            tessdataLocationTextBox.Text = Properties.Settings.Default.TessdataLocation;
+            ocrOutputLocationTextBox.Text = Properties.Settings.Default.OCROutputLocation;
+            logLocationTextBox.Text = Properties.Settings.Default.LogLocation;
+
+            // Update OCR Settings UI:
+            ocrLangComboBox.SelectedItem = Properties.Settings.Default.OCRLang;
+            concurrentOCRJobsComboBox.SelectedItem = Properties.Settings.Default.ConcurrentOCRJobs.ToString();
+            tileSizeComboBox.SelectedItem = Properties.Settings.Default.TileSize;
         }
 
-        #endregion
-
-
-        private void closeButton_Click(object sender, EventArgs e)
+        public void setDefaultOptions()
         {
-            this.Hide();
-        }
-
-        private void resetToDefaultButton_Click(object sender, EventArgs e)
-        {
+            // Update Settings :
             Properties.Settings.Default.TessdataLocation = Path.GetFullPath(".") + "\\tessdata";
             Properties.Settings.Default.OCROutputLocation = Path.GetFullPath(".") + "\\output";
+            Properties.Settings.Default.LogLocation = Path.GetFullPath(".") + "\\log";
+            
             Properties.Settings.Default.ConcurrentOCRJobs = 1;
             Properties.Settings.Default.OCRLang = "eng";
             Properties.Settings.Default.TileSize = "[1024x1024]";
+
             Properties.Settings.Default.Save();
 
-            tessdataLocationTextBox.Text = Properties.Settings.Default.TessdataLocation;
-            ocrOutputLocationTextBox.Text = Properties.Settings.Default.OCROutputLocation;
-            concurrentOCRJobsComboBox.SelectedIndex = 0;
-            ocrLangComboBox.SelectedIndex = 0;
-            tileSizeComboBox.SelectedIndex = 2;
+            // Clear folderBrowserDialog :
+            tessdataLocation_folderBrowserDialog.SelectedPath = String.Empty;
+            ocrOutputLocation_folderBrowserDialog.SelectedPath = String.Empty;
+            logLocation_folderBrowserDialog.SelectedPath = String.Empty;
 
-            logForm.appendTextsToLog("\"Tessdata Location\" has been reset to: " + Properties.Settings.Default.TessdataLocation, logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog("\"OCR Output Location\" has been reset to: " + Properties.Settings.Default.OCROutputLocation, logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog("\"Concurrent OCR Jobs\" has been reset to: " + Properties.Settings.Default.ConcurrentOCRJobs.ToString(), logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog("\"OCR Language\" has been reset to: " + Properties.Settings.Default.OCRLang, logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog("\"Tile Size\" has been changed to: " + Properties.Settings.Default.TileSize, logForm.LOG_TYPE_INFO);
+            // Update OptionsForm UI :
+            updateOptionsFormUI();
+
+            // Print logs :
+            printSettingsToLogs();
         }
+
+        private void saveChanges()
+        {
+            // Update Settings :
+            Properties.Settings.Default.TessdataLocation = tessdataLocationTextBox.Text;
+            Properties.Settings.Default.OCROutputLocation = ocrOutputLocationTextBox.Text;
+            Properties.Settings.Default.LogLocation = logLocationTextBox.Text;
+
+            Properties.Settings.Default.ConcurrentOCRJobs = concurrentOCRJobsComboBox.SelectedIndex + 1;
+            Properties.Settings.Default.OCRLang = ocrLangComboBox.SelectedItem.ToString().Substring(0, 3);
+            Properties.Settings.Default.TileSize = tileSizeComboBox.SelectedItem.ToString();
+            
+            Properties.Settings.Default.Save();
+
+            // Update OptionsForm UI :
+            updateOptionsFormUI();
+
+            // Print logs :
+            printSettingsToLogs();
+        }
+
+        #endregion
 
         private void tessdataLocationBrowseButton_Click(object sender, EventArgs e)
         {
             if (tessdataLocation_folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 tessdataLocationTextBox.Text = tessdataLocation_folderBrowserDialog.SelectedPath;
+            }
+            else
+            {
+                tessdataLocationTextBox.Text = Properties.Settings.Default.TessdataLocation;
             }
         }
 
@@ -68,25 +106,37 @@ namespace NewspaperOCR
             {
                 ocrOutputLocationTextBox.Text = ocrOutputLocation_folderBrowserDialog.SelectedPath;
             }
+            else
+            {
+                ocrOutputLocationTextBox.Text = Properties.Settings.Default.OCROutputLocation;
+            }
+        }
+
+        private void logLocationBrowseButton_Click(object sender, EventArgs e)
+        {
+            if (logLocation_folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                logLocationTextBox.Text = logLocation_folderBrowserDialog.SelectedPath;
+            }
+            else
+            {
+                logLocationTextBox.Text = Properties.Settings.Default.LogLocation;
+            }
         }
 
         private void saveChangesButton_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.TessdataLocation = tessdataLocationTextBox.Text;
-            Properties.Settings.Default.OCROutputLocation = ocrOutputLocationTextBox.Text;
-            Properties.Settings.Default.ConcurrentOCRJobs = concurrentOCRJobsComboBox.SelectedIndex + 1;
-            Properties.Settings.Default.OCRLang = ocrLangComboBox.SelectedItem.ToString().Substring(0,3);
-            Properties.Settings.Default.TileSize = tileSizeComboBox.SelectedItem.ToString();
-            Properties.Settings.Default.Save();
-
-            logForm.appendTextsToLog("\"Tessdata Location\" has been changed to: " + Properties.Settings.Default.TessdataLocation, logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog("\"OCR Output Location\" has been changed to: " + Properties.Settings.Default.OCROutputLocation, logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog("\"Concurrent OCR Jobs\" has been changed to: " + Properties.Settings.Default.ConcurrentOCRJobs.ToString(), logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog("\"OCR Language\" has been changed to: " + Properties.Settings.Default.OCRLang, logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog("\"Tile Size\" has been changed to: " + Properties.Settings.Default.TileSize, logForm.LOG_TYPE_INFO);
-
-            this.Hide();
+            saveChanges();
         }
 
+        private void resetToDefaultButton_Click(object sender, EventArgs e)
+        {
+            setDefaultOptions();
+        }
+        private void closeButton_Click(object sender, EventArgs e)
+        {
+            saveChanges();
+            this.Hide();
+        }
     }
 }

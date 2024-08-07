@@ -253,6 +253,7 @@ namespace NewspaperOCR
         #endregion
 
         #region My custom initializations
+
         private LogForm logForm;
         private OptionsForm optionsForm;
         public Button viewLogsButton;
@@ -260,22 +261,27 @@ namespace NewspaperOCR
 
         private void CustomInitializations()
         {
-            //Initialize forms and properties:
+            // Set MainForm start location :
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(200, (Screen.PrimaryScreen.Bounds.Height - this.Height) / 2 - 50);
 
+            // Initialize LogForm :
             logForm = new LogForm();
             logForm.mainForm = this;
             logForm.StartPosition = FormStartPosition.Manual;
             logForm.Location = new Point(this.Location.X + this.Width + 10, this.Location.Y);
 
+            // Initialize OptionsForm :
             optionsForm = new OptionsForm();
             optionsForm.mainForm = this;
             optionsForm.logForm = logForm;
             optionsForm.StartPosition = FormStartPosition.Manual;
             optionsForm.Location = new Point(this.Location.X + 50, this.Location.Y + 50);
 
-            //Other initializations:
+            // Initialize Settings :
+            optionsForm.setDefaultOptions();
+
+            // Initialize resources :
             directoryStructure = new List<DirectoryStructure>();
 
             loadImagesButton.Enabled = false;
@@ -285,9 +291,6 @@ namespace NewspaperOCR
             filenameCol.Width = imageFilesListView.Width - 150;
             
             imageFilesListView.SizeChanged += imageFilesListView_SizeChanged;
-
-            setDefaultOptions();
-
         }
         #endregion
 
