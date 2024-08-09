@@ -31,16 +31,16 @@ namespace NewspaperOCR
         /// </summary>
         private void InitializeComponent()
         {
-            browse_Button = new Button();
-            browse_TextBox = new TextBox();
+            folderBrowserButton = new Button();
+            folderBrowserTextBox = new TextBox();
             exitButton = new Button();
-            imageFilesListView = new ListView();
-            filenameCol = new ColumnHeader();
-            ocrStatusCol = new ColumnHeader();
+            sourceFilesListView = new ListView();
+            sourceFilesListView_filenameCol = new ColumnHeader();
+            sourceFilesListView_ocrStatusCol = new ColumnHeader();
             optionsButton = new Button();
             beginOCRButton = new Button();
             viewLogsButton = new Button();
-            browse_folderBrowserDialog = new FolderBrowserDialog();
+            folderBrowserDialog = new FolderBrowserDialog();
             loadImagesButton = new Button();
             numberOfImagesLoadedLabel = new Label();
             numberOfImages = new Label();
@@ -53,26 +53,26 @@ namespace NewspaperOCR
             statusBar.SuspendLayout();
             SuspendLayout();
             // 
-            // browse_Button
+            // folderBrowserButton
             // 
-            browse_Button.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            browse_Button.Location = new Point(944, 7);
-            browse_Button.Name = "browse_Button";
-            browse_Button.Size = new Size(150, 31);
-            browse_Button.TabIndex = 0;
-            browse_Button.Text = "... Browse ...";
-            browse_Button.UseVisualStyleBackColor = true;
-            browse_Button.Click += browse_Button_Click;
+            folderBrowserButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            folderBrowserButton.Location = new Point(944, 7);
+            folderBrowserButton.Name = "folderBrowserButton";
+            folderBrowserButton.Size = new Size(150, 31);
+            folderBrowserButton.TabIndex = 0;
+            folderBrowserButton.Text = "... Browse ...";
+            folderBrowserButton.UseVisualStyleBackColor = true;
+            folderBrowserButton.Click += folderBrowserButton_Click;
             // 
-            // browse_TextBox
+            // folderBrowserTextBox
             // 
-            browse_TextBox.AcceptsReturn = true;
-            browse_TextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            browse_TextBox.Location = new Point(12, 9);
-            browse_TextBox.Name = "browse_TextBox";
-            browse_TextBox.ReadOnly = true;
-            browse_TextBox.Size = new Size(926, 27);
-            browse_TextBox.TabIndex = 1;
+            folderBrowserTextBox.AcceptsReturn = true;
+            folderBrowserTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            folderBrowserTextBox.Location = new Point(12, 9);
+            folderBrowserTextBox.Name = "folderBrowserTextBox";
+            folderBrowserTextBox.ReadOnly = true;
+            folderBrowserTextBox.Size = new Size(926, 27);
+            folderBrowserTextBox.TabIndex = 1;
             // 
             // exitButton
             // 
@@ -85,26 +85,26 @@ namespace NewspaperOCR
             exitButton.UseVisualStyleBackColor = true;
             exitButton.Click += exitButton_Click;
             // 
-            // imageFilesListView
+            // sourceFilesListView
             // 
-            imageFilesListView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            imageFilesListView.Columns.AddRange(new ColumnHeader[] { filenameCol, ocrStatusCol });
-            imageFilesListView.Location = new Point(12, 44);
-            imageFilesListView.Name = "imageFilesListView";
-            imageFilesListView.Size = new Size(1238, 564);
-            imageFilesListView.TabIndex = 3;
-            imageFilesListView.UseCompatibleStateImageBehavior = false;
-            imageFilesListView.View = View.Details;
+            sourceFilesListView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            sourceFilesListView.Columns.AddRange(new ColumnHeader[] { sourceFilesListView_filenameCol, sourceFilesListView_ocrStatusCol });
+            sourceFilesListView.Location = new Point(12, 44);
+            sourceFilesListView.Name = "sourceFilesListView";
+            sourceFilesListView.Size = new Size(1238, 564);
+            sourceFilesListView.TabIndex = 3;
+            sourceFilesListView.UseCompatibleStateImageBehavior = false;
+            sourceFilesListView.View = View.Details;
             // 
-            // filenameCol
+            // sourceFilesListView_filenameCol
             // 
-            filenameCol.Text = "Filename";
-            filenameCol.Width = 1088;
+            sourceFilesListView_filenameCol.Text = "Filename";
+            sourceFilesListView_filenameCol.Width = 1088;
             // 
-            // ocrStatusCol
+            // sourceFilesListView_ocrStatusCol
             // 
-            ocrStatusCol.Text = "OCR Status";
-            ocrStatusCol.Width = 120;
+            sourceFilesListView_ocrStatusCol.Text = "OCR Status";
+            sourceFilesListView_ocrStatusCol.Width = 120;
             // 
             // optionsButton
             // 
@@ -237,10 +237,10 @@ namespace NewspaperOCR
             Controls.Add(viewLogsButton);
             Controls.Add(beginOCRButton);
             Controls.Add(optionsButton);
-            Controls.Add(imageFilesListView);
+            Controls.Add(sourceFilesListView);
             Controls.Add(exitButton);
-            Controls.Add(browse_TextBox);
-            Controls.Add(browse_Button);
+            Controls.Add(folderBrowserTextBox);
+            Controls.Add(folderBrowserButton);
             MinimumSize = new Size(1280, 720);
             Name = "MainForm";
             Text = "Newspaper OCR";
@@ -272,37 +272,40 @@ namespace NewspaperOCR
             logForm.Location = new Point(this.Location.X + this.Width + 10, this.Location.Y);
 
             // Initialize OptionsForm :
-            optionsForm = new OptionsForm();
+            optionsForm = new OptionsForm(logForm);
             optionsForm.mainForm = this;
-            optionsForm.logForm = logForm;
             optionsForm.StartPosition = FormStartPosition.Manual;
-            optionsForm.Location = new Point(this.Location.X + 50, this.Location.Y + 50);
+            optionsForm.Location = new Point(this.Location.X + this.Width + 20, this.Location.Y);
 
-            // Initialize Settings :
-            optionsForm.setDefaultOptions();
-
-            // Initialize resources :
-            directoryStructure = new List<DirectoryStructure>();
-
+            // Initialize MainForm UI :
+            folderBrowserTextBox.Text = String.Empty;
+            folderBrowserDialog.SelectedPath = String.Empty;
             loadImagesButton.Enabled = false;
-            beginOCRButton.Enabled = false;
-            clearStatusBar();
 
-            filenameCol.Width = imageFilesListView.Width - 150;
-            
-            imageFilesListView.SizeChanged += imageFilesListView_SizeChanged;
+            sourceFilesListView_filenameCol.Width = sourceFilesListView.Width - 150;
+            sourceFilesListView.SizeChanged += imageFilesListView_SizeChanged;
+
+            beginOCRButton.Enabled = false;
+
+            numberOfImages.Text = "-";
+            numberOfCompletedOcr.Text = "-";
+
+            resetStatusBar();
+
+            // Initialize data structures :
+            directoryStructure = new List<DirectoryStructure>();
         }
         #endregion
 
-        private Button browse_Button;
-        private TextBox browse_TextBox;
+        private Button folderBrowserButton;
+        private TextBox folderBrowserTextBox;
         private Button exitButton;
-        private ListView imageFilesListView;
-        private ColumnHeader filenameCol;
+        private ListView sourceFilesListView;
+        private ColumnHeader sourceFilesListView_filenameCol;
         private Button optionsButton;
         private Button beginOCRButton;
-        private ColumnHeader ocrStatusCol;
-        private FolderBrowserDialog browse_folderBrowserDialog;
+        private ColumnHeader sourceFilesListView_ocrStatusCol;
+        private FolderBrowserDialog folderBrowserDialog;
         private Button loadImagesButton;
         private Label numberOfImagesLoadedLabel;
         private Label numberOfImages;

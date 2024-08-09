@@ -18,41 +18,18 @@ namespace NewspaperOCR
         }
 
         #region My Custom Functions
-
-        private void imageFilesListView_SizeChanged(object sender, EventArgs e)
-        {
-            filenameCol.Width = imageFilesListView.Width - 150;
-        }
-
-        private void startOver()
-        {
-            imageFilesListView.Items.Clear();
-            directoryStructure.Clear();
-
-            numberOfImages.Text = "-";
-            numberOfCompletedOcr.Text = "-";
-
-            browse_folderBrowserDialog.SelectedPath = String.Empty;
-            browse_TextBox.Text = String.Empty;
-
-            loadImagesButton.Enabled = false;
-            beginOCRButton.Enabled = false;
-
-            clearStatusBar();
-        }
-
         public void constructOutputDirectoryStructure()
         {
-            string batchNameFolder = Path.GetFileName(browse_TextBox.Text);
+            string batchNameFolder = Path.GetFileName(folderBrowserTextBox.Text);
 
-            foreach (ListViewItem imageFileListViewItem in imageFilesListView.Items)
+            foreach (ListViewItem imageFileListViewItem in sourceFilesListView.Items)
             {
                 //Get the item index:
                 int index = imageFileListViewItem.Index;
 
                 //Construct issueDateFolder:
                 string issueDateFolder = imageFileListViewItem.SubItems[0].Text;
-                issueDateFolder = issueDateFolder.Replace(browse_TextBox.Text, "");
+                issueDateFolder = issueDateFolder.Replace(folderBrowserTextBox.Text, "");
                 var segments = issueDateFolder.Split(Path.DirectorySeparatorChar);
                 if (segments.Length > 0)
                 {
@@ -64,6 +41,14 @@ namespace NewspaperOCR
 
                 DirectoryStructure directoryStructureItem = new DirectoryStructure(index, batchNameFolder, issueDateFolder, imageFileName, imageFileListViewItem.SubItems[0].Text, Properties.Settings.Default.OCROutputLocation);
                 directoryStructure.Add(directoryStructureItem);
+            }
+
+            if (logForm.verboseLogCheckBox.Checked)
+            {
+                foreach (DirectoryStructure directoryStructureItem in directoryStructure)
+                {
+
+                }
             }
         }
 
@@ -117,75 +102,81 @@ namespace NewspaperOCR
             }
         }
 
-        public void updateStatusBar(string status, string message)
+        
+        private void startOver()
         {
-            statusBarItem_Status.Text = status;
-            statusBarItem_Message.Text = message;
+            // Reset MainForm UI:
+            folderBrowserTextBox.Text = String.Empty;
+            folderBrowserDialog.SelectedPath = String.Empty;
+            loadImagesButton.Enabled = false;
+
+            sourceFilesListView.Items.Clear();
+            sourceFilesListView_filenameCol.Width = sourceFilesListView.Width - 150;
+
+            beginOCRButton.Enabled = false;
+
+            numberOfImages.Text = "-";
+            numberOfCompletedOcr.Text = "-";
+
+            resetStatusBar();
+
+            // Reset data structures :
+            directoryStructure.Clear();
         }
 
-        public void clearStatusBar()
+        public void resetStatusBar()
         {
             statusBarItem_Status.Text = "No Image Files Loaded";
             statusBarItem_Message.Text = String.Empty;
         }
 
+        public void updateStatusBar(string status, string message)
+        {
+            statusBarItem_Status.Text = status;
+            statusBarItem_Message.Text = message;
+        }
+        private void imageFilesListView_SizeChanged(object sender, EventArgs e)
+        {
+            sourceFilesListView_filenameCol.Width = sourceFilesListView.Width - 150;
+        }
+
         #endregion
 
+        private void folderBrowserButton_Click(object sender, EventArgs e)
+        {
+            folderBrowserTextBox.Text = String.Empty;
+
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                folderBrowserTextBox.Text = folderBrowserDialog.SelectedPath;
+                loadImagesButton.Enabled = true;
+            }
+            else
+            {
+                folderBrowserTextBox.Text = String.Empty;
+                folderBrowserDialog.SelectedPath = String.Empty;
+                loadImagesButton.Enabled = false;
+            }
+        }
         private void loadImagesButton_Click(object sender, EventArgs e)
         {
-            if (browse_folderBrowserDialog.SelectedPath != null)
+            if (folderBrowserDialog.SelectedPath != String.Empty)
             {
                 List<string> imageFiles = new List<string>();
 
-                imageFiles.AddRange(Directory.GetFiles(browse_folderBrowserDialog.SelectedPath, "*.tif", SearchOption.AllDirectories));
+                imageFiles.AddRange(Directory.GetFiles(folderBrowserDialog.SelectedPath, $"*.{Properties.Settings.Default.SourceImageFileFormat}", SearchOption.AllDirectories));
 
                 foreach (string imageFile in imageFiles)
                 {
                     ListViewItem item = new ListViewItem(imageFile);
                     item.SubItems.Add("...");
 
-                    imageFilesListView.Items.Add(item);
+                    sourceFilesListView.Items.Add(item);
                 }
 
                 numberOfImages.Text = imageFiles.Count.ToString();
 
                 beginOCRButton.Enabled = true;
-            }
-        }
-
-        private void exitButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void browse_Button_Click(object sender, EventArgs e)
-        {
-            browse_TextBox.Text = String.Empty;
-
-            if (browse_folderBrowserDialog.ShowDialog() == DialogResult.OK)
-            {
-                browse_TextBox.Text = browse_folderBrowserDialog.SelectedPath;
-                loadImagesButton.Enabled = true;
-            }
-            else
-            {
-                browse_TextBox.Text = String.Empty;
-                loadImagesButton.Enabled = false;
-            }
-        }
-
-        private void viewLogsButton_Click(object sender, EventArgs e)
-        {
-            if (logForm.Visible)
-            {
-                logForm.Hide();
-                viewLogsButton.Text = "View Logs";
-            }
-            else
-            {
-                logForm.Location = new Point(this.Location.X + this.Width + 10, this.Location.Y);
-                logForm.Show();
-                viewLogsButton.Text = "Hide Logs";
             }
         }
 
@@ -203,7 +194,7 @@ namespace NewspaperOCR
 
             foreach (DirectoryStructure item in directoryStructure)
             {
-                ListViewItem imageFileListViewItem = imageFilesListView.Items[item.Index];
+                ListViewItem imageFileListViewItem = sourceFilesListView.Items[item.Index];
 
                 if (File.Exists(item.OutputAltoFileFullPath + ".xml") || File.Exists(item.OutputPdfFileFullPath + ".pdf"))
                 {
@@ -256,27 +247,50 @@ namespace NewspaperOCR
                 }
             }
 
+            // Print OCR completion message to log :
             batchCompletionTime = DateTime.Now;
             batchProcessingTime = batchCompletionTime - batchStartTime;
 
-            string ocrCompleteMessage = $"OCR of this batch has completed at {batchCompletionTime.ToString(@"hh\:mm\:ss")}. Time spent: {batchProcessingTime.ToString(@"hh\:mm\:ss")}. Files from this batch will be cleared from the list.";
-
+            string ocrCompleteMessage = $"OCR of this batch has completed at {batchCompletionTime.ToString(@"hh\:mm\:ss")}.\n" +
+                $"Time spent: {batchProcessingTime.ToString(@"hh\:mm\:ss")}.\n" +
+                $"Files from this batch will be cleared from the list.";
             logForm.appendTextsToLog(ocrCompleteMessage, logForm.LOG_TYPE_INFO);
-
             MessageBox.Show(ocrCompleteMessage, "OCR Complete!");
 
             startOver();
-        }
-
-        private void optionsButton_Click(object sender, EventArgs e)
-        {
-            optionsForm.Show();
         }
 
         private void startOverButton_Click(object sender, EventArgs e)
         {
             startOver();
         }
-
+        private void optionsButton_Click(object sender, EventArgs e)
+        {
+            if (optionsForm.Visible)
+            {
+                optionsForm.BringToFront();
+            }
+            else
+            {
+                optionsForm.Location = new Point(this.Location.X + this.Width + 20, this.Location.Y);
+                optionsForm.Show();
+            }
+        }
+        private void viewLogsButton_Click(object sender, EventArgs e)
+        {
+            if (logForm.Visible)
+            {
+                logForm.BringToFront();
+            }
+            else
+            {
+                logForm.Location = new Point(this.Location.X + this.Width + 10, this.Location.Y);
+                logForm.Show();
+            }
+        }
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

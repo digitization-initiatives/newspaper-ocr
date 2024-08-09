@@ -94,5 +94,17 @@ namespace NewspaperOCR.Properties {
                 this["LogLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SourceImageFileFormat {
+            get {
+                return ((string)(this["SourceImageFileFormat"]));
+            }
+            set {
+                this["SourceImageFileFormat"] = value;
+            }
+        }
     }
 }

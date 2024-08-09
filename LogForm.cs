@@ -28,20 +28,17 @@ namespace NewspaperOCR
 
         private void logFormSaveLogsButton_Click(object sender, EventArgs e)
         {
-            string currentDirectory = Directory.GetCurrentDirectory();
-            string logDirectory = Path.Combine(currentDirectory, "log");
-
             string logFileName = $"ocr_{DateTime.Now:yyyyMMdd_HHmmss}.log";
-            string logFileFullPath = Path.Combine(currentDirectory, logDirectory, logFileName);
+            string logFileFullPath = Path.Combine(Properties.Settings.Default.LogLocation, logFileName);
 
-            if (!Directory.Exists(logDirectory))
+            if (!Directory.Exists(Properties.Settings.Default.LogLocation))
             {
-                Directory.CreateDirectory(logDirectory);
+                Directory.CreateDirectory(Properties.Settings.Default.LogLocation);
             }
 
             File.WriteAllText(logFileFullPath, logsTextBox.Text);
 
-            MessageBox.Show("Log file saved to " + logFileFullPath, "Logs Saved!");
+            MessageBox.Show($"Log file saved to {logFileFullPath} .", "Logs Saved!");
         }
 
         private void logFormHideLogsButton_Click(object sender, EventArgs e)

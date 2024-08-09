@@ -116,9 +116,12 @@
 
         public MainForm mainForm;
         public string LOG_TYPE_INFO, LOG_TYPE_WARN, LOG_TYPE_ERROR;
+        public CheckBox verboseLogCheckBox;
         private string LOG_TIMESTAMP;
         private void CustomInitializations()
         {
+            verboseLogCheckBox.Checked = true;
+
             LOG_TYPE_INFO = " - [INFO] - ";
             LOG_TYPE_WARN = " - [WARN] - ";
             LOG_TYPE_ERROR = " - [ERROR] - ";
@@ -131,6 +134,5 @@
         private Button hideLogsButton;
         private TextBox logsTextBox;
         private Button clearLogsButton;
-        private CheckBox verboseLogCheckBox;
     }
 }

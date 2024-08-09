@@ -55,6 +55,8 @@ namespace NewspaperOCR
             logLocation_folderBrowserDialog = new FolderBrowserDialog();
             directorySettingsLabel = new Label();
             ocrSettingsLabel = new Label();
+            sourceImageFileFormatComboBox = new ComboBox();
+            sourceImageFileFormatLabel = new Label();
             SuspendLayout();
             // 
             // tessdataLocationLabel
@@ -245,12 +247,33 @@ namespace NewspaperOCR
             ocrSettingsLabel.TabIndex = 19;
             ocrSettingsLabel.Text = "OCR Settings :";
             // 
+            // sourceImageFileFormatComboBox
+            // 
+            sourceImageFileFormatComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            sourceImageFileFormatComboBox.FormattingEnabled = true;
+            sourceImageFileFormatComboBox.Items.AddRange(new object[] { "tif", "jpg", "png" });
+            sourceImageFileFormatComboBox.Location = new Point(17, 394);
+            sourceImageFileFormatComboBox.Name = "sourceImageFileFormatComboBox";
+            sourceImageFileFormatComboBox.Size = new Size(247, 28);
+            sourceImageFileFormatComboBox.TabIndex = 21;
+            // 
+            // sourceImageFileFormatLabel
+            // 
+            sourceImageFileFormatLabel.AutoSize = true;
+            sourceImageFileFormatLabel.Location = new Point(17, 371);
+            sourceImageFileFormatLabel.Name = "sourceImageFileFormatLabel";
+            sourceImageFileFormatLabel.Size = new Size(185, 20);
+            sourceImageFileFormatLabel.TabIndex = 20;
+            sourceImageFileFormatLabel.Text = "Source Image File Format :";
+            // 
             // OptionsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(782, 673);
             ControlBox = false;
+            Controls.Add(sourceImageFileFormatComboBox);
+            Controls.Add(sourceImageFileFormatLabel);
             Controls.Add(ocrSettingsLabel);
             Controls.Add(directorySettingsLabel);
             Controls.Add(logLocationBrowseButton);
@@ -285,7 +308,7 @@ namespace NewspaperOCR
         public LogForm logForm;
         private void CustomInitializations()
         {
-
+            setDefaultOptions();
         }
 
         #endregion
@@ -313,5 +336,7 @@ namespace NewspaperOCR
         private FolderBrowserDialog logLocation_folderBrowserDialog;
         private Label directorySettingsLabel;
         private Label ocrSettingsLabel;
+        private ComboBox sourceImageFileFormatComboBox;
+        private Label sourceImageFileFormatLabel;
     }
 }

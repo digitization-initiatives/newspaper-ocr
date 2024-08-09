@@ -12,8 +12,9 @@ namespace NewspaperOCR
 {
     public partial class OptionsForm : Form
     {
-        public OptionsForm()
+        public OptionsForm(LogForm logFormRef)
         {
+            logForm = logFormRef;
             InitializeComponent();
             CustomInitializations();
         }
@@ -21,12 +22,13 @@ namespace NewspaperOCR
         #region Custom Functions
         private void printSettingsToLogs()
         {
-            logForm.appendTextsToLog($"[Tessdata Location] has been changed to: {Properties.Settings.Default.TessdataLocation}.", logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog($"[OCR Output Location] has been changed to: {Properties.Settings.Default.OCROutputLocation}.", logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog($"[Log Location] has been changed to: {Properties.Settings.Default.LogLocation}.", logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog($"[Tessdata Location] has been changed to: {Properties.Settings.Default.TessdataLocation}", logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog($"[OCR Output Location] has been changed to: {Properties.Settings.Default.OCROutputLocation}", logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog($"[Log Location] has been changed to: {Properties.Settings.Default.LogLocation}", logForm.LOG_TYPE_INFO);
             logForm.appendTextsToLog($"[Concurrent OCR Jobs] has been changed to: {Properties.Settings.Default.ConcurrentOCRJobs.ToString()}.", logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog($"[OCR Language] has been changed to: {Properties.Settings.Default.OCRLang}.", logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog($"[Tile Size] has been changed to: {Properties.Settings.Default.TileSize}.", logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog($"[OCR Language] has been changed to: {Properties.Settings.Default.OCRLang}", logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog($"[Tile Size] has been changed to: {Properties.Settings.Default.TileSize}", logForm.LOG_TYPE_INFO);
+            logForm.appendTextsToLog($"[Source Image File Format] has been changed to: {Properties.Settings.Default.SourceImageFileFormat}", logForm.LOG_TYPE_INFO);
         }
         private void updateOptionsFormUI()
         {
@@ -39,6 +41,7 @@ namespace NewspaperOCR
             ocrLangComboBox.SelectedItem = Properties.Settings.Default.OCRLang;
             concurrentOCRJobsComboBox.SelectedItem = Properties.Settings.Default.ConcurrentOCRJobs.ToString();
             tileSizeComboBox.SelectedItem = Properties.Settings.Default.TileSize;
+            sourceImageFileFormatComboBox.SelectedItem = Properties.Settings.Default.SourceImageFileFormat;
         }
 
         public void setDefaultOptions()
@@ -51,6 +54,7 @@ namespace NewspaperOCR
             Properties.Settings.Default.ConcurrentOCRJobs = 1;
             Properties.Settings.Default.OCRLang = "eng";
             Properties.Settings.Default.TileSize = "[1024x1024]";
+            Properties.Settings.Default.SourceImageFileFormat = "tif";
 
             Properties.Settings.Default.Save();
 
@@ -76,6 +80,7 @@ namespace NewspaperOCR
             Properties.Settings.Default.ConcurrentOCRJobs = concurrentOCRJobsComboBox.SelectedIndex + 1;
             Properties.Settings.Default.OCRLang = ocrLangComboBox.SelectedItem.ToString().Substring(0, 3);
             Properties.Settings.Default.TileSize = tileSizeComboBox.SelectedItem.ToString();
+            Properties.Settings.Default.SourceImageFileFormat = sourceImageFileFormatComboBox.SelectedItem.ToString();
             
             Properties.Settings.Default.Save();
 
