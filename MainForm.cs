@@ -1,6 +1,7 @@
 using ImageMagick;
 using ImageMagick.Formats;
 using NewspaperOCR.src;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using TesseractOCR;
 using TesseractOCR.Enums;
@@ -18,6 +19,59 @@ namespace NewspaperOCR
         }
 
         #region My Custom Functions
+        public bool validateIssueFolderNames()
+        {
+            Regex issueFolderNamePattern = new Regex(@"^[a-zA-Z0-9_-]+_\d{4}-\d{2}-\d{2}$");
+            
+            List<string> issueFoldersPaths = new List<string>();
+            List<string> files = new List<string>();
+
+            issueFoldersPaths.AddRange(Directory.GetDirectories(folderBrowserDialog.SelectedPath));
+            files.AddRange(Directory.GetFiles(folderBrowserDialog.SelectedPath));
+
+            int validFolders = issueFoldersPaths.Count;
+
+            if (files.Count > 0)
+            {
+                //MessageBox.Show($"\"{folderBrowserDialog.SelectedPath}\" should only contain issue folders.", "Invalid Files Found!");
+                logForm.appendTextsToLog($"The following invalid files found in \"{folderBrowserDialog.SelectedPath}\". Only issue folders are allowed.", logForm.LOG_TYPE_WARN);
+                foreach (string file in files)
+                {
+                    logForm.appendTextsToLog($"Invalid file: \"{file}\"", logForm.LOG_TYPE_WARN);
+                }
+                return false;
+            }
+
+            if (issueFoldersPaths.Count == 0)
+            {
+                //MessageBox.Show($"No Issues Found in \"{folderBrowserDialog.SelectedPath}\"", "No Issues Found!");
+                logForm.appendTextsToLog($"No Issues Found in \"{folderBrowserDialog.SelectedPath}\"", logForm.LOG_TYPE_WARN);
+                return false;
+            } else
+            {
+                foreach (string issueFolderPath in issueFoldersPaths)
+                {
+                    string issueFolderName = Path.GetFileName(issueFolderPath);
+
+                    if (!issueFolderNamePattern.IsMatch(issueFolderName))
+                    {
+                        logForm.appendTextsToLog($"\"{issueFolderPath}\" is not a valid issue folder name", logForm.LOG_TYPE_WARN);
+                        validFolders--;
+                    } else
+                    {
+                        logForm.appendTextsToLog($"\"{issueFolderPath}\" is a valid issue folder name", logForm.LOG_TYPE_INFO);
+                    }
+                }
+
+                if (validFolders < issueFoldersPaths.Count)
+                {
+                    //MessageBox.Show($"Some issue folder names in \"{folderBrowserDialog.SelectedPath}\" are invalid, please see log for details.", "Invalid issue folder names found!");
+                    logForm.appendTextsToLog($"Some issue folder names in \"{folderBrowserDialog.SelectedPath}\" are invalid, please see log for details.", logForm.LOG_TYPE_WARN);
+                    return false;
+                }
+                else return true;
+            }
+        }
         public void constructOutputDirectoryStructure()
         {
             string batchNameFolder = Path.GetFileName(folderBrowserTextBox.Text);
@@ -162,21 +216,29 @@ namespace NewspaperOCR
         {
             if (folderBrowserDialog.SelectedPath != String.Empty)
             {
-                List<string> imageFiles = new List<string>();
-
-                imageFiles.AddRange(Directory.GetFiles(folderBrowserDialog.SelectedPath, $"*.{Properties.Settings.Default.SourceImageFileFormat}", SearchOption.AllDirectories));
-
-                foreach (string imageFile in imageFiles)
+                if (validateIssueFolderNames())
                 {
-                    ListViewItem item = new ListViewItem(imageFile);
-                    item.SubItems.Add("...");
+                    List<string> imageFiles = new List<string>();
 
-                    sourceFilesListView.Items.Add(item);
+                    imageFiles.AddRange(Directory.GetFiles(folderBrowserDialog.SelectedPath, $"*.{Properties.Settings.Default.SourceImageFileFormat}", SearchOption.AllDirectories));
+
+                    foreach (string imageFile in imageFiles)
+                    {
+                        ListViewItem item = new ListViewItem(imageFile);
+                        item.SubItems.Add("...");
+
+                        sourceFilesListView.Items.Add(item);
+                    }
+
+                    numberOfImages.Text = imageFiles.Count.ToString();
+
+                    beginOCRButton.Enabled = true;
                 }
-
-                numberOfImages.Text = imageFiles.Count.ToString();
-
-                beginOCRButton.Enabled = true;
+                else
+                {
+                    MessageBox.Show($"\"{folderBrowserDialog.SelectedPath}\" contains invalid issue folders, see log for details.", "Invalid Issue Folders Found!");
+                    logForm.appendTextsToLog($"\"{folderBrowserDialog.SelectedPath}\" contains invalid issue folders, validation faild.", logForm.LOG_TYPE_WARN);
+                }
             }
         }
 
