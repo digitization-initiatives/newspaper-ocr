@@ -236,7 +236,7 @@ namespace NewspaperOCR
                 }
                 else
                 {
-                    MessageBox.Show($"\"{folderBrowserDialog.SelectedPath}\" contains invalid issue folders, see log for details.", "Invalid Issue Folders Found!");
+                    MessageBox.Show($"\"{folderBrowserDialog.SelectedPath}\" is empty or contains invalid issue folders, see log for details.", "Invalid Issue Folders Found!");
                     logForm.appendTextsToLog($"\"{folderBrowserDialog.SelectedPath}\" contains invalid issue folders, validation faild.", logForm.LOG_TYPE_WARN);
                 }
             }
