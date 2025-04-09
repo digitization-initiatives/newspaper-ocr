@@ -42,14 +42,13 @@ namespace NewspaperOCR
             viewLogsButton = new Button();
             folderBrowserDialog = new FolderBrowserDialog();
             loadImagesButton = new Button();
-            numberOfImagesLoadedLabel = new Label();
-            numberOfImages = new Label();
             startOverButton = new Button();
             statusBar = new StatusStrip();
-            statusBarItem_Status = new ToolStripStatusLabel();
-            statusBarItem_Message = new ToolStripStatusLabel();
-            numberOfCompletedOcr = new Label();
-            numberOfCompletedOcrLabel = new Label();
+            statusBarItem_numberOfImagesLoaded = new ToolStripStatusLabel();
+            statusBarItem_divider = new ToolStripStatusLabel();
+            statusBarItem_numberOfCompletedItems = new ToolStripStatusLabel();
+            statusBarItem_numberOfCompletedItemsLabel = new ToolStripStatusLabel();
+            cancelOCRButton = new Button();
             statusBar.SuspendLayout();
             SuspendLayout();
             // 
@@ -150,26 +149,6 @@ namespace NewspaperOCR
             loadImagesButton.UseVisualStyleBackColor = true;
             loadImagesButton.Click += loadImagesButton_Click;
             // 
-            // numberOfImagesLoadedLabel
-            // 
-            numberOfImagesLoadedLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            numberOfImagesLoadedLabel.AutoSize = true;
-            numberOfImagesLoadedLabel.Location = new Point(292, 618);
-            numberOfImagesLoadedLabel.Name = "numberOfImagesLoadedLabel";
-            numberOfImagesLoadedLabel.Size = new Size(159, 20);
-            numberOfImagesLoadedLabel.TabIndex = 8;
-            numberOfImagesLoadedLabel.Text = "No. of Images Loaded:";
-            // 
-            // numberOfImages
-            // 
-            numberOfImages.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            numberOfImages.AutoSize = true;
-            numberOfImages.Location = new Point(457, 618);
-            numberOfImages.Name = "numberOfImages";
-            numberOfImages.Size = new Size(15, 20);
-            numberOfImages.TabIndex = 9;
-            numberOfImages.Text = "-";
-            // 
             // startOverButton
             // 
             startOverButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -184,55 +163,56 @@ namespace NewspaperOCR
             // statusBar
             // 
             statusBar.ImageScalingSize = new Size(20, 20);
-            statusBar.Items.AddRange(new ToolStripItem[] { statusBarItem_Status, statusBarItem_Message });
+            statusBar.Items.AddRange(new ToolStripItem[] { statusBarItem_numberOfImagesLoaded, statusBarItem_divider, statusBarItem_numberOfCompletedItems, statusBarItem_numberOfCompletedItemsLabel });
             statusBar.Location = new Point(0, 647);
             statusBar.Name = "statusBar";
             statusBar.Size = new Size(1262, 26);
             statusBar.TabIndex = 16;
             statusBar.Text = "statusBar";
             // 
-            // statusBarItem_Status
+            // statusBarItem_numberOfImagesLoaded
             // 
-            statusBarItem_Status.Name = "statusBarItem_Status";
-            statusBarItem_Status.Size = new Size(162, 20);
-            statusBarItem_Status.Text = "No Image Files Loaded";
+            statusBarItem_numberOfImagesLoaded.Name = "statusBarItem_numberOfImagesLoaded";
+            statusBarItem_numberOfImagesLoaded.Size = new Size(162, 20);
+            statusBarItem_numberOfImagesLoaded.Text = "No Image Files Loaded";
             // 
-            // statusBarItem_Message
+            // statusBarItem_divider
             // 
-            statusBarItem_Message.Name = "statusBarItem_Message";
-            statusBarItem_Message.Size = new Size(0, 20);
+            statusBarItem_divider.Name = "statusBarItem_divider";
+            statusBarItem_divider.Size = new Size(29, 20);
+            statusBarItem_divider.Text = "  |  ";
             // 
-            // numberOfCompletedOcr
+            // statusBarItem_numberOfCompletedItems
             // 
-            numberOfCompletedOcr.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            numberOfCompletedOcr.AutoSize = true;
-            numberOfCompletedOcr.Location = new Point(616, 618);
-            numberOfCompletedOcr.Name = "numberOfCompletedOcr";
-            numberOfCompletedOcr.Size = new Size(15, 20);
-            numberOfCompletedOcr.TabIndex = 18;
-            numberOfCompletedOcr.Text = "-";
+            statusBarItem_numberOfCompletedItems.Name = "statusBarItem_numberOfCompletedItems";
+            statusBarItem_numberOfCompletedItems.Size = new Size(15, 20);
+            statusBarItem_numberOfCompletedItems.Text = "-";
             // 
-            // numberOfCompletedOcrLabel
+            // statusBarItem_numberOfCompletedItemsLabel
             // 
-            numberOfCompletedOcrLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            numberOfCompletedOcrLabel.AutoSize = true;
-            numberOfCompletedOcrLabel.Location = new Point(524, 618);
-            numberOfCompletedOcrLabel.Name = "numberOfCompletedOcrLabel";
-            numberOfCompletedOcrLabel.Size = new Size(86, 20);
-            numberOfCompletedOcrLabel.TabIndex = 17;
-            numberOfCompletedOcrLabel.Text = "Completed:";
+            statusBarItem_numberOfCompletedItemsLabel.Name = "statusBarItem_numberOfCompletedItemsLabel";
+            statusBarItem_numberOfCompletedItemsLabel.Size = new Size(206, 20);
+            statusBarItem_numberOfCompletedItemsLabel.Text = "Images Have Completed OCR";
+            // 
+            // cancelOCRButton
+            // 
+            cancelOCRButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            cancelOCRButton.Location = new Point(218, 614);
+            cancelOCRButton.Name = "cancelOCRButton";
+            cancelOCRButton.Size = new Size(200, 29);
+            cancelOCRButton.TabIndex = 17;
+            cancelOCRButton.Text = "Stop OCR";
+            cancelOCRButton.UseVisualStyleBackColor = true;
+            cancelOCRButton.Click += cancelOCRButton_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1262, 673);
-            Controls.Add(numberOfCompletedOcr);
-            Controls.Add(numberOfCompletedOcrLabel);
+            Controls.Add(cancelOCRButton);
             Controls.Add(statusBar);
             Controls.Add(startOverButton);
-            Controls.Add(numberOfImages);
-            Controls.Add(numberOfImagesLoadedLabel);
             Controls.Add(loadImagesButton);
             Controls.Add(viewLogsButton);
             Controls.Add(beginOCRButton);
@@ -287,8 +267,8 @@ namespace NewspaperOCR
 
             beginOCRButton.Enabled = false;
 
-            numberOfImages.Text = "-";
-            numberOfCompletedOcr.Text = "-";
+            statusBarItem_numberOfImagesLoaded.Text = "No Image Files Loaded";
+            statusBarItem_numberOfCompletedItems.Text = "-";
 
             resetStatusBar();
 
@@ -307,14 +287,13 @@ namespace NewspaperOCR
         private ColumnHeader sourceFilesListView_ocrStatusCol;
         private FolderBrowserDialog folderBrowserDialog;
         private Button loadImagesButton;
-        private Label numberOfImagesLoadedLabel;
-        private Label numberOfImages;
         private Button startOverButton;
         private ToolStripStatusLabel statusStripItem_Status;
         private StatusStrip statusBar;
-        private ToolStripStatusLabel statusBarItem_Status;
-        private ToolStripStatusLabel statusBarItem_Message;
-        private Label numberOfCompletedOcr;
-        private Label numberOfCompletedOcrLabel;
+        private ToolStripStatusLabel statusBarItem_numberOfImagesLoaded;
+        private ToolStripStatusLabel statusBarItem_numberOfCompletedItems;
+        private ToolStripStatusLabel statusBarItem_divider;
+        private Button cancelOCRButton;
+        private ToolStripStatusLabel statusBarItem_numberOfCompletedItemsLabel;
     }
 }

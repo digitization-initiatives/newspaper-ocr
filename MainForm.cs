@@ -22,7 +22,7 @@ namespace NewspaperOCR
         public bool validateIssueFolderNames()
         {
             Regex issueFolderNamePattern = new Regex(@"^[a-zA-Z0-9_-]+_\d{4}-\d{2}-\d{2}$");
-            
+
             List<string> issueFoldersPaths = new List<string>();
             List<string> files = new List<string>();
 
@@ -47,7 +47,8 @@ namespace NewspaperOCR
                 //MessageBox.Show($"No Issues Found in \"{folderBrowserDialog.SelectedPath}\"", "No Issues Found!");
                 logForm.appendTextsToLog($"No Issues Found in \"{folderBrowserDialog.SelectedPath}\"", logForm.LOG_TYPE_WARN);
                 return false;
-            } else
+            }
+            else
             {
                 foreach (string issueFolderPath in issueFoldersPaths)
                 {
@@ -57,7 +58,8 @@ namespace NewspaperOCR
                     {
                         logForm.appendTextsToLog($"\"{issueFolderPath}\" is not a valid issue folder name", logForm.LOG_TYPE_WARN);
                         validFolders--;
-                    } else
+                    }
+                    else
                     {
                         logForm.appendTextsToLog($"\"{issueFolderPath}\" is a valid issue folder name", logForm.LOG_TYPE_INFO);
                     }
@@ -156,7 +158,7 @@ namespace NewspaperOCR
             }
         }
 
-        
+
         private void startOver()
         {
             // Reset MainForm UI:
@@ -169,8 +171,8 @@ namespace NewspaperOCR
 
             beginOCRButton.Enabled = false;
 
-            numberOfImages.Text = "-";
-            numberOfCompletedOcr.Text = "-";
+            statusBarItem_numberOfImagesLoaded.Text = "No Image Files Loaded";
+            statusBarItem_numberOfCompletedItems.Text = "-";
 
             resetStatusBar();
 
@@ -180,14 +182,14 @@ namespace NewspaperOCR
 
         public void resetStatusBar()
         {
-            statusBarItem_Status.Text = "No Image Files Loaded";
-            statusBarItem_Message.Text = String.Empty;
+            statusBarItem_numberOfImagesLoaded.Text = "No Image Files Loaded";
+            statusBarItem_numberOfCompletedItems.Text = "-";
         }
 
         public void updateStatusBar(string status, string message)
         {
-            statusBarItem_Status.Text = status;
-            statusBarItem_Message.Text = message;
+            statusBarItem_numberOfImagesLoaded.Text = status;
+            statusBarItem_numberOfCompletedItems.Text = message;
         }
         private void imageFilesListView_SizeChanged(object sender, EventArgs e)
         {
@@ -230,7 +232,8 @@ namespace NewspaperOCR
                         sourceFilesListView.Items.Add(item);
                     }
 
-                    numberOfImages.Text = imageFiles.Count.ToString();
+                    statusBarItem_numberOfImagesLoaded.Text = $"No. of Images Loaded: {imageFiles.Count.ToString()}";
+                    statusBarItem_numberOfCompletedItems.Text = $"0";
 
                     beginOCRButton.Enabled = true;
                 }
@@ -247,7 +250,7 @@ namespace NewspaperOCR
             constructOutputDirectoryStructure();
 
             int completedOcr = 0;
-            numberOfCompletedOcr.Text = completedOcr.ToString();
+            statusBarItem_numberOfCompletedItems.Text = completedOcr.ToString();
             DateTime batchStartTime = DateTime.Now;
             DateTime batchCompletionTime;
             TimeSpan batchProcessingTime;
@@ -263,7 +266,7 @@ namespace NewspaperOCR
                     imageFileListViewItem.SubItems[1].Text = "Skipped";
                     logForm.appendTextsToLog($"{item.SourceImageFileFullPath} skipped. Destinationa file exists.", logForm.LOG_TYPE_INFO);
                     completedOcr++;
-                    numberOfCompletedOcr.Text = completedOcr.ToString();
+                    statusBarItem_numberOfCompletedItems.Text = completedOcr.ToString();
                     continue;
                 }
                 else
@@ -294,7 +297,7 @@ namespace NewspaperOCR
                         logForm.appendTextsToLog(item.SourceImageFileFullPath + " ocr has completed ... ", logForm.LOG_TYPE_INFO);
                         imageFileListViewItem.SubItems[1].Text = "Finished";
                         completedOcr++;
-                        numberOfCompletedOcr.Text = completedOcr.ToString();
+                        statusBarItem_numberOfCompletedItems.Text = completedOcr.ToString();
                     }
                     else if (ocrTask.Status == TaskStatus.Canceled)
                     {
@@ -322,6 +325,10 @@ namespace NewspaperOCR
             startOver();
         }
 
+        private void cancelOCRButton_Click(object sender, EventArgs e)
+        {
+
+        }
         private void startOverButton_Click(object sender, EventArgs e)
         {
             startOver();
@@ -354,5 +361,7 @@ namespace NewspaperOCR
         {
             this.Close();
         }
+
+
     }
 }
