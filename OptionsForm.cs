@@ -47,7 +47,7 @@ namespace NewspaperOCR
         public void setDefaultOptions()
         {
             // Update Settings :
-            Properties.Settings.Default.TessdataLocation = Path.GetFullPath(".") + "\\tessdata";
+            Properties.Settings.Default.TessdataLocation = Path.GetFullPath(".") + "\\src\\tessdata";
             Properties.Settings.Default.OCROutputLocation = Path.GetFullPath(".") + "\\output";
             Properties.Settings.Default.LogLocation = Path.GetFullPath(".") + "\\log";
             

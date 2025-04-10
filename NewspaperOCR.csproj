@@ -10,6 +10,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="src\tessdata\eng.traineddata" />
+    <None Remove="src\tessdata\fra.traineddata" />
+    <None Remove="src\tessdata\jpn.traineddata" />
+    <None Remove="src\tessdata\spa.traineddata" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="src\tessdata\eng.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="src\tessdata\fra.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="src\tessdata\jpn.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="src\tessdata\spa.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.6.0" />
     <PackageReference Include="TesseractOCR" Version="5.3.5" />
   </ItemGroup>
