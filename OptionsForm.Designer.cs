@@ -252,7 +252,7 @@ namespace NewspaperOCR
             sourceImageFileFormatComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             sourceImageFileFormatComboBox.FormattingEnabled = true;
             sourceImageFileFormatComboBox.Items.AddRange(new object[] { "tif", "jpg", "png" });
-            sourceImageFileFormatComboBox.Location = new Point(17, 394);
+            sourceImageFileFormatComboBox.Location = new Point(17, 397);
             sourceImageFileFormatComboBox.Name = "sourceImageFileFormatComboBox";
             sourceImageFileFormatComboBox.Size = new Size(247, 28);
             sourceImageFileFormatComboBox.TabIndex = 21;
@@ -260,7 +260,7 @@ namespace NewspaperOCR
             // sourceImageFileFormatLabel
             // 
             sourceImageFileFormatLabel.AutoSize = true;
-            sourceImageFileFormatLabel.Location = new Point(17, 371);
+            sourceImageFileFormatLabel.Location = new Point(17, 374);
             sourceImageFileFormatLabel.Name = "sourceImageFileFormatLabel";
             sourceImageFileFormatLabel.Size = new Size(185, 20);
             sourceImageFileFormatLabel.TabIndex = 20;

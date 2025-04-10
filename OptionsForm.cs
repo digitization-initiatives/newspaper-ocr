@@ -80,7 +80,6 @@ namespace NewspaperOCR
             Properties.Settings.Default.ConcurrentOCRJobs = concurrentOCRJobsComboBox.SelectedIndex + 1;
             Properties.Settings.Default.OCRLang = ocrLangComboBox.SelectedItem.ToString().Substring(0, 3);
             Properties.Settings.Default.TileSize = tileSizeComboBox.SelectedItem.ToString();
-            Properties.Settings.Default.SourceImageFileFormat = sourceImageFileFormatComboBox.SelectedItem.ToString();
             
             Properties.Settings.Default.Save();
 
