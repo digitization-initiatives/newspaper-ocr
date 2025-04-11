@@ -51,7 +51,7 @@ namespace NewspaperOCR
             Properties.Settings.Default.OCROutputLocation = Path.GetFullPath(".") + "\\output";
             Properties.Settings.Default.LogLocation = Path.GetFullPath(".") + "\\log";
             
-            Properties.Settings.Default.ConcurrentOCRJobs = 1;
+            Properties.Settings.Default.ConcurrentOCRJobs = 5;
             Properties.Settings.Default.OCRLang = "eng";
             Properties.Settings.Default.TileSize = "[1024x1024]";
             Properties.Settings.Default.SourceImageFileFormat = "tif";
