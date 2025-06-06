@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NewspaperOCR.src
 {
-    internal class DirectoryStructure
+    internal class OutputDirectoryStructure
     {
         public int Index { get; set; }
         public string BatchNameFolder { get; set; }
@@ -23,7 +23,7 @@ namespace NewspaperOCR.src
         public string OutputAltoFileFullPath { get; set; }
         public string OutputDirectoryFullPath { get; set; }
 
-        public DirectoryStructure(int index, string batchNameFolder, string issueDateFolder, string sourceImageFileName, string sourceImageFileFullpath, string outputDirectory)
+        public OutputDirectoryStructure(int index, string batchNameFolder, string issueDateFolder, string sourceImageFileName, string sourceImageFileFullpath, string outputDirectory)
         {
             Index = index;
 

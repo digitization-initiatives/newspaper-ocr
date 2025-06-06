@@ -21,58 +21,7 @@ namespace NewspaperOCR
         }
 
         #region My Custom Functions
-        public bool validateIssueFolderNames()
-        {
-            Regex issueFolderNamePattern = new Regex(@"^[a-zA-Z0-9_-]+_\d{4}-\d{2}-\d{2}$");
 
-            List<string> issueFoldersPaths = new List<string>();
-            List<string> files = new List<string>();
-
-            issueFoldersPaths.AddRange(Directory.GetDirectories(folderBrowserDialog.SelectedPath));
-            files.AddRange(Directory.GetFiles(folderBrowserDialog.SelectedPath));
-
-            int validFolders = issueFoldersPaths.Count;
-
-            if (files.Count > 0)
-            {
-                logForm.appendTextsToLog($"The following invalid files found in \"{folderBrowserDialog.SelectedPath}\". Only issue folders are allowed.", logForm.LOG_TYPE_WARN);
-                foreach (string file in files)
-                {
-                    logForm.appendTextsToLog($"Invalid file: \"{file}\"", logForm.LOG_TYPE_WARN);
-                }
-                return false;
-            }
-
-            if (issueFoldersPaths.Count == 0)
-            {
-                logForm.appendTextsToLog($"No Issues Found in \"{folderBrowserDialog.SelectedPath}\"", logForm.LOG_TYPE_WARN);
-                return false;
-            }
-            else
-            {
-                foreach (string issueFolderPath in issueFoldersPaths)
-                {
-                    string issueFolderName = Path.GetFileName(issueFolderPath);
-
-                    if (!issueFolderNamePattern.IsMatch(issueFolderName))
-                    {
-                        logForm.appendTextsToLog($"\"{issueFolderPath}\" is not a valid issue folder name", logForm.LOG_TYPE_WARN);
-                        validFolders--;
-                    }
-                    else
-                    {
-                        logForm.appendTextsToLog($"\"{issueFolderPath}\" is a valid issue folder name", logForm.LOG_TYPE_INFO);
-                    }
-                }
-
-                if (validFolders < issueFoldersPaths.Count)
-                {
-                    logForm.appendTextsToLog($"Some issue folder names in \"{folderBrowserDialog.SelectedPath}\" are invalid, please see log for details.", logForm.LOG_TYPE_WARN);
-                    return false;
-                }
-                else return true;
-            }
-        }
         public void constructOutputDirectoryStructure()
         {
             string batchNameFolder = Path.GetFileName(folderBrowserTextBox.Text);
@@ -94,7 +43,7 @@ namespace NewspaperOCR
                 //Extract imageFileName:
                 string imageFileName = Path.GetFileName(imageFileListViewItem.SubItems[0].Text);
 
-                DirectoryStructure directoryStructureItem = new DirectoryStructure(index, batchNameFolder, issueDateFolder, imageFileName, imageFileListViewItem.SubItems[0].Text, Properties.Settings.Default.OCROutputLocation);
+                OutputDirectoryStructure directoryStructureItem = new OutputDirectoryStructure(index, batchNameFolder, issueDateFolder, imageFileName, imageFileListViewItem.SubItems[0].Text, Properties.Settings.Default.OCROutputLocation);
                 directoryStructure.Add(directoryStructureItem);
             }
 
@@ -125,7 +74,7 @@ namespace NewspaperOCR
 
         private async Task processOCRQueue(Language ocrLang, string tessdataLoc, int concurrentOCRJobs, string tileSize, CancellationToken ct)
         {
-            Queue<DirectoryStructure> directoryStructureQueue = new Queue<DirectoryStructure>(directoryStructure);
+            Queue<OutputDirectoryStructure> directoryStructureQueue = new Queue<OutputDirectoryStructure>(directoryStructure);
             Dictionary<int, src.TaskStatus> concurrentJobsTracker = new Dictionary<int, src.TaskStatus>();
             Task ocrTask;
 
@@ -133,7 +82,7 @@ namespace NewspaperOCR
             DateTime batchStartTime = DateTime.Now;
             DateTime batchCompletionTime;
             TimeSpan batchProcessingTime;
-            DirectoryStructure item;
+            OutputDirectoryStructure item;
 
             this.Invoke(() =>
             {

@@ -64,9 +64,9 @@ namespace NewspaperOCR
             tessdataLocationLabel.AutoSize = true;
             tessdataLocationLabel.Location = new Point(17, 44);
             tessdataLocationLabel.Name = "tessdataLocationLabel";
-            tessdataLocationLabel.Size = new Size(130, 20);
+            tessdataLocationLabel.Size = new Size(590, 20);
             tessdataLocationLabel.TabIndex = 0;
-            tessdataLocationLabel.Text = "Tessdata Location:";
+            tessdataLocationLabel.Text = "Tessdata Location: (choose your Tessdata location or leave as default to use embedded)";
             // 
             // tessdataLocationTextBox
             // 

@@ -10,9 +10,9 @@ namespace NewspaperOCR.src
     {
         public Task RunningTask { get; set; }
 
-        public DirectoryStructure Item { get; set; }
+        public OutputDirectoryStructure Item { get; set; }
 
-        public TaskStatus (Task runningTask, DirectoryStructure item)
+        public TaskStatus (Task runningTask, OutputDirectoryStructure item)
         {
             RunningTask = runningTask;
             Item = item;

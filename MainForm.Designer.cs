@@ -237,7 +237,7 @@ namespace NewspaperOCR
         private LogForm logForm;
         private OptionsForm optionsForm;
         public Button viewLogsButton;
-        private List<DirectoryStructure> directoryStructure;
+        private List<OutputDirectoryStructure> directoryStructure;
 
         private void CustomInitializations()
         {
@@ -273,27 +273,27 @@ namespace NewspaperOCR
             resetStatusBar();
 
             // Initialize data structures :
-            directoryStructure = new List<DirectoryStructure>();
+            directoryStructure = new List<OutputDirectoryStructure>();
         }
         #endregion
 
-        private Button folderBrowserButton;
-        private TextBox folderBrowserTextBox;
-        private Button exitButton;
-        private ListView sourceFilesListView;
-        private ColumnHeader sourceFilesListView_filenameCol;
-        private Button optionsButton;
-        private Button beginOCRButton;
-        private ColumnHeader sourceFilesListView_ocrStatusCol;
-        private FolderBrowserDialog folderBrowserDialog;
-        private Button loadImagesButton;
-        private Button startOverButton;
-        private ToolStripStatusLabel statusStripItem_Status;
-        private StatusStrip statusBar;
-        private ToolStripStatusLabel statusBarItem_numberOfImagesLoaded;
-        private ToolStripStatusLabel statusBarItem_numberOfCompletedItems;
-        private ToolStripStatusLabel statusBarItem_divider;
-        private Button cancelOCRButton;
-        private ToolStripStatusLabel statusBarItem_numberOfCompletedItemsLabel;
+        internal Button folderBrowserButton;
+        internal TextBox folderBrowserTextBox;
+        internal Button exitButton;
+        internal ListView sourceFilesListView;
+        internal ColumnHeader sourceFilesListView_filenameCol;
+        internal Button optionsButton;
+        internal Button beginOCRButton;
+        internal ColumnHeader sourceFilesListView_ocrStatusCol;
+        internal FolderBrowserDialog folderBrowserDialog;
+        internal Button loadImagesButton;
+        internal Button startOverButton;
+        internal ToolStripStatusLabel statusStripItem_Status;
+        internal StatusStrip statusBar;
+        internal ToolStripStatusLabel statusBarItem_numberOfImagesLoaded;
+        internal ToolStripStatusLabel statusBarItem_numberOfCompletedItems;
+        internal ToolStripStatusLabel statusBarItem_divider;
+        internal Button cancelOCRButton;
+        internal ToolStripStatusLabel statusBarItem_numberOfCompletedItemsLabel;
     }
 }
