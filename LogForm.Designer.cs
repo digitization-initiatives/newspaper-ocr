@@ -1,4 +1,6 @@
-﻿namespace NewspaperOCR
+﻿using System.Diagnostics;
+
+namespace NewspaperOCR
 {
     partial class LogForm
     {
@@ -28,84 +30,103 @@
         /// </summary>
         private void InitializeComponent()
         {
-            logsTextBox = new TextBox();
-            saveLogsButton = new Button();
-            hideLogsButton = new Button();
-            clearLogsButton = new Button();
-            verboseLogCheckBox = new CheckBox();
+            hideButton = new Button();
+            clearButton = new Button();
+            pauseLogsCheckbox = new CheckBox();
+            logEntryDataGridView = new DataGridView();
+            logTimestampCol = new DataGridViewTextBoxColumn();
+            logTypeCol = new DataGridViewTextBoxColumn();
+            logTextCol = new DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)logEntryDataGridView).BeginInit();
             SuspendLayout();
             // 
-            // logsTextBox
+            // hideButton
             // 
-            logsTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            logsTextBox.BackColor = Color.FromArgb(64, 64, 64);
-            logsTextBox.ForeColor = Color.FromArgb(0, 192, 0);
-            logsTextBox.Location = new Point(12, 12);
-            logsTextBox.Multiline = true;
-            logsTextBox.Name = "logsTextBox";
-            logsTextBox.ScrollBars = ScrollBars.Vertical;
-            logsTextBox.Size = new Size(758, 614);
-            logsTextBox.TabIndex = 0;
+            hideButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            hideButton.Location = new Point(874, 632);
+            hideButton.Name = "hideButton";
+            hideButton.Size = new Size(120, 29);
+            hideButton.TabIndex = 3;
+            hideButton.Text = "Hide";
+            hideButton.UseVisualStyleBackColor = true;
+            hideButton.Click += logFormHideLogsButton_Click;
             // 
-            // saveLogsButton
+            // clearButton
             // 
-            saveLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            saveLogsButton.Location = new Point(398, 632);
-            saveLogsButton.Name = "saveLogsButton";
-            saveLogsButton.Size = new Size(120, 29);
-            saveLogsButton.TabIndex = 2;
-            saveLogsButton.Text = "Save Logs";
-            saveLogsButton.UseVisualStyleBackColor = true;
-            saveLogsButton.Click += logFormSaveLogsButton_Click;
+            clearButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            clearButton.Location = new Point(748, 632);
+            clearButton.Name = "clearButton";
+            clearButton.Size = new Size(120, 29);
+            clearButton.TabIndex = 4;
+            clearButton.Text = "Clear";
+            clearButton.UseVisualStyleBackColor = true;
+            clearButton.Click += clearLogsButton_Click;
             // 
-            // hideLogsButton
+            // pauseLogsCheckbox
             // 
-            hideLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            hideLogsButton.Location = new Point(650, 632);
-            hideLogsButton.Name = "hideLogsButton";
-            hideLogsButton.Size = new Size(120, 29);
-            hideLogsButton.TabIndex = 3;
-            hideLogsButton.Text = "Hide Logs";
-            hideLogsButton.UseVisualStyleBackColor = true;
-            hideLogsButton.Click += logFormHideLogsButton_Click;
+            pauseLogsCheckbox.AutoSize = true;
+            pauseLogsCheckbox.Location = new Point(12, 635);
+            pauseLogsCheckbox.Name = "pauseLogsCheckbox";
+            pauseLogsCheckbox.Size = new Size(147, 24);
+            pauseLogsCheckbox.TabIndex = 5;
+            pauseLogsCheckbox.Text = "Pause Auto-Scroll";
+            pauseLogsCheckbox.UseVisualStyleBackColor = true;
             // 
-            // clearLogsButton
+            // logEntryDataGridView
             // 
-            clearLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            clearLogsButton.Location = new Point(524, 632);
-            clearLogsButton.Name = "clearLogsButton";
-            clearLogsButton.Size = new Size(120, 29);
-            clearLogsButton.TabIndex = 4;
-            clearLogsButton.Text = "Clear Logs";
-            clearLogsButton.UseVisualStyleBackColor = true;
-            clearLogsButton.Click += clearLogsButton_Click;
+            logEntryDataGridView.AllowUserToAddRows = false;
+            logEntryDataGridView.AllowUserToDeleteRows = false;
+            logEntryDataGridView.AllowUserToResizeColumns = false;
+            logEntryDataGridView.AllowUserToResizeRows = false;
+            logEntryDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            logEntryDataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            logEntryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            logEntryDataGridView.Columns.AddRange(new DataGridViewColumn[] { logTimestampCol, logTypeCol, logTextCol });
+            logEntryDataGridView.Location = new Point(12, 12);
+            logEntryDataGridView.Name = "logEntryDataGridView";
+            logEntryDataGridView.ReadOnly = true;
+            logEntryDataGridView.RowHeadersWidth = 51;
+            logEntryDataGridView.Size = new Size(982, 610);
+            logEntryDataGridView.TabIndex = 6;
             // 
-            // verboseLogCheckBox
+            // logTimestampCol
             // 
-            verboseLogCheckBox.AutoSize = true;
-            verboseLogCheckBox.Checked = true;
-            verboseLogCheckBox.CheckState = CheckState.Checked;
-            verboseLogCheckBox.Location = new Point(12, 637);
-            verboseLogCheckBox.Name = "verboseLogCheckBox";
-            verboseLogCheckBox.Size = new Size(84, 24);
-            verboseLogCheckBox.TabIndex = 5;
-            verboseLogCheckBox.Text = "Verbose";
-            verboseLogCheckBox.UseVisualStyleBackColor = true;
+            logTimestampCol.HeaderText = "Timestamp";
+            logTimestampCol.MinimumWidth = 6;
+            logTimestampCol.Name = "logTimestampCol";
+            logTimestampCol.ReadOnly = true;
+            logTimestampCol.Width = 125;
+            // 
+            // logTypeCol
+            // 
+            logTypeCol.HeaderText = "Log Type";
+            logTypeCol.MinimumWidth = 6;
+            logTypeCol.Name = "logTypeCol";
+            logTypeCol.ReadOnly = true;
+            logTypeCol.Width = 125;
+            // 
+            // logTextCol
+            // 
+            logTextCol.HeaderText = "Log Text";
+            logTextCol.MinimumWidth = 6;
+            logTextCol.Name = "logTextCol";
+            logTextCol.ReadOnly = true;
+            logTextCol.Width = 125;
             // 
             // LogForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(782, 673);
-            Controls.Add(verboseLogCheckBox);
-            Controls.Add(clearLogsButton);
-            Controls.Add(hideLogsButton);
-            Controls.Add(saveLogsButton);
-            Controls.Add(logsTextBox);
-            MaximumSize = new Size(800, 720);
-            MinimumSize = new Size(800, 720);
+            ClientSize = new Size(1006, 673);
+            Controls.Add(logEntryDataGridView);
+            Controls.Add(pauseLogsCheckbox);
+            Controls.Add(clearButton);
+            Controls.Add(hideButton);
+            MaximumSize = new Size(1024, 720);
+            MinimumSize = new Size(1024, 720);
             Name = "LogForm";
             Text = "View Logs";
+            ((System.ComponentModel.ISupportInitialize)logEntryDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -114,25 +135,35 @@
 
         #region Custom Initializations
 
-        public MainForm mainForm;
-        public string LOG_TYPE_INFO, LOG_TYPE_WARN, LOG_TYPE_ERROR;
-        public CheckBox verboseLogCheckBox;
+        internal MainForm mainForm;
         private string LOG_TIMESTAMP;
+
+        internal static readonly string DEBUG = "debug", ERROR = "error", WARN = "warn", INFO = "info";
+        internal static readonly Dictionary<string, string> LogType = new Dictionary<string, string>
+        {
+            { },
+            { },
+            { },
+            { }
+        }
+
         private void CustomInitializations()
         {
-            verboseLogCheckBox.Checked = true;
+            public const int LOG_TYPE_INFO = 0;
 
-            LOG_TYPE_INFO = " - [INFO] - ";
-            LOG_TYPE_WARN = " - [WARN] - ";
-            LOG_TYPE_ERROR = " - [ERROR] - ";
+            LOG_TYPE_INFO_TEXT = " - [INFO] - ";
+            LOG_TYPE_WARN_TEXT = " - [WARN] - ";
+            LOG_TYPE_ERROR_TEXT = " - [ERROR] - ";
 
             LOG_TIMESTAMP = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-        }
-        #endregion
 
-        private Button saveLogsButton;
-        private Button hideLogsButton;
-        private TextBox logsTextBox;
-        private Button clearLogsButton;
+        #endregion
+        private Button hideButton;
+        private Button clearButton;
+        private CheckBox pauseLogsCheckbox;
+        private DataGridView logEntryDataGridView;
+        private DataGridViewTextBoxColumn logTimestampCol;
+        private DataGridViewTextBoxColumn logTypeCol;
+        private DataGridViewTextBoxColumn logTextCol;
     }
 }

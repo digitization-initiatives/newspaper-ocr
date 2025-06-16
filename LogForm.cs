@@ -20,10 +20,16 @@ namespace NewspaperOCR
 
         public void appendTextsToLog(string logText, string logType)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => appendTextsToLog(logText, logType)));
+                return;
+            }
+
             LOG_TIMESTAMP = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            logsTextBox.AppendText(LOG_TIMESTAMP + logType + logText);
-            logsTextBox.AppendText(Environment.NewLine);
-            logsTextBox.ScrollToCaret();
+            debugTextbox.AppendText(LOG_TIMESTAMP + logType + logText);
+            debugTextbox.AppendText(Environment.NewLine);
+            debugTextbox.ScrollToCaret();
         }
 
         private void logFormSaveLogsButton_Click(object sender, EventArgs e)
@@ -36,7 +42,7 @@ namespace NewspaperOCR
                 Directory.CreateDirectory(Properties.Settings.Default.LogLocation);
             }
 
-            File.WriteAllText(logFileFullPath, logsTextBox.Text);
+            File.WriteAllText(logFileFullPath, debugTextbox.Text);
 
             MessageBox.Show($"Log file saved to {logFileFullPath} .", "Logs Saved!");
         }
@@ -49,7 +55,7 @@ namespace NewspaperOCR
 
         private void clearLogsButton_Click(object sender, EventArgs e)
         {
-            logsTextBox.Clear();
+            debugTextbox.Clear();
         }
     }
 }
