@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,18 +19,29 @@ namespace NewspaperOCR
             CustomInitializations();
         }
 
-        public void appendTextsToLog(string logText, string logType)
+        public void addLogEntryToUI(string logType, string logMessage)
         {
+            string timestamp;
+
             if (InvokeRequired)
             {
-                Invoke(new Action(() => appendTextsToLog(logText, logType)));
+                Invoke(new Action(() => addLogEntryToUI(logType, logMessage)));
                 return;
             }
 
-            LOG_TIMESTAMP = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            debugTextbox.AppendText(LOG_TIMESTAMP + logType + logText);
-            debugTextbox.AppendText(Environment.NewLine);
-            debugTextbox.ScrollToCaret();
+            timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            int rowIndex = logEntryDataGridView.Rows.Add(timestamp, logType, logMessage);
+
+            if (logEntryDataGridView.Rows.Count > MAX_LOG_ROWS)
+            {
+                logEntryDataGridView.Rows.RemoveAt(0);
+            }
+
+            if (!pauseAutoScrollCheckbox.Checked)
+            {
+                logEntryDataGridView.FirstDisplayedScrollingRowIndex = logEntryDataGridView.Rows.Count - 1;
+            }
         }
 
         private void logFormSaveLogsButton_Click(object sender, EventArgs e)
@@ -42,7 +54,7 @@ namespace NewspaperOCR
                 Directory.CreateDirectory(Properties.Settings.Default.LogLocation);
             }
 
-            File.WriteAllText(logFileFullPath, debugTextbox.Text);
+            //File.WriteAllText(logFileFullPath, debugTextbox.Text);
 
             MessageBox.Show($"Log file saved to {logFileFullPath} .", "Logs Saved!");
         }
@@ -55,7 +67,13 @@ namespace NewspaperOCR
 
         private void clearLogsButton_Click(object sender, EventArgs e)
         {
-            debugTextbox.Clear();
+            //debugTextbox.Clear();
+        }
+
+        private void viewLogFileButton_Click(object sender, EventArgs e)
+        {
+            addLogEntryToUI(LogForm.LogType[0], $"This is a test log message.");
         }
     }
 }
+

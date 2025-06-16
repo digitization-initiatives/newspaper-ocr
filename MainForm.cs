@@ -47,33 +47,33 @@ namespace NewspaperOCR
         }
         private void loadImagesButton_Click(object sender, EventArgs e)
         {
-            if (folderBrowserDialog.SelectedPath != String.Empty)
-            {
-                if (ocrHelper.validateIssueFolderNames())
-                {
-                    List<string> imageFiles = new List<string>();
+            //if (folderBrowserDialog.SelectedPath != String.Empty)
+            //{
+            //    if (ocrHelper.validateIssueFolderNames())
+            //    {
+            //        List<string> imageFiles = new List<string>();
 
-                    imageFiles.AddRange(Directory.GetFiles(folderBrowserDialog.SelectedPath, $"*.{Properties.Settings.Default.SourceImageFileFormat}", SearchOption.AllDirectories));
+            //        imageFiles.AddRange(Directory.GetFiles(folderBrowserDialog.SelectedPath, $"*.{Properties.Settings.Default.SourceImageFileFormat}", SearchOption.AllDirectories));
 
-                    foreach (string imageFile in imageFiles)
-                    {
-                        ListViewItem item = new ListViewItem(imageFile);
-                        item.SubItems.Add("...");
+            //        foreach (string imageFile in imageFiles)
+            //        {
+            //            ListViewItem item = new ListViewItem(imageFile);
+            //            item.SubItems.Add("...");
 
-                        sourceFilesListView.Items.Add(item);
-                    }
+            //            sourceFilesListView.Items.Add(item);
+            //        }
 
-                    statusBarItem_numberOfImagesLoaded.Text = $"No. of Images Loaded: {imageFiles.Count.ToString()}";
-                    statusBarItem_numberOfCompletedItems.Text = $"0";
+            //        statusBarItem_numberOfImagesLoaded.Text = $"No. of Images Loaded: {imageFiles.Count.ToString()}";
+            //        statusBarItem_numberOfCompletedItems.Text = $"0";
 
-                    beginOCRButton.Enabled = true;
-                }
-                else
-                {
-                    MessageBox.Show($"\"{folderBrowserDialog.SelectedPath}\" is empty or contains invalid issue folders, see log for details.", "Invalid Issue Folders Found!");
-                    logForm.appendTextsToLog($"\"{folderBrowserDialog.SelectedPath}\" contains invalid issue folders, validation faild.", logForm.LOG_TYPE_WARN);
-                }
-            }
+            //        beginOCRButton.Enabled = true;
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show($"\"{folderBrowserDialog.SelectedPath}\" is empty or contains invalid issue folders, see log for details.", "Invalid Issue Folders Found!");
+            //        logForm.addLogEntryToUI(LogForm.LogType[1], $"\"{folderBrowserDialog.SelectedPath}\" contains invalid issue folders, validation faild.");
+            //    }
+            //}
         }
 
         private async void beginOCRButton_Click(object sender, EventArgs e)
@@ -87,7 +87,7 @@ namespace NewspaperOCR
 
             CancellationTokenSource cts = new CancellationTokenSource();
 
-            await ocr.processOCRQueue(ocrLang, tessdataLoc, concurrentOCRJobs, tileSize, cts.Token);
+            //await ocr.processOCRQueue(ocrLang, tessdataLoc, concurrentOCRJobs, tileSize, cts.Token);
 
             ocrHelper.startOver();
         }

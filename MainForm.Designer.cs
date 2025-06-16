@@ -76,7 +76,7 @@ namespace NewspaperOCR
             // exitButton
             // 
             exitButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            exitButton.Location = new Point(1040, 614);
+            exitButton.Location = new Point(1130, 615);
             exitButton.Name = "exitButton";
             exitButton.Size = new Size(120, 29);
             exitButton.TabIndex = 2;
@@ -108,7 +108,7 @@ namespace NewspaperOCR
             // optionsButton
             // 
             optionsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            optionsButton.Location = new Point(788, 614);
+            optionsButton.Location = new Point(878, 615);
             optionsButton.Name = "optionsButton";
             optionsButton.Size = new Size(120, 29);
             optionsButton.TabIndex = 4;
@@ -130,7 +130,7 @@ namespace NewspaperOCR
             // viewLogsButton
             // 
             viewLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            viewLogsButton.Location = new Point(914, 614);
+            viewLogsButton.Location = new Point(1004, 615);
             viewLogsButton.Name = "viewLogsButton";
             viewLogsButton.Size = new Size(120, 29);
             viewLogsButton.TabIndex = 6;
@@ -152,7 +152,7 @@ namespace NewspaperOCR
             // startOverButton
             // 
             startOverButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            startOverButton.Location = new Point(662, 614);
+            startOverButton.Location = new Point(752, 615);
             startOverButton.Name = "startOverButton";
             startOverButton.Size = new Size(120, 29);
             startOverButton.TabIndex = 10;
@@ -271,7 +271,7 @@ namespace NewspaperOCR
             statusBarItem_numberOfImagesLoaded.Text = "No Image Files Loaded";
             statusBarItem_numberOfCompletedItems.Text = "-";
 
-            ocrHelper.resetStatusBar();
+            //ocrHelper.resetStatusBar();
         }
         #endregion
 

@@ -22,13 +22,13 @@ namespace NewspaperOCR
         #region Custom Functions
         private void printSettingsToLogs()
         {
-            logForm.appendTextsToLog($"[Tessdata Location] has been changed to: {Properties.Settings.Default.TessdataLocation}", logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog($"[OCR Output Location] has been changed to: {Properties.Settings.Default.OCROutputLocation}", logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog($"[Log Location] has been changed to: {Properties.Settings.Default.LogLocation}", logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog($"[Concurrent OCR Jobs] has been changed to: {Properties.Settings.Default.ConcurrentOCRJobs.ToString()}.", logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog($"[OCR Language] has been changed to: {Properties.Settings.Default.OCRLang}", logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog($"[Tile Size] has been changed to: {Properties.Settings.Default.TileSize}", logForm.LOG_TYPE_INFO);
-            logForm.appendTextsToLog($"[Source Image File Format] has been changed to: {Properties.Settings.Default.SourceImageFileFormat}", logForm.LOG_TYPE_INFO);
+            logForm.addLogEntryToUI(LogForm.LogType[0], $"[Tessdata Location] has been changed to: {Properties.Settings.Default.TessdataLocation}");
+            logForm.addLogEntryToUI(LogForm.LogType[0], $"[OCR Output Location] has been changed to: {Properties.Settings.Default.OCROutputLocation}");
+            logForm.addLogEntryToUI(LogForm.LogType[0], $"[Log Location] has been changed to: {Properties.Settings.Default.LogLocation}");
+            logForm.addLogEntryToUI(LogForm.LogType[0], $"[Concurrent OCR Jobs] has been changed to: {Properties.Settings.Default.ConcurrentOCRJobs.ToString()}.");
+            logForm.addLogEntryToUI(LogForm.LogType[0], $"[OCR Language] has been changed to: {Properties.Settings.Default.OCRLang}");
+            logForm.addLogEntryToUI(LogForm.LogType[0], $"[Tile Size] has been changed to: {Properties.Settings.Default.TileSize}");
+            logForm.addLogEntryToUI(LogForm.LogType[0], $"[Source Image File Format] has been changed to: {Properties.Settings.Default.SourceImageFileFormat}");
         }
         private void updateOptionsFormUI()
         {

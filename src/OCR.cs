@@ -24,7 +24,7 @@ namespace NewspaperOCR.src
 
         private async Task processOCRQueue(Language ocrLang, string tessdataLoc, int concurrentOCRJobs, string tileSize, CancellationToken ct)
         {
-            Queue<OutputDirectoryStructure> directoryStructureQueue = new Queue<OutputDirectoryStructure>(directoryStructure);
+            //Queue<OutputDirectoryStructure> directoryStructureQueue = new Queue<OutputDirectoryStructure>(directoryStructure);
             Dictionary<int, src.TaskStatus> concurrentJobsTracker = new Dictionary<int, src.TaskStatus>();
             Task ocrTask;
 
@@ -37,7 +37,7 @@ namespace NewspaperOCR.src
             mainForm.Invoke(() =>
             {
                 mainForm.statusBarItem_numberOfCompletedItems.Text = completedOcr.ToString();
-                logForm.appendTextsToLog($"OCR of this batch started at: {batchStartTime.ToString(@"hh\:mm\:ss")}.", logForm.LOG_TYPE_INFO);
+                //logForm.appendTextsToLog($"OCR of this batch started at: {batchStartTime.ToString(@"hh\:mm\:ss")}.", logForm.LOG_TYPE_INFO);
             });
 
             if (concurrentJobsTracker.Count == 0)
@@ -46,87 +46,87 @@ namespace NewspaperOCR.src
                 {
                     ct.ThrowIfCancellationRequested();
 
-                    if (directoryStructureQueue.Count != 0)
-                    {
-                        item = directoryStructureQueue.Dequeue();
-                        ocrTask = Task.Run(async () =>
-                        {
-                            //await ocr(item.SourceImageFileFullPath, item.SourceImageFileName, item.OutputPdfFileFullPath, item.OutputAltoFileFullPath, item.OutputJp2ImageFileFullPath, tessdataLoc, ocrLang, tileSize);
-                            await Task.Delay(10000);
-                            Invoke(() =>
-                            {
-                                logForm.appendTextsToLog($"{item.SourceImageFileFullPath} OCR started.", logForm.LOG_TYPE_INFO);
-                            });
-                        });
-                        src.TaskStatus ocrTaskStatus = new src.TaskStatus(ocrTask, item);
-                        concurrentJobsTracker.Add(i, ocrTaskStatus);
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    //if (directoryStructureQueue.Count != 0)
+                    //{
+                    //    item = directoryStructureQueue.Dequeue();
+                    //    ocrTask = Task.Run(async () =>
+                    //    {
+                    //        //await ocr(item.SourceImageFileFullPath, item.SourceImageFileName, item.OutputPdfFileFullPath, item.OutputAltoFileFullPath, item.OutputJp2ImageFileFullPath, tessdataLoc, ocrLang, tileSize);
+                    //        await Task.Delay(10000);
+                    //        Invoke(() =>
+                    //        {
+                    //            logForm.appendTextsToLog($"{item.SourceImageFileFullPath} OCR started.", logForm.LOG_TYPE_INFO);
+                    //        });
+                    //    });
+                    //    src.TaskStatus ocrTaskStatus = new src.TaskStatus(ocrTask, item);
+                    //    concurrentJobsTracker.Add(i, ocrTaskStatus);
+                    //}
+                    //else
+                    //{
+                    //    break;
+                    //}
                 }
             }
             else
             {
-                for (int i = 0; i < concurrentOCRJobs; i++)
-                {
-                    ct.ThrowIfCancellationRequested();
+                //for (int i = 0; i < concurrentOCRJobs; i++)
+                //{
+                //    ct.ThrowIfCancellationRequested();
 
-                    if (concurrentJobsTracker[i].RunningTask.IsCompleted)
-                    {
-                        Invoke(() =>
-                        {
-                            ListViewItem imageFileListViewItem = sourceFilesListView.Items[concurrentJobsTracker[i].Item.Index];
-                            imageFileListViewItem.SubItems[1].Text = "Finished";
-                        });
+                //    if (concurrentJobsTracker[i].RunningTask.IsCompleted)
+                //    {
+                //        Invoke(() =>
+                //        {
+                //            ListViewItem imageFileListViewItem = sourceFilesListView.Items[concurrentJobsTracker[i].Item.Index];
+                //            imageFileListViewItem.SubItems[1].Text = "Finished";
+                //        });
 
-                        if (directoryStructureQueue.Count != 0)
-                        {
-                            item = directoryStructureQueue.Dequeue();
-                            ocrTask = Task.Run(async () =>
-                            {
-                                //await ocr(item.SourceImageFileFullPath, item.SourceImageFileName, item.OutputPdfFileFullPath, item.OutputAltoFileFullPath, item.OutputJp2ImageFileFullPath, tessdataLoc, ocrLang, tileSize);
-                                await Task.Delay(10000);
-                                Invoke(() =>
-                                {
-                                    logForm.appendTextsToLog($"{item.SourceImageFileFullPath} OCR started.", logForm.LOG_TYPE_INFO);
-                                });
-                            });
-                            concurrentJobsTracker[i].RunningTask = ocrTask;
-                        }
-                    }
-                    else if (!concurrentJobsTracker[i].RunningTask.IsCompleted)
-                    {
-                        Invoke(() =>
-                        {
-                            ListViewItem imageFileListViewItem = sourceFilesListView.Items[concurrentJobsTracker[i].Item.Index];
+                //        if (directoryStructureQueue.Count != 0)
+                //        {
+                //            item = directoryStructureQueue.Dequeue();
+                //            ocrTask = Task.Run(async () =>
+                //            {
+                //                //await ocr(item.SourceImageFileFullPath, item.SourceImageFileName, item.OutputPdfFileFullPath, item.OutputAltoFileFullPath, item.OutputJp2ImageFileFullPath, tessdataLoc, ocrLang, tileSize);
+                //                await Task.Delay(10000);
+                //                Invoke(() =>
+                //                {
+                //                    logForm.appendTextsToLog($"{item.SourceImageFileFullPath} OCR started.", logForm.LOG_TYPE_INFO);
+                //                });
+                //            });
+                //            concurrentJobsTracker[i].RunningTask = ocrTask;
+                //        }
+                //    }
+                //    else if (!concurrentJobsTracker[i].RunningTask.IsCompleted)
+                //    {
+                //        Invoke(() =>
+                //        {
+                //            ListViewItem imageFileListViewItem = sourceFilesListView.Items[concurrentJobsTracker[i].Item.Index];
 
-                            if (imageFileListViewItem.SubItems[1].Text.Length < 8)
-                            {
-                                imageFileListViewItem.SubItems[1].Text += "..";
-                            }
-                            else
-                            {
-                                imageFileListViewItem.SubItems[1].Text = "...";
-                            }
+                //            if (imageFileListViewItem.SubItems[1].Text.Length < 8)
+                //            {
+                //                imageFileListViewItem.SubItems[1].Text += "..";
+                //            }
+                //            else
+                //            {
+                //                imageFileListViewItem.SubItems[1].Text = "...";
+                //            }
 
-                            logForm.appendTextsToLog(concurrentJobsTracker[i].Item.SourceImageFileFullPath + " is being OCR'd " + imageFileListViewItem.SubItems[1].Text, logForm.LOG_TYPE_INFO);
-                            //imageFileListViewItem.SubItems[1].Text = imageFileListViewItem.SubItems[1].Text;
-                        });
-                    }
-                    else
-                    {
-                        Invoke(() =>
-                        {
-                            ListViewItem imageFileListViewItem = sourceFilesListView.Items[concurrentJobsTracker[i].Item.Index];
+                //            logForm.appendTextsToLog(concurrentJobsTracker[i].Item.SourceImageFileFullPath + " is being OCR'd " + imageFileListViewItem.SubItems[1].Text, logForm.LOG_TYPE_INFO);
+                //            //imageFileListViewItem.SubItems[1].Text = imageFileListViewItem.SubItems[1].Text;
+                //        });
+                //    }
+                //    else
+                //    {
+                //        Invoke(() =>
+                //        {
+                //            ListViewItem imageFileListViewItem = sourceFilesListView.Items[concurrentJobsTracker[i].Item.Index];
 
-                            imageFileListViewItem.SubItems[1].Text = "Faulted";
+                //            imageFileListViewItem.SubItems[1].Text = "Faulted";
 
-                            logForm.appendTextsToLog(concurrentJobsTracker[i].Item.SourceImageFileFullPath + " is not OCR'd.", logForm.LOG_TYPE_INFO);
-                        });
-                    }
-                }
+                //            logForm.appendTextsToLog(concurrentJobsTracker[i].Item.SourceImageFileFullPath + " is not OCR'd.", logForm.LOG_TYPE_INFO);
+                //        });
+                //    }
+                //}
             }
         }
 
