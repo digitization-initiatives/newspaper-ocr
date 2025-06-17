@@ -22,13 +22,13 @@ namespace NewspaperOCR
         #region Custom Functions
         private void printSettingsToLogs()
         {
-            logForm.addLogEntryToUI(LogForm.LogType[0], $"[Tessdata Location] has been changed to: {Properties.Settings.Default.TessdataLocation}");
-            logForm.addLogEntryToUI(LogForm.LogType[0], $"[OCR Output Location] has been changed to: {Properties.Settings.Default.OCROutputLocation}");
-            logForm.addLogEntryToUI(LogForm.LogType[0], $"[Log Location] has been changed to: {Properties.Settings.Default.LogLocation}");
-            logForm.addLogEntryToUI(LogForm.LogType[0], $"[Concurrent OCR Jobs] has been changed to: {Properties.Settings.Default.ConcurrentOCRJobs.ToString()}.");
-            logForm.addLogEntryToUI(LogForm.LogType[0], $"[OCR Language] has been changed to: {Properties.Settings.Default.OCRLang}");
-            logForm.addLogEntryToUI(LogForm.LogType[0], $"[Tile Size] has been changed to: {Properties.Settings.Default.TileSize}");
-            logForm.addLogEntryToUI(LogForm.LogType[0], $"[Source Image File Format] has been changed to: {Properties.Settings.Default.SourceImageFileFormat}");
+            logForm.sendToLog(LogForm.LogType[0], $"[Tessdata Location] has been changed to: {Properties.Settings.Default.TessdataLocation}");
+            logForm.sendToLog(LogForm.LogType[0], $"[OCR Output Location] has been changed to: {Properties.Settings.Default.OCROutputLocation}");
+            logForm.sendToLog(LogForm.LogType[0], $"[Log Location] has been changed to: {Properties.Settings.Default.LogLocation}");
+            logForm.sendToLog(LogForm.LogType[0], $"[Concurrent OCR Jobs] has been changed to: {Properties.Settings.Default.ConcurrentOCRJobs.ToString()}.");
+            logForm.sendToLog(LogForm.LogType[0], $"[OCR Language] has been changed to: {Properties.Settings.Default.OCRLang}");
+            logForm.sendToLog(LogForm.LogType[0], $"[Tile Size] has been changed to: {Properties.Settings.Default.TileSize}");
+            logForm.sendToLog(LogForm.LogType[0], $"[Source Image File Format] has been changed to: {Properties.Settings.Default.SourceImageFileFormat}");
         }
         private void updateOptionsFormUI()
         {
@@ -49,7 +49,6 @@ namespace NewspaperOCR
             // Update Settings :
             Properties.Settings.Default.TessdataLocation = Path.GetFullPath(".") + "\\src\\tessdata";
             Properties.Settings.Default.OCROutputLocation = Path.GetFullPath(".") + "\\output";
-            Properties.Settings.Default.LogLocation = Path.GetFullPath(".") + "\\log";
             
             Properties.Settings.Default.ConcurrentOCRJobs = 5;
             Properties.Settings.Default.OCRLang = "eng";

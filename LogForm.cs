@@ -18,45 +18,35 @@ namespace NewspaperOCR
             InitializeComponent();
             CustomInitializations();
         }
-
-        public void addLogEntryToUI(string logType, string logMessage)
+        public string getTimestamp()
         {
-            string timestamp;
+            return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        }
 
+        public void sendToLog(string logType, string logMessage)
+        {
             if (InvokeRequired)
             {
-                Invoke(new Action(() => addLogEntryToUI(logType, logMessage)));
+                Invoke(new Action(() => sendToLog(logType, logMessage)));
                 return;
             }
 
-            timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-
-            int rowIndex = logEntryDataGridView.Rows.Add(timestamp, logType, logMessage);
+            // Handle log monitoring UI:
+            if (!pauseLogMonitoringCheckbox.Checked)
+            {
+                int rowIndex = logEntryDataGridView.Rows.Add(getTimestamp(), logType, logMessage);
+                logEntryDataGridView.FirstDisplayedScrollingRowIndex = logEntryDataGridView.Rows.Count - 1;
+            }
 
             if (logEntryDataGridView.Rows.Count > MAX_LOG_ROWS)
             {
                 logEntryDataGridView.Rows.RemoveAt(0);
             }
 
-            if (!pauseAutoScrollCheckbox.Checked)
-            {
-                logEntryDataGridView.FirstDisplayedScrollingRowIndex = logEntryDataGridView.Rows.Count - 1;
-            }
-        }
+            // Handle writing to log file:
+            string messageEntry = $"{getTimestamp()} - {logType} - {logMessage}" + Environment.NewLine;
 
-        private void logFormSaveLogsButton_Click(object sender, EventArgs e)
-        {
-            string logFileName = $"ocr_{DateTime.Now:yyyyMMdd_HHmmss}.log";
-            string logFileFullPath = Path.Combine(Properties.Settings.Default.LogLocation, logFileName);
-
-            if (!Directory.Exists(Properties.Settings.Default.LogLocation))
-            {
-                Directory.CreateDirectory(Properties.Settings.Default.LogLocation);
-            }
-
-            //File.WriteAllText(logFileFullPath, debugTextbox.Text);
-
-            MessageBox.Show($"Log file saved to {logFileFullPath} .", "Logs Saved!");
+            File.AppendAllText(logFileFullPath, messageEntry);
         }
 
         private void logFormHideLogsButton_Click(object sender, EventArgs e)
@@ -67,12 +57,13 @@ namespace NewspaperOCR
 
         private void clearLogsButton_Click(object sender, EventArgs e)
         {
-            //debugTextbox.Clear();
+            logEntryDataGridView.Rows.Clear();
+            logEntryDataGridView.Refresh();
         }
 
         private void viewLogFileButton_Click(object sender, EventArgs e)
         {
-            addLogEntryToUI(LogForm.LogType[0], $"This is a test log message.");
+            sendToLog(LogForm.LogType[0], $"This is a test log message.");
         }
     }
 }

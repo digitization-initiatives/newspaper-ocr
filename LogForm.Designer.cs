@@ -33,19 +33,22 @@ namespace NewspaperOCR
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             hideButton = new Button();
             clearButton = new Button();
-            pauseAutoScrollCheckbox = new CheckBox();
+            pauseLogMonitoringCheckbox = new CheckBox();
             logEntryDataGridView = new DataGridView();
             logTimestampCol = new DataGridViewTextBoxColumn();
             logTypeCol = new DataGridViewTextBoxColumn();
             logMessageCol = new DataGridViewTextBoxColumn();
-            viewLogFileButton = new Button();
+            ViewFullLogsButton = new Button();
+            statusStrip1 = new StatusStrip();
+            maxLogEntryStatusStripLabel = new ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)logEntryDataGridView).BeginInit();
+            statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // hideButton
             // 
             hideButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            hideButton.Location = new Point(874, 632);
+            hideButton.Location = new Point(874, 614);
             hideButton.Name = "hideButton";
             hideButton.Size = new Size(120, 29);
             hideButton.TabIndex = 3;
@@ -56,7 +59,7 @@ namespace NewspaperOCR
             // clearButton
             // 
             clearButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            clearButton.Location = new Point(748, 632);
+            clearButton.Location = new Point(748, 614);
             clearButton.Name = "clearButton";
             clearButton.Size = new Size(120, 29);
             clearButton.TabIndex = 4;
@@ -64,15 +67,15 @@ namespace NewspaperOCR
             clearButton.UseVisualStyleBackColor = true;
             clearButton.Click += clearLogsButton_Click;
             // 
-            // pauseAutoScrollCheckbox
+            // pauseLogMonitoringCheckbox
             // 
-            pauseAutoScrollCheckbox.AutoSize = true;
-            pauseAutoScrollCheckbox.Location = new Point(12, 635);
-            pauseAutoScrollCheckbox.Name = "pauseAutoScrollCheckbox";
-            pauseAutoScrollCheckbox.Size = new Size(147, 24);
-            pauseAutoScrollCheckbox.TabIndex = 5;
-            pauseAutoScrollCheckbox.Text = "Pause Auto-Scroll";
-            pauseAutoScrollCheckbox.UseVisualStyleBackColor = true;
+            pauseLogMonitoringCheckbox.AutoSize = true;
+            pauseLogMonitoringCheckbox.Location = new Point(12, 617);
+            pauseLogMonitoringCheckbox.Name = "pauseLogMonitoringCheckbox";
+            pauseLogMonitoringCheckbox.Size = new Size(175, 24);
+            pauseLogMonitoringCheckbox.TabIndex = 5;
+            pauseLogMonitoringCheckbox.Text = "Pause Log Monitoring";
+            pauseLogMonitoringCheckbox.UseVisualStyleBackColor = true;
             // 
             // logEntryDataGridView
             // 
@@ -98,7 +101,7 @@ namespace NewspaperOCR
             logEntryDataGridView.RowHeadersVisible = false;
             logEntryDataGridView.RowHeadersWidth = 51;
             logEntryDataGridView.ScrollBars = ScrollBars.Vertical;
-            logEntryDataGridView.Size = new Size(982, 610);
+            logEntryDataGridView.Size = new Size(982, 596);
             logEntryDataGridView.TabIndex = 6;
             // 
             // logTimestampCol
@@ -125,25 +128,42 @@ namespace NewspaperOCR
             logMessageCol.ReadOnly = true;
             logMessageCol.Width = 125;
             // 
-            // viewLogFileButton
+            // ViewFullLogsButton
             // 
-            viewLogFileButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            viewLogFileButton.Location = new Point(602, 632);
-            viewLogFileButton.Name = "viewLogFileButton";
-            viewLogFileButton.Size = new Size(140, 29);
-            viewLogFileButton.TabIndex = 7;
-            viewLogFileButton.Text = "View Log File";
-            viewLogFileButton.UseVisualStyleBackColor = true;
-            viewLogFileButton.Click += viewLogFileButton_Click;
+            ViewFullLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            ViewFullLogsButton.Location = new Point(582, 614);
+            ViewFullLogsButton.Name = "ViewFullLogsButton";
+            ViewFullLogsButton.Size = new Size(160, 29);
+            ViewFullLogsButton.TabIndex = 7;
+            ViewFullLogsButton.Text = "View Full Logs";
+            ViewFullLogsButton.UseVisualStyleBackColor = true;
+            ViewFullLogsButton.Click += viewLogFileButton_Click;
+            // 
+            // statusStrip1
+            // 
+            statusStrip1.ImageScalingSize = new Size(20, 20);
+            statusStrip1.Items.AddRange(new ToolStripItem[] { maxLogEntryStatusStripLabel });
+            statusStrip1.Location = new Point(0, 647);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(1006, 26);
+            statusStrip1.TabIndex = 9;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // maxLogEntryStatusStripLabel
+            // 
+            maxLogEntryStatusStripLabel.Name = "maxLogEntryStatusStripLabel";
+            maxLogEntryStatusStripLabel.Size = new Size(294, 20);
+            maxLogEntryStatusStripLabel.Text = "Only the most recent log entries are shown.";
             // 
             // LogForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1006, 673);
-            Controls.Add(viewLogFileButton);
+            Controls.Add(statusStrip1);
+            Controls.Add(ViewFullLogsButton);
             Controls.Add(logEntryDataGridView);
-            Controls.Add(pauseAutoScrollCheckbox);
+            Controls.Add(pauseLogMonitoringCheckbox);
             Controls.Add(clearButton);
             Controls.Add(hideButton);
             MaximumSize = new Size(1024, 720);
@@ -151,6 +171,8 @@ namespace NewspaperOCR
             Name = "LogForm";
             Text = "View Logs";
             ((System.ComponentModel.ISupportInitialize)logEntryDataGridView).EndInit();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -171,25 +193,48 @@ namespace NewspaperOCR
             { DEBUG, "[DEBUG]"}
         };
 
+        internal string logFileName = String.Empty;
+        internal string logFileFullPath = String.Empty;
+
         private void CustomInitializations()
         {
+            // Set log monitoring window column size:
             logTimestampCol.Width = 150;
             logTypeCol.Width = 60;
             logMessageCol.Width = logEntryDataGridView.Width - logTimestampCol.Width - logTypeCol.Width - 3;
 
+            // Define cell text alignment:
             logTimestampCol.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
             logTypeCol.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopCenter;
             logMessageCol.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+
+            
+            maxLogEntryStatusStripLabel.Text = $"Only the most recent {MAX_LOG_ROWS} log entries are shown.";
+
+            // Initialize log file:
+            Properties.Settings.Default.LogLocation = Path.GetFullPath(".") + "\\logs";
+
+            logFileName = $"ocr_{DateTime.Now:yyyyMMdd_HHmmss}.log";
+            logFileFullPath = Path.Combine(Properties.Settings.Default.LogLocation, logFileName);
+
+            if (!Directory.Exists(Properties.Settings.Default.LogLocation))
+            {
+                Directory.CreateDirectory(Properties.Settings.Default.LogLocation);
+            }
+
+            File.WriteAllText(logFileFullPath, String.Empty);
         }
 
         #endregion
         private Button hideButton;
         private Button clearButton;
-        private CheckBox pauseAutoScrollCheckbox;
+        private CheckBox pauseLogMonitoringCheckbox;
         private DataGridView logEntryDataGridView;
         private DataGridViewTextBoxColumn logTimestampCol;
         private DataGridViewTextBoxColumn logTypeCol;
         private DataGridViewTextBoxColumn logMessageCol;
-        private Button viewLogFileButton;
+        private Button ViewFullLogsButton;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel maxLogEntryStatusStripLabel;
     }
 }
