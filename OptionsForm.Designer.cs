@@ -57,6 +57,7 @@ namespace NewspaperOCR
             ocrSettingsLabel = new Label();
             sourceImageFileFormatComboBox = new ComboBox();
             sourceImageFileFormatLabel = new Label();
+            statusStrip1 = new StatusStrip();
             SuspendLayout();
             // 
             // tessdataLocationLabel
@@ -134,7 +135,7 @@ namespace NewspaperOCR
             // 
             // closeButton
             // 
-            closeButton.Location = new Point(620, 632);
+            closeButton.Location = new Point(620, 619);
             closeButton.Name = "closeButton";
             closeButton.Size = new Size(150, 29);
             closeButton.TabIndex = 8;
@@ -144,7 +145,7 @@ namespace NewspaperOCR
             // 
             // resetToDefaultButton
             // 
-            resetToDefaultButton.Location = new Point(308, 632);
+            resetToDefaultButton.Location = new Point(308, 619);
             resetToDefaultButton.Name = "resetToDefaultButton";
             resetToDefaultButton.Size = new Size(150, 29);
             resetToDefaultButton.TabIndex = 9;
@@ -154,7 +155,7 @@ namespace NewspaperOCR
             // 
             // saveChangesButton
             // 
-            saveChangesButton.Location = new Point(464, 632);
+            saveChangesButton.Location = new Point(464, 619);
             saveChangesButton.Name = "saveChangesButton";
             saveChangesButton.Size = new Size(150, 29);
             saveChangesButton.TabIndex = 10;
@@ -266,12 +267,22 @@ namespace NewspaperOCR
             sourceImageFileFormatLabel.TabIndex = 20;
             sourceImageFileFormatLabel.Text = "Source Image File Format :";
             // 
+            // statusStrip1
+            // 
+            statusStrip1.ImageScalingSize = new Size(20, 20);
+            statusStrip1.Location = new Point(0, 651);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(782, 22);
+            statusStrip1.TabIndex = 22;
+            statusStrip1.Text = "statusStrip1";
+            // 
             // OptionsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(782, 673);
             ControlBox = false;
+            Controls.Add(statusStrip1);
             Controls.Add(sourceImageFileFormatComboBox);
             Controls.Add(sourceImageFileFormatLabel);
             Controls.Add(ocrSettingsLabel);
@@ -338,5 +349,6 @@ namespace NewspaperOCR
         private Label ocrSettingsLabel;
         private ComboBox sourceImageFileFormatComboBox;
         private Label sourceImageFileFormatLabel;
+        private StatusStrip statusStrip1;
     }
 }
