@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
@@ -63,7 +64,14 @@ namespace NewspaperOCR
 
         private void viewLogFileButton_Click(object sender, EventArgs e)
         {
-            sendToLog(LogForm.LogType[0], $"This is a test log message.");
+            try
+            {
+                Process.Start(@"notepad.exe", logFileFullPath);
+            }
+            catch (Exception err)
+            {
+                sendToLog(LogForm.LogType[2], err.Message);
+            }
         }
     }
 }

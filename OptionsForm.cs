@@ -35,7 +35,6 @@ namespace NewspaperOCR
             // Update Directory Settings UI:
             tessdataLocationTextBox.Text = Properties.Settings.Default.TessdataLocation;
             ocrOutputLocationTextBox.Text = Properties.Settings.Default.OCROutputLocation;
-            logLocationTextBox.Text = Properties.Settings.Default.LogLocation;
 
             // Update OCR Settings UI:
             ocrLangComboBox.SelectedItem = Properties.Settings.Default.OCRLang;
@@ -64,9 +63,6 @@ namespace NewspaperOCR
 
             // Update OptionsForm UI :
             updateOptionsFormUI();
-
-            // Print logs :
-            printSettingsToLogs();
         }
 
         private void saveChanges()
@@ -74,7 +70,6 @@ namespace NewspaperOCR
             // Update Settings :
             Properties.Settings.Default.TessdataLocation = tessdataLocationTextBox.Text;
             Properties.Settings.Default.OCROutputLocation = ocrOutputLocationTextBox.Text;
-            Properties.Settings.Default.LogLocation = logLocationTextBox.Text;
 
             Properties.Settings.Default.ConcurrentOCRJobs = concurrentOCRJobsComboBox.SelectedIndex + 1;
             Properties.Settings.Default.OCRLang = ocrLangComboBox.SelectedItem.ToString().Substring(0, 3);
@@ -84,9 +79,6 @@ namespace NewspaperOCR
 
             // Update OptionsForm UI :
             updateOptionsFormUI();
-
-            // Print logs :
-            printSettingsToLogs();
         }
 
         #endregion
@@ -115,21 +107,10 @@ namespace NewspaperOCR
             }
         }
 
-        private void logLocationBrowseButton_Click(object sender, EventArgs e)
-        {
-            if (logLocation_folderBrowserDialog.ShowDialog() == DialogResult.OK)
-            {
-                logLocationTextBox.Text = logLocation_folderBrowserDialog.SelectedPath;
-            }
-            else
-            {
-                logLocationTextBox.Text = Properties.Settings.Default.LogLocation;
-            }
-        }
-
         private void saveChangesButton_Click(object sender, EventArgs e)
         {
             saveChanges();
+            printSettingsToLogs();
         }
 
         private void resetToDefaultButton_Click(object sender, EventArgs e)
@@ -138,7 +119,6 @@ namespace NewspaperOCR
         }
         private void closeButton_Click(object sender, EventArgs e)
         {
-            saveChanges();
             this.Hide();
         }
     }

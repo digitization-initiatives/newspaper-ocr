@@ -49,11 +49,8 @@ namespace NewspaperOCR
             ocrLangLabel = new Label();
             tileSizeComboBox = new ComboBox();
             tileSizeLabel = new Label();
-            logLocationBrowseButton = new Button();
-            logLocationTextBox = new TextBox();
-            logLocationLabel = new Label();
             logLocation_folderBrowserDialog = new FolderBrowserDialog();
-            directorySettingsLabel = new Label();
+            applicationSettingsLabel = new Label();
             ocrSettingsLabel = new Label();
             sourceImageFileFormatComboBox = new ComboBox();
             sourceImageFileFormatLabel = new Label();
@@ -117,7 +114,7 @@ namespace NewspaperOCR
             // concurrentOCRJobsLabel
             // 
             concurrentOCRJobsLabel.AutoSize = true;
-            concurrentOCRJobsLabel.Location = new Point(270, 307);
+            concurrentOCRJobsLabel.Location = new Point(270, 213);
             concurrentOCRJobsLabel.Name = "concurrentOCRJobsLabel";
             concurrentOCRJobsLabel.Size = new Size(150, 20);
             concurrentOCRJobsLabel.TabIndex = 6;
@@ -128,14 +125,14 @@ namespace NewspaperOCR
             concurrentOCRJobsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             concurrentOCRJobsComboBox.FormattingEnabled = true;
             concurrentOCRJobsComboBox.Items.AddRange(new object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
-            concurrentOCRJobsComboBox.Location = new Point(270, 330);
+            concurrentOCRJobsComboBox.Location = new Point(270, 236);
             concurrentOCRJobsComboBox.Name = "concurrentOCRJobsComboBox";
             concurrentOCRJobsComboBox.Size = new Size(247, 28);
             concurrentOCRJobsComboBox.TabIndex = 7;
             // 
             // closeButton
             // 
-            closeButton.Location = new Point(620, 619);
+            closeButton.Location = new Point(620, 612);
             closeButton.Name = "closeButton";
             closeButton.Size = new Size(150, 29);
             closeButton.TabIndex = 8;
@@ -145,7 +142,7 @@ namespace NewspaperOCR
             // 
             // resetToDefaultButton
             // 
-            resetToDefaultButton.Location = new Point(308, 619);
+            resetToDefaultButton.Location = new Point(308, 612);
             resetToDefaultButton.Name = "resetToDefaultButton";
             resetToDefaultButton.Size = new Size(150, 29);
             resetToDefaultButton.TabIndex = 9;
@@ -155,7 +152,7 @@ namespace NewspaperOCR
             // 
             // saveChangesButton
             // 
-            saveChangesButton.Location = new Point(464, 619);
+            saveChangesButton.Location = new Point(464, 612);
             saveChangesButton.Name = "saveChangesButton";
             saveChangesButton.Size = new Size(150, 29);
             saveChangesButton.TabIndex = 10;
@@ -168,7 +165,7 @@ namespace NewspaperOCR
             ocrLangComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             ocrLangComboBox.FormattingEnabled = true;
             ocrLangComboBox.Items.AddRange(new object[] { "eng", "spa", "fra", "jpn" });
-            ocrLangComboBox.Location = new Point(17, 330);
+            ocrLangComboBox.Location = new Point(17, 236);
             ocrLangComboBox.Name = "ocrLangComboBox";
             ocrLangComboBox.Size = new Size(247, 28);
             ocrLangComboBox.TabIndex = 12;
@@ -176,7 +173,7 @@ namespace NewspaperOCR
             // ocrLangLabel
             // 
             ocrLangLabel.AutoSize = true;
-            ocrLangLabel.Location = new Point(17, 307);
+            ocrLangLabel.Location = new Point(17, 213);
             ocrLangLabel.Name = "ocrLangLabel";
             ocrLangLabel.Size = new Size(110, 20);
             ocrLangLabel.TabIndex = 11;
@@ -187,7 +184,7 @@ namespace NewspaperOCR
             tileSizeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             tileSizeComboBox.FormattingEnabled = true;
             tileSizeComboBox.Items.AddRange(new object[] { "[256x256]", "[512x512]", "[1024x1024]" });
-            tileSizeComboBox.Location = new Point(523, 330);
+            tileSizeComboBox.Location = new Point(523, 236);
             tileSizeComboBox.Name = "tileSizeComboBox";
             tileSizeComboBox.Size = new Size(247, 28);
             tileSizeComboBox.TabIndex = 14;
@@ -195,54 +192,27 @@ namespace NewspaperOCR
             // tileSizeLabel
             // 
             tileSizeLabel.AutoSize = true;
-            tileSizeLabel.Location = new Point(523, 307);
+            tileSizeLabel.Location = new Point(523, 213);
             tileSizeLabel.Name = "tileSizeLabel";
             tileSizeLabel.Size = new Size(67, 20);
             tileSizeLabel.TabIndex = 13;
             tileSizeLabel.Text = "Tile Size:";
             // 
-            // logLocationBrowseButton
+            // applicationSettingsLabel
             // 
-            logLocationBrowseButton.Location = new Point(650, 199);
-            logLocationBrowseButton.Name = "logLocationBrowseButton";
-            logLocationBrowseButton.Size = new Size(120, 29);
-            logLocationBrowseButton.TabIndex = 17;
-            logLocationBrowseButton.Text = "... Browse ...";
-            logLocationBrowseButton.UseVisualStyleBackColor = true;
-            logLocationBrowseButton.Click += logLocationBrowseButton_Click;
-            // 
-            // logLocationTextBox
-            // 
-            logLocationTextBox.Location = new Point(17, 200);
-            logLocationTextBox.Name = "logLocationTextBox";
-            logLocationTextBox.ReadOnly = true;
-            logLocationTextBox.Size = new Size(627, 27);
-            logLocationTextBox.TabIndex = 16;
-            // 
-            // logLocationLabel
-            // 
-            logLocationLabel.AutoSize = true;
-            logLocationLabel.Location = new Point(17, 177);
-            logLocationLabel.Name = "logLocationLabel";
-            logLocationLabel.Size = new Size(98, 20);
-            logLocationLabel.TabIndex = 15;
-            logLocationLabel.Text = "Log Location:";
-            // 
-            // directorySettingsLabel
-            // 
-            directorySettingsLabel.AutoSize = true;
-            directorySettingsLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            directorySettingsLabel.Location = new Point(12, 16);
-            directorySettingsLabel.Name = "directorySettingsLabel";
-            directorySettingsLabel.Size = new Size(144, 20);
-            directorySettingsLabel.TabIndex = 18;
-            directorySettingsLabel.Text = "Directory Settings :";
+            applicationSettingsLabel.AutoSize = true;
+            applicationSettingsLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            applicationSettingsLabel.Location = new Point(12, 16);
+            applicationSettingsLabel.Name = "applicationSettingsLabel";
+            applicationSettingsLabel.Size = new Size(154, 20);
+            applicationSettingsLabel.TabIndex = 18;
+            applicationSettingsLabel.Text = "Application Settings:";
             // 
             // ocrSettingsLabel
             // 
             ocrSettingsLabel.AutoSize = true;
             ocrSettingsLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            ocrSettingsLabel.Location = new Point(12, 280);
+            ocrSettingsLabel.Location = new Point(12, 186);
             ocrSettingsLabel.Name = "ocrSettingsLabel";
             ocrSettingsLabel.Size = new Size(108, 20);
             ocrSettingsLabel.TabIndex = 19;
@@ -253,7 +223,7 @@ namespace NewspaperOCR
             sourceImageFileFormatComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             sourceImageFileFormatComboBox.FormattingEnabled = true;
             sourceImageFileFormatComboBox.Items.AddRange(new object[] { "tif", "jpg", "png" });
-            sourceImageFileFormatComboBox.Location = new Point(17, 397);
+            sourceImageFileFormatComboBox.Location = new Point(17, 303);
             sourceImageFileFormatComboBox.Name = "sourceImageFileFormatComboBox";
             sourceImageFileFormatComboBox.Size = new Size(247, 28);
             sourceImageFileFormatComboBox.TabIndex = 21;
@@ -261,7 +231,7 @@ namespace NewspaperOCR
             // sourceImageFileFormatLabel
             // 
             sourceImageFileFormatLabel.AutoSize = true;
-            sourceImageFileFormatLabel.Location = new Point(17, 374);
+            sourceImageFileFormatLabel.Location = new Point(17, 280);
             sourceImageFileFormatLabel.Name = "sourceImageFileFormatLabel";
             sourceImageFileFormatLabel.Size = new Size(185, 20);
             sourceImageFileFormatLabel.TabIndex = 20;
@@ -286,10 +256,7 @@ namespace NewspaperOCR
             Controls.Add(sourceImageFileFormatComboBox);
             Controls.Add(sourceImageFileFormatLabel);
             Controls.Add(ocrSettingsLabel);
-            Controls.Add(directorySettingsLabel);
-            Controls.Add(logLocationBrowseButton);
-            Controls.Add(logLocationTextBox);
-            Controls.Add(logLocationLabel);
+            Controls.Add(applicationSettingsLabel);
             Controls.Add(tileSizeComboBox);
             Controls.Add(tileSizeLabel);
             Controls.Add(ocrLangComboBox);
@@ -341,11 +308,8 @@ namespace NewspaperOCR
         private Label ocrLangLabel;
         private ComboBox tileSizeComboBox;
         private Label tileSizeLabel;
-        private Button logLocationBrowseButton;
-        private TextBox logLocationTextBox;
-        private Label logLocationLabel;
         private FolderBrowserDialog logLocation_folderBrowserDialog;
-        private Label directorySettingsLabel;
+        private Label applicationSettingsLabel;
         private Label ocrSettingsLabel;
         private ComboBox sourceImageFileFormatComboBox;
         private Label sourceImageFileFormatLabel;
