@@ -32,6 +32,7 @@ namespace NewspaperOCR
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             tessdataLocationLabel = new Label();
             tessdataLocationTextBox = new TextBox();
             tessdataLocationBrowseButton = new Button();
@@ -54,7 +55,9 @@ namespace NewspaperOCR
             ocrSettingsLabel = new Label();
             sourceImageFileFormatComboBox = new ComboBox();
             sourceImageFileFormatLabel = new Label();
-            statusStrip1 = new StatusStrip();
+            optionsFormStatusStrip = new StatusStrip();
+            tessdataLocationTextBoxToolTip = new ToolTip(components);
+            ocrOutputLocationTextBoxToolTip = new ToolTip(components);
             SuspendLayout();
             // 
             // tessdataLocationLabel
@@ -237,14 +240,18 @@ namespace NewspaperOCR
             sourceImageFileFormatLabel.TabIndex = 20;
             sourceImageFileFormatLabel.Text = "Source Image File Format :";
             // 
-            // statusStrip1
+            // optionsFormStatusStrip
             // 
-            statusStrip1.ImageScalingSize = new Size(20, 20);
-            statusStrip1.Location = new Point(0, 651);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(782, 22);
-            statusStrip1.TabIndex = 22;
-            statusStrip1.Text = "statusStrip1";
+            optionsFormStatusStrip.ImageScalingSize = new Size(20, 20);
+            optionsFormStatusStrip.Location = new Point(0, 651);
+            optionsFormStatusStrip.Name = "optionsFormStatusStrip";
+            optionsFormStatusStrip.Size = new Size(782, 22);
+            optionsFormStatusStrip.TabIndex = 22;
+            optionsFormStatusStrip.Text = "statusStrip1";
+            // 
+            // tessdataLocationTextBoxToolTip
+            // 
+            tessdataLocationTextBoxToolTip.ShowAlways = true;
             // 
             // OptionsForm
             // 
@@ -252,7 +259,7 @@ namespace NewspaperOCR
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(782, 673);
             ControlBox = false;
-            Controls.Add(statusStrip1);
+            Controls.Add(optionsFormStatusStrip);
             Controls.Add(sourceImageFileFormatComboBox);
             Controls.Add(sourceImageFileFormatLabel);
             Controls.Add(ocrSettingsLabel);
@@ -272,6 +279,8 @@ namespace NewspaperOCR
             Controls.Add(tessdataLocationBrowseButton);
             Controls.Add(tessdataLocationTextBox);
             Controls.Add(tessdataLocationLabel);
+            MaximumSize = new Size(800, 720);
+            MinimumSize = new Size(800, 720);
             Name = "OptionsForm";
             Text = "Options";
             ResumeLayout(false);
@@ -286,6 +295,9 @@ namespace NewspaperOCR
         public LogForm logForm;
         private void CustomInitializations()
         {
+            tessdataLocationTextBoxToolTip.SetToolTip(tessdataLocationTextBox, tessdataLocationTextBox.Text);
+            ocrOutputLocationTextBoxToolTip.SetToolTip(ocrOutputLocationTextBox, "sanity test");
+            
             setDefaultOptions();
         }
 
@@ -313,6 +325,8 @@ namespace NewspaperOCR
         private Label ocrSettingsLabel;
         private ComboBox sourceImageFileFormatComboBox;
         private Label sourceImageFileFormatLabel;
-        private StatusStrip statusStrip1;
+        private StatusStrip optionsFormStatusStrip;
+        private ToolTip tessdataLocationTextBoxToolTip;
+        private ToolTip ocrOutputLocationTextBoxToolTip;
     }
 }

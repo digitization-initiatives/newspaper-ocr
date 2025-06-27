@@ -201,7 +201,7 @@ namespace NewspaperOCR
             cancelOCRButton.Name = "cancelOCRButton";
             cancelOCRButton.Size = new Size(200, 29);
             cancelOCRButton.TabIndex = 17;
-            cancelOCRButton.Text = "Stop OCR";
+            cancelOCRButton.Text = "Cancel OCR";
             cancelOCRButton.UseVisualStyleBackColor = true;
             cancelOCRButton.Click += cancelOCRButton_Click;
             // 
@@ -237,8 +237,8 @@ namespace NewspaperOCR
         private LogForm logForm;
         private OptionsForm optionsForm;
         public Button viewLogsButton;
-        internal OCR ocr;
-        internal OCRHelper ocrHelper;
+        private OCR ocr;
+        private OCRHelper ocrHelper;
 
         private void CustomInitializations()
         {
@@ -258,20 +258,16 @@ namespace NewspaperOCR
             optionsForm.StartPosition = FormStartPosition.Manual;
             optionsForm.Location = new Point(this.Location.X + this.Width + 20, this.Location.Y);
 
+            // Initialize OCRHelper :
+            ocrHelper = new OCRHelper(this, logForm, optionsForm);
+
+            // Initialize OCR :
+            ocr = new OCR(this, logForm, optionsForm);
+
             // Initialize MainForm UI :
-            folderBrowserTextBox.Text = String.Empty;
-            folderBrowserDialog.SelectedPath = String.Empty;
-            loadImagesButton.Enabled = false;
+            resetMainFormControls();
 
-            sourceFilesListView_filenameCol.Width = sourceFilesListView.Width - 150;
-            sourceFilesListView.SizeChanged += imageFilesListView_SizeChanged;
-
-            beginOCRButton.Enabled = false;
-
-            statusBarItem_numberOfImagesLoaded.Text = "No Image Files Loaded";
-            statusBarItem_numberOfCompletedItems.Text = "-";
-
-            //ocrHelper.resetStatusBar();
+            resetMainFormStatusBar();
         }
         #endregion
 

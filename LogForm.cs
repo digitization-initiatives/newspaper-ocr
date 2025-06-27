@@ -70,7 +70,7 @@ namespace NewspaperOCR
             }
             catch (Exception err)
             {
-                sendToLog(LogForm.LogType[2], err.Message);
+                sendToLog(LogForm.LogType[LogForm.ERROR], err.Message);
             }
         }
     }

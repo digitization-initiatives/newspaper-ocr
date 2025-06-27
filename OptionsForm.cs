@@ -22,13 +22,13 @@ namespace NewspaperOCR
         #region Custom Functions
         private void printSettingsToLogs()
         {
-            logForm.sendToLog(LogForm.LogType[0], $"[Tessdata Location] has been changed to: {Properties.Settings.Default.TessdataLocation}");
-            logForm.sendToLog(LogForm.LogType[0], $"[OCR Output Location] has been changed to: {Properties.Settings.Default.OCROutputLocation}");
-            logForm.sendToLog(LogForm.LogType[0], $"[Log Location] has been changed to: {Properties.Settings.Default.LogLocation}");
-            logForm.sendToLog(LogForm.LogType[0], $"[Concurrent OCR Jobs] has been changed to: {Properties.Settings.Default.ConcurrentOCRJobs.ToString()}.");
-            logForm.sendToLog(LogForm.LogType[0], $"[OCR Language] has been changed to: {Properties.Settings.Default.OCRLang}");
-            logForm.sendToLog(LogForm.LogType[0], $"[Tile Size] has been changed to: {Properties.Settings.Default.TileSize}");
-            logForm.sendToLog(LogForm.LogType[0], $"[Source Image File Format] has been changed to: {Properties.Settings.Default.SourceImageFileFormat}");
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Tessdata Location] has been changed to: {Properties.Settings.Default.TessdataLocation}");
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[OCR Output Location] has been changed to: {Properties.Settings.Default.OCROutputLocation}");
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Log Location] has been changed to: {Properties.Settings.Default.LogLocation}");
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Concurrent OCR Jobs] has been changed to: {Properties.Settings.Default.ConcurrentOCRJobs.ToString()}.");
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[OCR Language] has been changed to: {Properties.Settings.Default.OCRLang}");
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Tile Size] has been changed to: {Properties.Settings.Default.TileSize}");
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Source Image File Format] has been changed to: {Properties.Settings.Default.SourceImageFileFormat}");
         }
         private void updateOptionsFormUI()
         {

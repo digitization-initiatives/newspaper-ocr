@@ -160,6 +160,7 @@ namespace NewspaperOCR
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1006, 673);
+            ControlBox = false;
             Controls.Add(statusStrip1);
             Controls.Add(ViewFullLogsButton);
             Controls.Add(logEntryDataGridView);
@@ -226,6 +227,7 @@ namespace NewspaperOCR
         }
 
         #endregion
+
         private Button hideButton;
         private Button clearButton;
         private CheckBox pauseLogMonitoringCheckbox;

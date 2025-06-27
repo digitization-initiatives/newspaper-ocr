@@ -26,58 +26,60 @@ namespace NewspaperOCR.src
             outputDirectoryStructure = new List<OutputDirectoryStructure>();
         }
 
-        //public bool validateIssueFolderNames()
-        //{
-        //    Regex issueFolderNamePattern = new Regex(@"^[a-zA-Z0-9_-]+_\d{4}-\d{2}-\d{2}$");
+        public bool validateIssueFolderNames(string folderBrowserDialogSelectedPath)
+        {
+            Regex issueFolderNamePattern = new Regex(@"^[a-zA-Z0-9]+_\d{4}-\d{2}-\d{2}_\d{2}$");
 
-        //    List<string> issueFoldersPaths = new List<string>();
-        //    List<string> files = new List<string>();
+            List<string> issueFoldersPaths = new List<string>();
+            List<string> files = new List<string>();
 
-        //    issueFoldersPaths.AddRange(Directory.GetDirectories(mainForm.folderBrowserDialog.SelectedPath));
-        //    files.AddRange(Directory.GetFiles(mainForm.folderBrowserDialog.SelectedPath));
+            issueFoldersPaths.AddRange(Directory.GetDirectories(folderBrowserDialogSelectedPath));
+            files.AddRange(Directory.GetFiles(folderBrowserDialogSelectedPath));
 
-        //    int validFolders = issueFoldersPaths.Count;
+            int validFolders = issueFoldersPaths.Count;
 
-        //    if (files.Count > 0)
-        //    {
-        //        logForm.appendTextsToLog($"The following invalid files found in \"{mainForm.folderBrowserDialog.SelectedPath}\". Only issue folders are allowed.", logForm.LOG_TYPE_WARN);
-        //        foreach (string file in files)
-        //        {
-        //            logForm.appendTextsToLog($"Invalid file: \"{file}\"", logForm.LOG_TYPE_WARN);
-        //        }
-        //        return false;
-        //    }
+            // Ensure there are no individual files in the folder besides issue folders.
+            if (files.Count > 0)
+            {
+                logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"The following invalid files found in \"{folderBrowserDialogSelectedPath}\". Only issue folders are allowed.");
+                foreach (string file in files)
+                {
+                    logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"Invalid file: \"{file}\"");
+                }
+                return false;
+            }
 
-        //    if (issueFoldersPaths.Count == 0)
-        //    {
-        //        logForm.appendTextsToLog($"No Issues Found in \"{mainForm.folderBrowserDialog.SelectedPath}\"", logForm.LOG_TYPE_WARN);
-        //        return false;
-        //    }
-        //    else
-        //    {
-        //        foreach (string issueFolderPath in issueFoldersPaths)
-        //        {
-        //            string issueFolderName = Path.GetFileName(issueFolderPath);
+            // Validate issue folders:
+            if (issueFoldersPaths.Count == 0)
+            {
+                logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"No Issues Found in \"{folderBrowserDialogSelectedPath}\"");
+                return false;
+            }
+            else
+            {
+                foreach (string issueFolderPath in issueFoldersPaths)
+                {
+                    string issueFolderName = Path.GetFileName(issueFolderPath);
 
-        //            if (!issueFolderNamePattern.IsMatch(issueFolderName))
-        //            {
-        //                logForm.appendTextsToLog($"\"{issueFolderPath}\" is not a valid issue folder name", logForm.LOG_TYPE_WARN);
-        //                validFolders--;
-        //            }
-        //            else
-        //            {
-        //                logForm.appendTextsToLog($"\"{issueFolderPath}\" is a valid issue folder name", logForm.LOG_TYPE_INFO);
-        //            }
-        //        }
+                    if (!issueFolderNamePattern.IsMatch(issueFolderName))
+                    {
+                        logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"\"{issueFolderPath}\" is not a valid issue folder name");
+                        validFolders--;
+                    }
+                    else
+                    {
+                        logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"\"{issueFolderPath}\" is a valid issue folder name");
+                    }
+                }
 
-        //        if (validFolders < issueFoldersPaths.Count)
-        //        {
-        //            logForm.appendTextsToLog($"Some issue folder names in \"{mainForm.folderBrowserDialog.SelectedPath}\" are invalid, please see log for details.", logForm.LOG_TYPE_WARN);
-        //            return false;
-        //        }
-        //        else return true;
-        //    }
-        //}
+                if (validFolders < issueFoldersPaths.Count)
+                {
+                    logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"Some issue folder names in \"{folderBrowserDialogSelectedPath}\" are invalid, please see log for details.");
+                    return false;
+                }
+                else return true;
+            }
+        }
 
         public void constructOutputDirectoryStructure()
         {
@@ -121,32 +123,7 @@ namespace NewspaperOCR.src
                     return Language.English;
             }
         }
-        public void startOver()
-        {
-            //// Reset MainForm UI:
-            //folderBrowserTextBox.Text = String.Empty;
-            //folderBrowserDialog.SelectedPath = String.Empty;
-            //loadImagesButton.Enabled = false;
 
-            //sourceFilesListView.Items.Clear();
-            //sourceFilesListView_filenameCol.Width = sourceFilesListView.Width - 150;
-
-            //beginOCRButton.Enabled = false;
-
-            //statusBarItem_numberOfImagesLoaded.Text = "No Image Files Loaded";
-            //statusBarItem_numberOfCompletedItems.Text = "-";
-
-            //resetStatusBar();
-
-            //// Reset data structures :
-            //directoryStructure.Clear();
-        }
-
-        public void resetStatusBar()
-        {
-            //statusBarItem_numberOfImagesLoaded.Text = "No Image Files Loaded";
-            //statusBarItem_numberOfCompletedItems.Text = "-";
-        }
 
         public void updateStatusBar(string status, string message)
         {
