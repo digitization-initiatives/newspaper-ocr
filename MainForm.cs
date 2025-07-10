@@ -89,8 +89,11 @@ namespace NewspaperOCR
                         sourceFilesListView.Items.Add(item);
                     }
 
-                    statusBarItem_numberOfImagesLoaded.Text = $"No. of Images Loaded: {imageFiles.Count.ToString()}";
-                    statusBarItem_numberOfCompletedItems.Text = $"0";
+                    ocrHelper.totalNumberOfImages = imageFiles.Count;
+                    ocrHelper.completedOcrJobs = 0;
+
+                    statusBarItem_numberOfImagesLoaded.Text = $"No. of Images Loaded: {ocrHelper.totalNumberOfImages}";
+                    statusBarItem_numberOfCompletedItems.Text = $"{ocrHelper.completedOcrJobs}";
 
                     beginOCRButton.Enabled = true;
 
@@ -106,14 +109,14 @@ namespace NewspaperOCR
 
         private async void beginOCRButton_Click(object sender, EventArgs e)
         {
-            ocrHelper.constructOutputDirectoryStructure();
+            ocrHelper.createOutputDirectories();
             
             Language ocrLang = ocrHelper.getOcrLanguage();
             string tessdataLoc = Properties.Settings.Default.TessdataLocation;
             int concurrentOCRJobs = Properties.Settings.Default.ConcurrentOCRJobs;
             string tileSize = Properties.Settings.Default.TileSize;
 
-            ocrHelper.testOCROutputQueue();
+            ocrHelper.testOcrWorkflow();
 
 
             //CancellationTokenSource cts = new CancellationTokenSource();

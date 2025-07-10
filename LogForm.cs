@@ -19,6 +19,7 @@ namespace NewspaperOCR
             InitializeComponent();
             CustomInitializations();
         }
+
         public string getTimestamp()
         {
             return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -72,6 +73,11 @@ namespace NewspaperOCR
             {
                 sendToLog(LogForm.LogType[LogForm.ERROR], err.Message);
             }
+        }
+
+        private void LogForm_Click(object sender, EventArgs e)
+        {
+            logEntryDataGridView.ClearSelection();
         }
     }
 }

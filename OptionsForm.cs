@@ -75,7 +75,7 @@ namespace NewspaperOCR
             // Update Settings :
             Properties.Settings.Default.TessdataLocation = Path.GetFullPath(".") + "\\src\\tessdata";
             Properties.Settings.Default.OCROutputLocation = Path.GetFullPath(".") + "\\output";
-            
+
             Properties.Settings.Default.ConcurrentOCRJobs = 5;
             Properties.Settings.Default.OCRLang = "eng";
             Properties.Settings.Default.TileSize = "[1024x1024]";
@@ -152,6 +152,11 @@ namespace NewspaperOCR
             saveChanges();
             printSettingsToLogs();
             this.Hide();
+        }
+
+        private void jp2CompressionLevelTrackbar_Scroll(object sender, EventArgs e)
+        {
+            jp2CompressionLevelValue.Text = jp2CompressionLevelTrackbar.Value.ToString();
         }
     }
 }

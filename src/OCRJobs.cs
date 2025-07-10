@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NewspaperOCR.src
 {
-    public class OCRJob
+    public class OCRJobs
     {
         public int ListViewItemIndex { get; set; }
         public string SourceImageFileFullPath { get; set; }
@@ -23,6 +23,5 @@ namespace NewspaperOCR.src
         public CancellationTokenSource CTS { get; set; }
         public bool IsCompleted => OcrTask?.IsCompleted ?? false;
         public bool IsCanceled => CTS?.IsCancellationRequested ?? false;
-
     }
 }

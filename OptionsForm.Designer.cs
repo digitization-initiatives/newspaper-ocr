@@ -60,6 +60,10 @@ namespace NewspaperOCR
             ocrOutputLocationTextBoxToolTip = new ToolTip(components);
             issueFolderNameValidationRegexTextBoxLabel = new Label();
             issueFolderNameValidationRegexTextBox = new TextBox();
+            jp2CompressionLevelLabel = new Label();
+            jp2CompressionLevelTrackbar = new TrackBar();
+            jp2CompressionLevelValue = new Label();
+            ((System.ComponentModel.ISupportInitialize)jp2CompressionLevelTrackbar).BeginInit();
             SuspendLayout();
             // 
             // tessdataLocationLabel
@@ -272,12 +276,46 @@ namespace NewspaperOCR
             issueFolderNameValidationRegexTextBox.TabIndex = 24;
             issueFolderNameValidationRegexTextBox.Text = "^[a-zA-Z0-9]+_\\d{4}-\\d{2}-\\d{2}$";
             // 
+            // jp2CompressionLevelLabel
+            // 
+            jp2CompressionLevelLabel.AutoSize = true;
+            jp2CompressionLevelLabel.Location = new Point(17, 355);
+            jp2CompressionLevelLabel.Name = "jp2CompressionLevelLabel";
+            jp2CompressionLevelLabel.Size = new Size(171, 20);
+            jp2CompressionLevelLabel.TabIndex = 25;
+            jp2CompressionLevelLabel.Text = "JPEG Compression Level:";
+            // 
+            // jp2CompressionLevelTrackbar
+            // 
+            jp2CompressionLevelTrackbar.LargeChange = 10;
+            jp2CompressionLevelTrackbar.Location = new Point(225, 353);
+            jp2CompressionLevelTrackbar.Maximum = 100;
+            jp2CompressionLevelTrackbar.Name = "jp2CompressionLevelTrackbar";
+            jp2CompressionLevelTrackbar.Size = new Size(545, 56);
+            jp2CompressionLevelTrackbar.SmallChange = 5;
+            jp2CompressionLevelTrackbar.TabIndex = 26;
+            jp2CompressionLevelTrackbar.TickFrequency = 5;
+            jp2CompressionLevelTrackbar.Value = 40;
+            jp2CompressionLevelTrackbar.Scroll += jp2CompressionLevelTrackbar_Scroll;
+            // 
+            // jp2CompressionLevelValue
+            // 
+            jp2CompressionLevelValue.AutoSize = true;
+            jp2CompressionLevelValue.Location = new Point(194, 355);
+            jp2CompressionLevelValue.Name = "jp2CompressionLevelValue";
+            jp2CompressionLevelValue.Size = new Size(25, 20);
+            jp2CompressionLevelValue.TabIndex = 27;
+            jp2CompressionLevelValue.Text = "40";
+            // 
             // OptionsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(782, 673);
             ControlBox = false;
+            Controls.Add(jp2CompressionLevelValue);
+            Controls.Add(jp2CompressionLevelTrackbar);
+            Controls.Add(jp2CompressionLevelLabel);
             Controls.Add(issueFolderNameValidationRegexTextBox);
             Controls.Add(issueFolderNameValidationRegexTextBoxLabel);
             Controls.Add(optionsFormStatusStrip);
@@ -304,6 +342,7 @@ namespace NewspaperOCR
             MinimumSize = new Size(800, 720);
             Name = "OptionsForm";
             Text = "Options";
+            ((System.ComponentModel.ISupportInitialize)jp2CompressionLevelTrackbar).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -362,5 +401,8 @@ namespace NewspaperOCR
         private ToolTip ocrOutputLocationTextBoxToolTip;
         private Label issueFolderNameValidationRegexTextBoxLabel;
         private TextBox issueFolderNameValidationRegexTextBox;
+        private Label jp2CompressionLevelLabel;
+        private TrackBar jp2CompressionLevelTrackbar;
+        private Label jp2CompressionLevelValue;
     }
 }

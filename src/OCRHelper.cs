@@ -18,6 +18,9 @@ namespace NewspaperOCR.src
         internal List<OCROutputInfo> ocrOutputInfoList;
         internal Queue<OCROutputInfo> ocrOutputInfoQueue;
 
+        internal int totalNumberOfImages = 0;
+        internal int completedOcrJobs = 0;
+
         public OCRHelper(MainForm _mainForm, LogForm _logForm, OptionsForm _optionsForm)
         {
             mainForm = _mainForm;
@@ -82,7 +85,7 @@ namespace NewspaperOCR.src
             }
         }
 
-        public void constructOutputDirectoryStructure()
+        public void createOutputDirectories()
         {
             string batchFolderFullPath = mainForm.folderBrowserTextBox.Text;
             string batchNameFolder = Path.GetFileName(batchFolderFullPath);
@@ -115,16 +118,23 @@ namespace NewspaperOCR.src
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Batch and issue folders in \"{outputDirectory}\" have been created.");
         }
 
-        public async Task testOCROutputQueue()
+        public async Task testOcrWorkflow()
         {
             OCROutputInfo ocrOutputInfoItem;
 
-            while (ocrOutputInfoQueue.Count > 0)
+            while (completedOcrJobs != totalNumberOfImages)
             {
                 ocrOutputInfoItem = ocrOutputInfoQueue.Dequeue();
                 logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"Item index No.{ocrOutputInfoItem.Index} dequeued: {ocrOutputInfoItem.SourceImageFileFullPath}, and is being processed.");
-                await Task.Delay(1000);
+                await Task.Delay(2000);
+
+                mainForm.sourceFilesListView.Items[ocrOutputInfoItem.Index].SubItems[1].Text = "Completed";
+                mainForm.statusBarItem_numberOfCompletedItems.Text = $"{completedOcrJobs}";
+                
+                completedOcrJobs++;
             }
+
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"All {completedOcrJobs} images have been processed.");
         }
 
         public Language getOcrLanguage()
