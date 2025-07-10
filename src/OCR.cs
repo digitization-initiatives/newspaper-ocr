@@ -25,14 +25,14 @@ namespace NewspaperOCR.src
         private async Task processOCRQueue(Language ocrLang, string tessdataLoc, int concurrentOCRJobs, string tileSize, CancellationToken ct)
         {
             //Queue<OutputDirectoryStructure> directoryStructureQueue = new Queue<OutputDirectoryStructure>(directoryStructure);
-            Dictionary<int, src.TaskStatus> concurrentJobsTracker = new Dictionary<int, src.TaskStatus>();
+            //Dictionary<int, src.TaskStatus> concurrentJobsTracker = new Dictionary<int, src.TaskStatus>();
             Task ocrTask;
 
             int completedOcr = 0;
             DateTime batchStartTime = DateTime.Now;
             DateTime batchCompletionTime;
             TimeSpan batchProcessingTime;
-            OutputDirectoryStructure item;
+            OCROutputInfo item;
 
             mainForm.Invoke(() =>
             {
@@ -40,11 +40,11 @@ namespace NewspaperOCR.src
                 //logForm.appendTextsToLog($"OCR of this batch started at: {batchStartTime.ToString(@"hh\:mm\:ss")}.", logForm.LOG_TYPE_INFO);
             });
 
-            if (concurrentJobsTracker.Count == 0)
-            {
-                for (int i = 0; i < concurrentOCRJobs; i++)
-                {
-                    ct.ThrowIfCancellationRequested();
+            //if (concurrentJobsTracker.Count == 0)
+            //{
+            //    for (int i = 0; i < concurrentOCRJobs; i++)
+            //    {
+            //        ct.ThrowIfCancellationRequested();
 
                     //if (directoryStructureQueue.Count != 0)
                     //{
@@ -65,10 +65,10 @@ namespace NewspaperOCR.src
                     //{
                     //    break;
                     //}
-                }
-            }
-            else
-            {
+            //    }
+            //}
+            //else
+            //{
                 //for (int i = 0; i < concurrentOCRJobs; i++)
                 //{
                 //    ct.ThrowIfCancellationRequested();
@@ -127,7 +127,7 @@ namespace NewspaperOCR.src
                 //        });
                 //    }
                 //}
-            }
+            //}
         }
 
         private async Task ocr(string sourceImageFileFullpath, string sourceImageFileName, string outputPdfFileFullPath, string outputAltoFileFullPath, string outputJp2FileFullPath, string tessdataLoc, Language ocrLang, string tileSize)

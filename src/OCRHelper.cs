@@ -15,7 +15,8 @@ namespace NewspaperOCR.src
         private MainForm mainForm;
         private LogForm logForm;
         private OptionsForm optionsForm;
-        internal List<OutputDirectoryStructure> outputDirectoryStructure;
+        internal List<OCROutputInfo> ocrOutputInfoList;
+        internal Queue<OCROutputInfo> ocrOutputInfoQueue;
 
         public OCRHelper(MainForm _mainForm, LogForm _logForm, OptionsForm _optionsForm)
         {
@@ -23,7 +24,7 @@ namespace NewspaperOCR.src
             logForm = _logForm;
             optionsForm = _optionsForm;
 
-            outputDirectoryStructure = new List<OutputDirectoryStructure>();
+            ocrOutputInfoList = new List<OCROutputInfo>();
         }
 
         public bool validateIssueFolderNames(string folderBrowserDialogSelectedPath)
@@ -103,13 +104,27 @@ namespace NewspaperOCR.src
                 //Extract imageFileName:
                 string sourceImageFileName = Path.GetFileName(sourceImageFileFullPath);
                 
-                OutputDirectoryStructure directoryStructureItem = new OutputDirectoryStructure(index, batchNameFolder, issueDateFolder, sourceImageFileName, sourceImageFileFullPath, outputDirectory);
-                outputDirectoryStructure.Add(directoryStructureItem);
+                OCROutputInfo directoryStructureItem = new OCROutputInfo(index, batchNameFolder, issueDateFolder, sourceImageFileName, sourceImageFileFullPath, outputDirectory);
+                ocrOutputInfoList.Add(directoryStructureItem);
                 
                 logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Output directory \"{directoryStructureItem.OutputDirectoryFullPath}\" has been created.");
             }
 
+            ocrOutputInfoQueue = new Queue<OCROutputInfo>(ocrOutputInfoList);
+
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Batch and issue folders in \"{outputDirectory}\" have been created.");
+        }
+
+        public async Task testOCROutputQueue()
+        {
+            OCROutputInfo ocrOutputInfoItem;
+
+            while (ocrOutputInfoQueue.Count > 0)
+            {
+                ocrOutputInfoItem = ocrOutputInfoQueue.Dequeue();
+                logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"Item index No.{ocrOutputInfoItem.Index} dequeued: {ocrOutputInfoItem.SourceImageFileFullPath}, and is being processed.");
+                await Task.Delay(1000);
+            }
         }
 
         public Language getOcrLanguage()

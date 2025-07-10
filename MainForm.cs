@@ -107,11 +107,14 @@ namespace NewspaperOCR
         private async void beginOCRButton_Click(object sender, EventArgs e)
         {
             ocrHelper.constructOutputDirectoryStructure();
+            
+            Language ocrLang = ocrHelper.getOcrLanguage();
+            string tessdataLoc = Properties.Settings.Default.TessdataLocation;
+            int concurrentOCRJobs = Properties.Settings.Default.ConcurrentOCRJobs;
+            string tileSize = Properties.Settings.Default.TileSize;
 
-            //Language ocrLang = ocrHelper.getOcrLanguage();
-            //string tessdataLoc = Properties.Settings.Default.TessdataLocation;
-            //int concurrentOCRJobs = Properties.Settings.Default.ConcurrentOCRJobs;
-            //string tileSize = Properties.Settings.Default.TileSize;
+            ocrHelper.testOCROutputQueue();
+
 
             //CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -129,7 +132,8 @@ namespace NewspaperOCR
             resetMainFormControls();
             resetMainFormStatusBar();
 
-            ocrHelper.outputDirectoryStructure.Clear();
+            ocrHelper.ocrOutputInfoList.Clear();
+            ocrHelper.ocrOutputInfoQueue.Clear();
         }
         private void optionsButton_Click(object sender, EventArgs e)
         {
