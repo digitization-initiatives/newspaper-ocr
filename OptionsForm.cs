@@ -20,6 +20,31 @@ namespace NewspaperOCR
         }
 
         #region Custom Functions
+
+        //Override default ToolTip behavior:
+        private void tessdataLocationTextBox_MouseHover(object sender, EventArgs e)
+        {
+            string toolTipText = tessdataLocationTextBox.Text;
+
+            Point cursorPosition = tessdataLocationTextBox.PointToClient(Cursor.Position);
+            tessdataLocationTextBoxToolTip.Show(toolTipText, tessdataLocationTextBox, cursorPosition.X, cursorPosition.Y + 10, int.MaxValue);
+        }
+        private void tessdataLocationTextBox_MouseLeave(object sender, EventArgs e)
+        {
+            tessdataLocationTextBoxToolTip.Hide(tessdataLocationTextBox);
+        }
+        private void ocrOutputLocationTextBox_MouseHover(object sender, EventArgs e)
+        {
+            string toolTipText = ocrOutputLocationTextBox.Text;
+
+            Point cursorPosition = ocrOutputLocationTextBox.PointToClient(Cursor.Position);
+            ocrOutputLocationTextBoxToolTip.Show(toolTipText, ocrOutputLocationTextBox, cursorPosition.X, cursorPosition.Y + 10, int.MaxValue);
+        }
+        private void ocrOutputLocationTextBox_MouseLeave(object sender, EventArgs e)
+        {
+            ocrOutputLocationTextBoxToolTip.Hide(ocrOutputLocationTextBox);
+        }
+
         private void printSettingsToLogs()
         {
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Tessdata Location] has been changed to: {Properties.Settings.Default.TessdataLocation}");
@@ -29,6 +54,7 @@ namespace NewspaperOCR
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[OCR Language] has been changed to: {Properties.Settings.Default.OCRLang}");
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Tile Size] has been changed to: {Properties.Settings.Default.TileSize}");
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Source Image File Format] has been changed to: {Properties.Settings.Default.SourceImageFileFormat}");
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Source Image File Format] has been changed to: {Properties.Settings.Default.IssueFolderNameValidationRegex}");
         }
         private void updateOptionsFormUI()
         {
@@ -37,10 +63,11 @@ namespace NewspaperOCR
             ocrOutputLocationTextBox.Text = Properties.Settings.Default.OCROutputLocation;
 
             // Update OCR Settings UI:
-            ocrLangComboBox.SelectedItem = Properties.Settings.Default.OCRLang;
             concurrentOCRJobsComboBox.SelectedItem = Properties.Settings.Default.ConcurrentOCRJobs.ToString();
+            ocrLangComboBox.SelectedItem = Properties.Settings.Default.OCRLang;
             tileSizeComboBox.SelectedItem = Properties.Settings.Default.TileSize;
             sourceImageFileFormatComboBox.SelectedItem = Properties.Settings.Default.SourceImageFileFormat;
+            issueFolderNameValidationRegexTextBox.Text = Properties.Settings.Default.IssueFolderNameValidationRegex;
         }
 
         public void setDefaultOptions()
@@ -53,6 +80,7 @@ namespace NewspaperOCR
             Properties.Settings.Default.OCRLang = "eng";
             Properties.Settings.Default.TileSize = "[1024x1024]";
             Properties.Settings.Default.SourceImageFileFormat = "tif";
+            Properties.Settings.Default.IssueFolderNameValidationRegex = @"^[a-zA-Z0-9]+_\d{4}-\d{2}-\d{2}$";
 
             Properties.Settings.Default.Save();
 
@@ -74,7 +102,9 @@ namespace NewspaperOCR
             Properties.Settings.Default.ConcurrentOCRJobs = concurrentOCRJobsComboBox.SelectedIndex + 1;
             Properties.Settings.Default.OCRLang = ocrLangComboBox.SelectedItem.ToString().Substring(0, 3);
             Properties.Settings.Default.TileSize = tileSizeComboBox.SelectedItem.ToString();
-            
+            Properties.Settings.Default.SourceImageFileFormat = sourceImageFileFormatComboBox.SelectedItem.ToString();
+            Properties.Settings.Default.IssueFolderNameValidationRegex = issueFolderNameValidationRegexTextBox.Text;
+
             Properties.Settings.Default.Save();
 
             // Update OptionsForm UI :
@@ -119,6 +149,8 @@ namespace NewspaperOCR
         }
         private void closeButton_Click(object sender, EventArgs e)
         {
+            saveChanges();
+            printSettingsToLogs();
             this.Hide();
         }
     }

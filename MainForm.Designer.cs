@@ -234,6 +234,13 @@ namespace NewspaperOCR
 
         #region My custom initializations
 
+        //Override default OnShown behavior:
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            this.ActiveControl = null;
+        }
+
         private LogForm logForm;
         private OptionsForm optionsForm;
         public Button viewLogsButton;

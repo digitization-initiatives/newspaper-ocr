@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Interop;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +12,9 @@ namespace NewspaperOCR.src
         public int Index { get; set; }
         public string BatchNameFolder { get; set; }
         public string IssueDateFolder { get; set; }
+        public string SourceImageFileFullPath { get; set; }
         public string SourceImageFileName { get; set; }
         public string SourceImageFileNameWithoutExtension { get; set; }
-        public string SourceImageFileFullPath { get; set; }
         public string OutputDirectory { get; set; }
         public string OutputJp2ImageFileName { get; set; }
         public string OutputJp2ImageFileFullPath { get; set; }
@@ -29,8 +30,8 @@ namespace NewspaperOCR.src
 
             BatchNameFolder = batchNameFolder;
             IssueDateFolder = issueDateFolder;
-            SourceImageFileName = sourceImageFileName;
             SourceImageFileFullPath = sourceImageFileFullpath;
+            SourceImageFileName = sourceImageFileName;
             SourceImageFileNameWithoutExtension = Path.GetFileNameWithoutExtension(sourceImageFileName);
 
             OutputDirectory = outputDirectory;

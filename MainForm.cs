@@ -93,6 +93,8 @@ namespace NewspaperOCR
                     statusBarItem_numberOfCompletedItems.Text = $"0";
 
                     beginOCRButton.Enabled = true;
+
+                    logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"All issue folders in \"{folderBrowserDialog.SelectedPath}\" have successfully passed validation.");
                 }
                 else
                 {
@@ -106,12 +108,12 @@ namespace NewspaperOCR
         {
             ocrHelper.constructOutputDirectoryStructure();
 
-            Language ocrLang = ocrHelper.getOcrLanguage();
-            string tessdataLoc = Properties.Settings.Default.TessdataLocation;
-            int concurrentOCRJobs = Properties.Settings.Default.ConcurrentOCRJobs;
-            string tileSize = Properties.Settings.Default.TileSize;
+            //Language ocrLang = ocrHelper.getOcrLanguage();
+            //string tessdataLoc = Properties.Settings.Default.TessdataLocation;
+            //int concurrentOCRJobs = Properties.Settings.Default.ConcurrentOCRJobs;
+            //string tileSize = Properties.Settings.Default.TileSize;
 
-            CancellationTokenSource cts = new CancellationTokenSource();
+            //CancellationTokenSource cts = new CancellationTokenSource();
 
             //await ocr.processOCRQueue(ocrLang, tessdataLoc, concurrentOCRJobs, tileSize, cts.Token);
 

@@ -182,6 +182,13 @@ namespace NewspaperOCR
 
         #region Custom Initializations
 
+        //Override default OnShown behavior:
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            this.ActiveControl = null;
+        }
+
         internal MainForm mainForm;
 
         internal static readonly int MAX_LOG_ROWS = 500;

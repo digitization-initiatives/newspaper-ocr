@@ -28,7 +28,7 @@ namespace NewspaperOCR.src
 
         public bool validateIssueFolderNames(string folderBrowserDialogSelectedPath)
         {
-            Regex issueFolderNamePattern = new Regex(@"^[a-zA-Z0-9]+_\d{4}-\d{2}-\d{2}_\d{2}$");
+            Regex issueFolderNamePattern = new Regex(Properties.Settings.Default.IssueFolderNameValidationRegex);
 
             List<string> issueFoldersPaths = new List<string>();
             List<string> files = new List<string>();
@@ -83,28 +83,33 @@ namespace NewspaperOCR.src
 
         public void constructOutputDirectoryStructure()
         {
-            string batchNameFolder = Path.GetFileName(mainForm.folderBrowserTextBox.Text);
+            string batchFolderFullPath = mainForm.folderBrowserTextBox.Text;
+            string batchNameFolder = Path.GetFileName(batchFolderFullPath);
+            string outputDirectory = Properties.Settings.Default.OCROutputLocation;
 
             foreach (ListViewItem imageFileListViewItem in mainForm.sourceFilesListView.Items)
             {
-                //Get the item index:
                 int index = imageFileListViewItem.Index;
+                string sourceImageFileFullPath = imageFileListViewItem.SubItems[0].Text;
 
                 //Construct issueDateFolder:
-                string issueDateFolder = imageFileListViewItem.SubItems[0].Text;
-                issueDateFolder = issueDateFolder.Replace(mainForm.folderBrowserTextBox.Text, "");
-                var segments = issueDateFolder.Split(Path.DirectorySeparatorChar);
+                string issueDateFolder = sourceImageFileFullPath.Replace(batchFolderFullPath + "\\", "");
+                string[] segments = issueDateFolder.Split(Path.DirectorySeparatorChar);
                 if (segments.Length > 0)
                 {
-                    issueDateFolder = segments[1];
+                    issueDateFolder = segments[0];
                 }
 
                 //Extract imageFileName:
-                string imageFileName = Path.GetFileName(imageFileListViewItem.SubItems[0].Text);
-
-                OutputDirectoryStructure directoryStructureItem = new OutputDirectoryStructure(index, batchNameFolder, issueDateFolder, imageFileName, imageFileListViewItem.SubItems[0].Text, Properties.Settings.Default.OCROutputLocation);
-                //mainForm.outputDirectoryStructure.Add(directoryStructureItem);
+                string sourceImageFileName = Path.GetFileName(sourceImageFileFullPath);
+                
+                OutputDirectoryStructure directoryStructureItem = new OutputDirectoryStructure(index, batchNameFolder, issueDateFolder, sourceImageFileName, sourceImageFileFullPath, outputDirectory);
+                outputDirectoryStructure.Add(directoryStructureItem);
+                
+                logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Output directory \"{directoryStructureItem.OutputDirectoryFullPath}\" has been created.");
             }
+
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Batch and issue folders in \"{outputDirectory}\" have been created.");
         }
 
         public Language getOcrLanguage()

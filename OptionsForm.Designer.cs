@@ -58,6 +58,8 @@ namespace NewspaperOCR
             optionsFormStatusStrip = new StatusStrip();
             tessdataLocationTextBoxToolTip = new ToolTip(components);
             ocrOutputLocationTextBoxToolTip = new ToolTip(components);
+            issueFolderNameValidationRegexTextBoxLabel = new Label();
+            issueFolderNameValidationRegexTextBox = new TextBox();
             SuspendLayout();
             // 
             // tessdataLocationLabel
@@ -253,12 +255,31 @@ namespace NewspaperOCR
             // 
             tessdataLocationTextBoxToolTip.ShowAlways = true;
             // 
+            // issueFolderNameValidationRegexTextBoxLabel
+            // 
+            issueFolderNameValidationRegexTextBoxLabel.AutoSize = true;
+            issueFolderNameValidationRegexTextBoxLabel.Location = new Point(270, 280);
+            issueFolderNameValidationRegexTextBoxLabel.Name = "issueFolderNameValidationRegexTextBoxLabel";
+            issueFolderNameValidationRegexTextBoxLabel.Size = new Size(250, 20);
+            issueFolderNameValidationRegexTextBoxLabel.TabIndex = 23;
+            issueFolderNameValidationRegexTextBoxLabel.Text = "Issue Folder Name Validation Regex:";
+            // 
+            // issueFolderNameValidationRegexTextBox
+            // 
+            issueFolderNameValidationRegexTextBox.Location = new Point(270, 303);
+            issueFolderNameValidationRegexTextBox.Name = "issueFolderNameValidationRegexTextBox";
+            issueFolderNameValidationRegexTextBox.Size = new Size(500, 27);
+            issueFolderNameValidationRegexTextBox.TabIndex = 24;
+            issueFolderNameValidationRegexTextBox.Text = "^[a-zA-Z0-9]+_\\d{4}-\\d{2}-\\d{2}$";
+            // 
             // OptionsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(782, 673);
             ControlBox = false;
+            Controls.Add(issueFolderNameValidationRegexTextBox);
+            Controls.Add(issueFolderNameValidationRegexTextBoxLabel);
             Controls.Add(optionsFormStatusStrip);
             Controls.Add(sourceImageFileFormatComboBox);
             Controls.Add(sourceImageFileFormatLabel);
@@ -291,13 +312,24 @@ namespace NewspaperOCR
 
         #region Custom Initializations
 
+        //Override default OnShown behavior:
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            this.ActiveControl = null;
+        }
+
         public MainForm mainForm;
         public LogForm logForm;
+
         private void CustomInitializations()
         {
-            tessdataLocationTextBoxToolTip.SetToolTip(tessdataLocationTextBox, tessdataLocationTextBox.Text);
-            ocrOutputLocationTextBoxToolTip.SetToolTip(ocrOutputLocationTextBox, "sanity test");
-            
+            tessdataLocationTextBox.MouseHover += tessdataLocationTextBox_MouseHover;
+            tessdataLocationTextBox.MouseLeave += tessdataLocationTextBox_MouseLeave;
+
+            ocrOutputLocationTextBox.MouseHover += ocrOutputLocationTextBox_MouseHover;
+            ocrOutputLocationTextBox.MouseLeave += ocrOutputLocationTextBox_MouseLeave;
+
             setDefaultOptions();
         }
 
@@ -328,5 +360,7 @@ namespace NewspaperOCR
         private StatusStrip optionsFormStatusStrip;
         private ToolTip tessdataLocationTextBoxToolTip;
         private ToolTip ocrOutputLocationTextBoxToolTip;
+        private Label issueFolderNameValidationRegexTextBoxLabel;
+        private TextBox issueFolderNameValidationRegexTextBox;
     }
 }
