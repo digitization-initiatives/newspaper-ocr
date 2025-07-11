@@ -245,7 +245,6 @@ namespace NewspaperOCR
         private OptionsForm optionsForm;
         public Button viewLogsButton;
         private OCR ocr;
-        private OCRHelper ocrHelper;
 
         private void CustomInitializations()
         {
@@ -266,7 +265,7 @@ namespace NewspaperOCR
             optionsForm.Location = new Point(this.Location.X + this.Width + 20, this.Location.Y);
 
             // Initialize OCRHelper :
-            ocrHelper = new OCRHelper(this, logForm, optionsForm);
+            ocr = new OCR(this, logForm, optionsForm);
 
             // Initialize OCR :
             ocr = new OCR(this, logForm, optionsForm);

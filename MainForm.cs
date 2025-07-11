@@ -75,7 +75,7 @@ namespace NewspaperOCR
         {
             if (folderBrowserDialog.SelectedPath != String.Empty)
             {
-                if (ocrHelper.validateIssueFolderNames(folderBrowserDialog.SelectedPath))
+                if (ocr.ValidateIssueFolderNames(folderBrowserDialog.SelectedPath))
                 {
                     List<string> imageFiles = new List<string>();
 
@@ -89,11 +89,11 @@ namespace NewspaperOCR
                         sourceFilesListView.Items.Add(item);
                     }
 
-                    ocrHelper.totalNumberOfImages = imageFiles.Count;
-                    ocrHelper.completedOcrJobs = 0;
+                    ocr.totalNumberOfImages = imageFiles.Count;
+                    ocr.completedOcrJobs = 0;
 
-                    statusBarItem_numberOfImagesLoaded.Text = $"No. of Images Loaded: {ocrHelper.totalNumberOfImages}";
-                    statusBarItem_numberOfCompletedItems.Text = $"{ocrHelper.completedOcrJobs}";
+                    statusBarItem_numberOfImagesLoaded.Text = $"No. of Images Loaded: {ocr.totalNumberOfImages}";
+                    statusBarItem_numberOfCompletedItems.Text = $"{ocr.completedOcrJobs}";
 
                     beginOCRButton.Enabled = true;
 
@@ -109,21 +109,21 @@ namespace NewspaperOCR
 
         private async void beginOCRButton_Click(object sender, EventArgs e)
         {
-            ocrHelper.createOutputDirectories();
+            ocr.CreateOutputDirectories();
             
-            Language ocrLang = ocrHelper.getOcrLanguage();
+            Language ocrLang = ocr.GetOcrLanguage();
             string tessdataLoc = Properties.Settings.Default.TessdataLocation;
             int concurrentOCRJobs = Properties.Settings.Default.ConcurrentOCRJobs;
             string tileSize = Properties.Settings.Default.TileSize;
 
-            ocrHelper.testOcrWorkflow();
+            ocr.TestOcrWorkflow();
 
 
             //CancellationTokenSource cts = new CancellationTokenSource();
 
             //await ocr.processOCRQueue(ocrLang, tessdataLoc, concurrentOCRJobs, tileSize, cts.Token);
 
-            //ocrHelper.startOver();
+            //ocr.startOver();
         }
 
         private void cancelOCRButton_Click(object sender, EventArgs e)
@@ -135,8 +135,8 @@ namespace NewspaperOCR
             resetMainFormControls();
             resetMainFormStatusBar();
 
-            ocrHelper.ocrOutputInfoList.Clear();
-            ocrHelper.ocrOutputInfoQueue.Clear();
+            ocr.ocrItemsList.Clear();
+            ocr.ocrItemsQueue.Clear();
         }
         private void optionsButton_Click(object sender, EventArgs e)
         {

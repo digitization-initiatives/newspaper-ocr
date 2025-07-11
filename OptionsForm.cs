@@ -54,7 +54,8 @@ namespace NewspaperOCR
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[OCR Language] has been changed to: {Properties.Settings.Default.OCRLang}");
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Tile Size] has been changed to: {Properties.Settings.Default.TileSize}");
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Source Image File Format] has been changed to: {Properties.Settings.Default.SourceImageFileFormat}");
-            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Source Image File Format] has been changed to: {Properties.Settings.Default.IssueFolderNameValidationRegex}");
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[Issue Folder Name Validation Regex] has been changed to: {Properties.Settings.Default.IssueFolderNameValidationRegex}");
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"[JPEG Compression Level:] has been changed to: {Properties.Settings.Default.Jp2CompressionLevel}");
         }
         private void updateOptionsFormUI()
         {
@@ -68,6 +69,7 @@ namespace NewspaperOCR
             tileSizeComboBox.SelectedItem = Properties.Settings.Default.TileSize;
             sourceImageFileFormatComboBox.SelectedItem = Properties.Settings.Default.SourceImageFileFormat;
             issueFolderNameValidationRegexTextBox.Text = Properties.Settings.Default.IssueFolderNameValidationRegex;
+            jp2CompressionLevelTrackbar.Value = Properties.Settings.Default.Jp2CompressionLevel;
         }
 
         public void setDefaultOptions()
@@ -81,6 +83,7 @@ namespace NewspaperOCR
             Properties.Settings.Default.TileSize = "[1024x1024]";
             Properties.Settings.Default.SourceImageFileFormat = "tif";
             Properties.Settings.Default.IssueFolderNameValidationRegex = @"^[a-zA-Z0-9]+_\d{4}-\d{2}-\d{2}$";
+            Properties.Settings.Default.Jp2CompressionLevel = 40;
 
             Properties.Settings.Default.Save();
 
@@ -104,6 +107,7 @@ namespace NewspaperOCR
             Properties.Settings.Default.TileSize = tileSizeComboBox.SelectedItem.ToString();
             Properties.Settings.Default.SourceImageFileFormat = sourceImageFileFormatComboBox.SelectedItem.ToString();
             Properties.Settings.Default.IssueFolderNameValidationRegex = issueFolderNameValidationRegexTextBox.Text;
+            Properties.Settings.Default.Jp2CompressionLevel = jp2CompressionLevelTrackbar.Value;
 
             Properties.Settings.Default.Save();
 

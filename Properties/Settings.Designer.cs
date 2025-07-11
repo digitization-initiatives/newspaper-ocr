@@ -118,5 +118,17 @@ namespace NewspaperOCR.Properties {
                 this["IssueFolderNameValidationRegex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Jp2CompressionLevel {
+            get {
+                return ((int)(this["Jp2CompressionLevel"]));
+            }
+            set {
+                this["Jp2CompressionLevel"] = value;
+            }
+        }
     }
 }
