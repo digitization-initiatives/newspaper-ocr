@@ -22,8 +22,9 @@ namespace NewspaperOCR.src
 
         public int totalNumberOfImages = 0;
         public int completedOcrJobs = 0;
+        public bool queueCancelled = false;
 
-        public List<OCRJob> concurrentOcrJobs;
+        public List<OCRTask> ocrTasks = new List<OCRTask>();
 
         public OCR(MainForm _mainForm, LogForm _logForm, OptionsForm _optionsForm)
         {
@@ -117,17 +118,13 @@ namespace NewspaperOCR.src
                 logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Output directory \"{ocrItem.OutputDirectoryFullPath}\" has been created.");
             }
 
-            ocrItemsQueue = new Queue<OCRItem>(ocrItemsList);
-
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Batch and issue folders in \"{outputDirectory}\" have been created.");
         }
 
-        public async Task<int> Ocr(string sourceImageFileFullpath, string sourceImageFileName, string outputPdfFileFullPath, string outputAltoFileFullPath, string outputJp2FileFullPath, string tessdataLoc, Language ocrLang, string tileSize, CancellationToken cancellationToken)
+        public async Task Ocr(string sourceImageFileFullpath, string sourceImageFileName, string outputPdfFileFullPath, string outputAltoFileFullPath, string outputJp2FileFullPath, string tessdataLoc, Language ocrLang, string tileSize)
         {
             try
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
                 //Perform OCR and produce PDF and Alto files:
                 using (var engine = new TesseractOCR.Engine(tessdataLoc, Language.English, EngineMode.LstmOnly))
                 {
@@ -135,10 +132,20 @@ namespace NewspaperOCR.src
                     {
                         using (var page = engine.Process(img))
                         {
+                            if (File.Exists(outputPdfFileFullPath))
+                            {
+                                File.Delete(outputPdfFileFullPath);
+                            }
+
                             using (var pdfRenderer = new PdfResult(outputPdfFileFullPath, tessdataLoc, false))
                             {
                                 pdfRenderer.BeginDocument(sourceImageFileName);
                                 pdfRenderer.AddPage(page);
+                            }
+
+                            if (File.Exists(outputAltoFileFullPath))
+                            {
+                                File.Delete(outputAltoFileFullPath);
                             }
 
                             using (var altoRenderer = new AltoResult(outputAltoFileFullPath))
@@ -169,46 +176,101 @@ namespace NewspaperOCR.src
 
                     File.Move(tiledJp2FileFullPath, outputJp2FileFullPath);
                 }
-
-                return 0;
-            }
-            catch (OperationCanceledException)
-            {
-                return 1;
             }
             catch (Exception ex)
             {
-                return 2;
+                logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"Error trying to perform OCR on file \"{sourceImageFileFullpath}\" with message: {ex.Message}");
             }
         }
 
-        public async Task TestOcrWorkflow()
+        public async Task ProcessOCRQueue()
         {
-            OCRItem ocrOutputInfoItem;
+            Language ocrLang = GetOcrLanguage();
+            string tessdataLoc = Properties.Settings.Default.TessdataLocation;
+            string tileSize = Properties.Settings.Default.TileSize;
+            int concurrentOCRJobs = Properties.Settings.Default.ConcurrentOCRJobs;
 
-            while (completedOcrJobs != totalNumberOfImages)
+            //Set up OCR items queue:
+            ocrItemsQueue = new Queue<OCRItem>(ocrItemsList);
+
+            //Process OCR queue:
+            OCRItem ocrItem;
+
+            while (completedOcrJobs < totalNumberOfImages)
             {
-                ocrOutputInfoItem = ocrItemsQueue.Dequeue();
-                logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"Item index No.{ocrOutputInfoItem.Index} dequeued: {ocrOutputInfoItem.SourceImageFileFullPath}, and is being processed.");
-                await Task.Delay(2000);
+                while ((ocrTasks.Count < concurrentOCRJobs) && (!queueCancelled) && (ocrItemsQueue.Count > 0))
+                {
+                    ocrItem = ocrItemsQueue.Dequeue();
+                    OCRTask ocrTask = new OCRTask();
 
-                mainForm.sourceFilesListView.Items[ocrOutputInfoItem.Index].SubItems[1].Text = "Completed";
-                mainForm.statusBarItem_numberOfCompletedItems.Text = $"{completedOcrJobs}";
-                
-                completedOcrJobs++;
+                    ocrTask.OcrItem = ocrItem;
+                    ocrTask.OcrTask = Task.Run(() => Ocr(ocrItem.SourceImageFileFullPath, ocrItem.SourceImageFileName, ocrItem.OutputPdfFileFullPath, ocrItem.OutputAltoFileFullPath, ocrItem.OutputJp2ImageFileFullPath, tessdataLoc, ocrLang, tileSize));
+
+                    ocrTasks.Add(ocrTask);
+
+                    logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"{ocrItem.SourceImageFileFullPath} has been added to the OCR job queue.");
+                }
+
+                if (queueCancelled)
+                {
+                    while (ocrItemsQueue.Count > 0)
+                    {
+                        ocrItem = ocrItemsQueue.Dequeue();
+                        ListViewItem sourceImageFileListViewItem = mainForm.sourceFilesListView.Items[ocrItem.Index];
+                        sourceImageFileListViewItem.SubItems[1].Text = "Cancelled";
+                        completedOcrJobs++;
+
+                        logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"{ocrItem.SourceImageFileFullPath} cancelled.");
+                    }
+                }
+
+                if (ocrTasks.Count > 0)
+                {
+                    foreach (OCRTask runningTask in ocrTasks.ToList())
+                    {
+                        ListViewItem sourceImageFileListViewItem = mainForm.sourceFilesListView.Items[runningTask.OcrItem.Index];
+
+                        if (runningTask.OcrTask.Status == TaskStatus.RanToCompletion)
+                        {
+                            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"{runningTask.OcrItem.SourceImageFileFullPath} has completed OCR.");
+                            sourceImageFileListViewItem.SubItems[1].Text = "Finished";
+                            completedOcrJobs++;
+                            mainForm.statusBarItem_numberOfCompletedItems.Text = completedOcrJobs.ToString();
+
+                            ocrTasks.Remove(runningTask);
+                        }
+                        else if (runningTask.OcrTask.Status == TaskStatus.Faulted)
+                        {
+                            logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"{runningTask.OcrItem.SourceImageFileFullPath} has faulted");
+                            sourceImageFileListViewItem.SubItems[1].Text = "Faulted";
+                            completedOcrJobs++;
+
+                            ocrTasks.Remove(runningTask);
+                        }
+                        else if (!runningTask.OcrTask.IsCompleted)
+                        {
+                            if (sourceImageFileListViewItem.SubItems[1].Text.Length < 8)
+                            {
+                                sourceImageFileListViewItem.SubItems[1].Text += "..";
+                            }
+                            else
+                            {
+                                sourceImageFileListViewItem.SubItems[1].Text = "...";
+                            }
+
+                            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"{runningTask.OcrItem.SourceImageFileFullPath} is being ocr'd ...");
+                            sourceImageFileListViewItem.SubItems[1].Text = sourceImageFileListViewItem.SubItems[1].Text;
+
+                            await Task.Delay(2000);
+                        }
+                    }
+                }
+
+                logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"Completed Jobs: {completedOcrJobs}, Total Jobs: {totalNumberOfImages}.");
+                logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"ocrTasks.Count: {ocrTasks.Count}, ocrItemsQueue.Count: {ocrItemsQueue.Count}.");
             }
 
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"All {completedOcrJobs} images have been processed.");
-        }
-
-        public int TestOcr(int timeDelay)
-        {
-            foreach (OCRItem ocrItem in ocrItemsList)
-            {
-                logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"Item index No.{ocrItem.Index} dequeued: {ocrItem.SourceImageFileFullPath}, and is being processed.");
-            }
-
-            return 0;
         }
 
         public Language GetOcrLanguage()
@@ -226,13 +288,6 @@ namespace NewspaperOCR.src
                 default:
                     return Language.English;
             }
-        }
-
-
-        public void UpdateStatusBar(string status, string message)
-        {
-            //statusBarItem_numberOfImagesLoaded.Text = status;
-            //statusBarItem_numberOfCompletedItems.Text = message;
         }
     }
 }

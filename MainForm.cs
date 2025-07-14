@@ -109,34 +109,41 @@ namespace NewspaperOCR
 
         private async void beginOCRButton_Click(object sender, EventArgs e)
         {
+            cancelOCRButton.Enabled = true;
+
             ocr.CreateOutputDirectories();
-            
-            Language ocrLang = ocr.GetOcrLanguage();
-            string tessdataLoc = Properties.Settings.Default.TessdataLocation;
-            int concurrentOCRJobs = Properties.Settings.Default.ConcurrentOCRJobs;
-            string tileSize = Properties.Settings.Default.TileSize;
 
-            ocr.TestOcrWorkflow();
-
-
-            //CancellationTokenSource cts = new CancellationTokenSource();
-
-            //await ocr.processOCRQueue(ocrLang, tessdataLoc, concurrentOCRJobs, tileSize, cts.Token);
-
-            //ocr.startOver();
+            await ocr.ProcessOCRQueue();
         }
 
         private void cancelOCRButton_Click(object sender, EventArgs e)
         {
-
+            ocr.queueCancelled = true;
         }
         private void startOverButton_Click(object sender, EventArgs e)
         {
-            resetMainFormControls();
-            resetMainFormStatusBar();
+            if (ocr.ocrTasks.Count > 0)
+            {
+                MessageBox.Show("OCR tasks are currently running! Please cancel all jobs first and wait for the remaining {ocr.ocrTasks.Count} jobs to complete.", "OCR Tasks Are Running!");
+                logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"OCR tasks are currently running! Please cancel all jobs first and wait for the remaining {ocr.ocrTasks.Count} jobs to complete.");
+            }
+            else
+            {
+                resetMainFormControls();
+                resetMainFormStatusBar();
 
-            ocr.ocrItemsList.Clear();
-            ocr.ocrItemsQueue.Clear();
+                if (ocr.ocrItemsList != null)
+                {
+                    ocr.ocrItemsList.Clear();
+                }
+
+                if (ocr.ocrItemsQueue != null)
+                {
+                    ocr.ocrItemsQueue.Clear();
+                }
+
+                ocr.queueCancelled = false;
+            }
         }
         private void optionsButton_Click(object sender, EventArgs e)
         {
