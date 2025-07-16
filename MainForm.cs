@@ -83,6 +83,7 @@ namespace NewspaperOCR
                     {
                         ListViewItem item = new ListViewItem(imageFile);
                         item.SubItems.Add("...");
+                        item.SubItems.Add("00:00:00");
 
                         sourceFilesListView.Items.Add(item);
                     }
