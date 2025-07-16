@@ -3,6 +3,7 @@ using ImageMagick.Formats;
 using NewspaperOCR.src;
 using System.Runtime.Intrinsics.X86;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using TesseractOCR;
@@ -23,19 +24,16 @@ namespace NewspaperOCR
         #region My Custom Functions
         public void resetMainFormControls()
         {
-            // Reset MainForm UI:
             folderBrowserDialog.SelectedPath = String.Empty;
             folderBrowserTextBox.Text = String.Empty;
+            folderBrowserButton.Enabled = true;
             loadImagesButton.Enabled = false;
 
             sourceFilesListView.Items.Clear();
-            sourceFilesListView_filenameCol.Width = sourceFilesListView.Width - 150;
-
+            
             beginOCRButton.Enabled = false;
             cancelOCRButton.Enabled = false;
-
-            statusBarItem_numberOfImagesLoaded.Text = "No Image Files Loaded";
-            statusBarItem_numberOfCompletedItems.Text = "-";
+            optionsButton.Enabled = true;
         }
 
         public void resetMainFormStatusBar()
@@ -109,16 +107,36 @@ namespace NewspaperOCR
 
         private async void beginOCRButton_Click(object sender, EventArgs e)
         {
+            beginOCRButton.Enabled = false;
+            startOverButton.Enabled = false;
+            optionsButton.Enabled = false;
+            folderBrowserButton.Enabled = false;
+            loadImagesButton.Enabled = false;
+
+            totalTimeElapsedStopwatch.Start();
+            totalTimeElapsedTimer.Start();
+
             cancelOCRButton.Enabled = true;
 
             ocr.CreateOutputDirectories();
 
             await ocr.ProcessOCRQueue();
+
+            totalTimeElapsedStopwatch.Stop();
+            totalTimeElapsedTimer.Stop();
+            statusBarItem_timeElapsed.Text = $"{totalTimeElapsedStopwatch.Elapsed:hh\\:mm\\:ss}";
+
+            startOverButton.Enabled = true;
+            optionsButton.Enabled = true;
         }
 
-        private void cancelOCRButton_Click(object sender, EventArgs e)
+        private async void cancelOCRButton_Click(object sender, EventArgs e)
         {
-            ocr.queueCancelled = true;
+            cancelOCRButton.Enabled = false;
+
+            await ocr.CancelQueue();
+
+            this.ActiveControl = null;
         }
         private void startOverButton_Click(object sender, EventArgs e)
         {
@@ -141,8 +159,6 @@ namespace NewspaperOCR
                 {
                     ocr.ocrItemsQueue.Clear();
                 }
-
-                ocr.queueCancelled = false;
             }
         }
         private void optionsButton_Click(object sender, EventArgs e)

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TesseractOCR.Enums;
 using TesseractOCR.Renderers;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Menu;
 
 namespace NewspaperOCR.src
 {
@@ -22,7 +23,6 @@ namespace NewspaperOCR.src
 
         public int totalNumberOfImages = 0;
         public int completedOcrJobs = 0;
-        public bool queueCancelled = false;
 
         public List<OCRTask> ocrTasks = new List<OCRTask>();
 
@@ -198,7 +198,7 @@ namespace NewspaperOCR.src
 
             while (completedOcrJobs < totalNumberOfImages)
             {
-                while ((ocrTasks.Count < concurrentOCRJobs) && (!queueCancelled) && (ocrItemsQueue.Count > 0))
+                while ((ocrTasks.Count < concurrentOCRJobs) && (ocrItemsQueue.Count > 0))
                 {
                     ocrItem = ocrItemsQueue.Dequeue();
                     OCRTask ocrTask = new OCRTask();
@@ -209,19 +209,6 @@ namespace NewspaperOCR.src
                     ocrTasks.Add(ocrTask);
 
                     logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"{ocrItem.SourceImageFileFullPath} has been added to the OCR job queue.");
-                }
-
-                if (queueCancelled)
-                {
-                    while (ocrItemsQueue.Count > 0)
-                    {
-                        ocrItem = ocrItemsQueue.Dequeue();
-                        ListViewItem sourceImageFileListViewItem = mainForm.sourceFilesListView.Items[ocrItem.Index];
-                        sourceImageFileListViewItem.SubItems[1].Text = "Cancelled";
-                        completedOcrJobs++;
-
-                        logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"{ocrItem.SourceImageFileFullPath} cancelled.");
-                    }
                 }
 
                 if (ocrTasks.Count > 0)
@@ -271,6 +258,21 @@ namespace NewspaperOCR.src
             }
 
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"All {completedOcrJobs} images have been processed.");
+        }
+
+        public async Task CancelQueue()
+        {
+            while (ocrItemsQueue.Count > 0)
+            {
+                OCRItem ocrItem;
+
+                ocrItem = ocrItemsQueue.Dequeue();
+                ListViewItem sourceImageFileListViewItem = mainForm.sourceFilesListView.Items[ocrItem.Index];
+                sourceImageFileListViewItem.SubItems[1].Text = "Cancelled";
+                completedOcrJobs++;
+
+                logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"{ocrItem.SourceImageFileFullPath} cancelled.");
+            }
         }
 
         public Language GetOcrLanguage()

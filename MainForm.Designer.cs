@@ -1,5 +1,7 @@
 ﻿using NewspaperOCR.src;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Timer = System.Windows.Forms.Timer;
 
 namespace NewspaperOCR
 {
@@ -37,6 +39,7 @@ namespace NewspaperOCR
             sourceFilesListView = new ListView();
             sourceFilesListView_filenameCol = new ColumnHeader();
             sourceFilesListView_ocrStatusCol = new ColumnHeader();
+            sourceFilesListView_timeSpentCol = new ColumnHeader();
             optionsButton = new Button();
             beginOCRButton = new Button();
             viewLogsButton = new Button();
@@ -45,9 +48,12 @@ namespace NewspaperOCR
             startOverButton = new Button();
             statusBar = new StatusStrip();
             statusBarItem_numberOfImagesLoaded = new ToolStripStatusLabel();
-            statusBarItem_divider = new ToolStripStatusLabel();
+            statusBarItem_divider1 = new ToolStripStatusLabel();
             statusBarItem_numberOfCompletedItems = new ToolStripStatusLabel();
             statusBarItem_numberOfCompletedItemsLabel = new ToolStripStatusLabel();
+            statusBarItem_divider2 = new ToolStripStatusLabel();
+            statusBarItem_timeElapsedLabel = new ToolStripStatusLabel();
+            statusBarItem_timeElapsed = new ToolStripStatusLabel();
             cancelOCRButton = new Button();
             statusBar.SuspendLayout();
             SuspendLayout();
@@ -87,7 +93,7 @@ namespace NewspaperOCR
             // sourceFilesListView
             // 
             sourceFilesListView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            sourceFilesListView.Columns.AddRange(new ColumnHeader[] { sourceFilesListView_filenameCol, sourceFilesListView_ocrStatusCol });
+            sourceFilesListView.Columns.AddRange(new ColumnHeader[] { sourceFilesListView_filenameCol, sourceFilesListView_ocrStatusCol, sourceFilesListView_timeSpentCol });
             sourceFilesListView.Location = new Point(12, 44);
             sourceFilesListView.Name = "sourceFilesListView";
             sourceFilesListView.Size = new Size(1238, 564);
@@ -98,12 +104,17 @@ namespace NewspaperOCR
             // sourceFilesListView_filenameCol
             // 
             sourceFilesListView_filenameCol.Text = "Filename";
-            sourceFilesListView_filenameCol.Width = 1088;
+            sourceFilesListView_filenameCol.Width = 968;
             // 
             // sourceFilesListView_ocrStatusCol
             // 
             sourceFilesListView_ocrStatusCol.Text = "OCR Status";
             sourceFilesListView_ocrStatusCol.Width = 120;
+            // 
+            // sourceFilesListView_timeSpentCol
+            // 
+            sourceFilesListView_timeSpentCol.Text = "Time Spent";
+            sourceFilesListView_timeSpentCol.Width = 120;
             // 
             // optionsButton
             // 
@@ -163,7 +174,7 @@ namespace NewspaperOCR
             // statusBar
             // 
             statusBar.ImageScalingSize = new Size(20, 20);
-            statusBar.Items.AddRange(new ToolStripItem[] { statusBarItem_numberOfImagesLoaded, statusBarItem_divider, statusBarItem_numberOfCompletedItems, statusBarItem_numberOfCompletedItemsLabel });
+            statusBar.Items.AddRange(new ToolStripItem[] { statusBarItem_numberOfImagesLoaded, statusBarItem_divider1, statusBarItem_numberOfCompletedItems, statusBarItem_numberOfCompletedItemsLabel, statusBarItem_divider2, statusBarItem_timeElapsedLabel, statusBarItem_timeElapsed });
             statusBar.Location = new Point(0, 647);
             statusBar.Name = "statusBar";
             statusBar.Size = new Size(1262, 26);
@@ -176,11 +187,11 @@ namespace NewspaperOCR
             statusBarItem_numberOfImagesLoaded.Size = new Size(162, 20);
             statusBarItem_numberOfImagesLoaded.Text = "No Image Files Loaded";
             // 
-            // statusBarItem_divider
+            // statusBarItem_divider1
             // 
-            statusBarItem_divider.Name = "statusBarItem_divider";
-            statusBarItem_divider.Size = new Size(29, 20);
-            statusBarItem_divider.Text = "  |  ";
+            statusBarItem_divider1.Name = "statusBarItem_divider1";
+            statusBarItem_divider1.Size = new Size(29, 20);
+            statusBarItem_divider1.Text = "  |  ";
             // 
             // statusBarItem_numberOfCompletedItems
             // 
@@ -193,6 +204,24 @@ namespace NewspaperOCR
             statusBarItem_numberOfCompletedItemsLabel.Name = "statusBarItem_numberOfCompletedItemsLabel";
             statusBarItem_numberOfCompletedItemsLabel.Size = new Size(206, 20);
             statusBarItem_numberOfCompletedItemsLabel.Text = "Images Have Completed OCR";
+            // 
+            // statusBarItem_divider2
+            // 
+            statusBarItem_divider2.Name = "statusBarItem_divider2";
+            statusBarItem_divider2.Size = new Size(29, 20);
+            statusBarItem_divider2.Text = "  |  ";
+            // 
+            // statusBarItem_timeElapsedLabel
+            // 
+            statusBarItem_timeElapsedLabel.Name = "statusBarItem_timeElapsedLabel";
+            statusBarItem_timeElapsedLabel.Size = new Size(101, 20);
+            statusBarItem_timeElapsedLabel.Text = "Time Elapsed:";
+            // 
+            // statusBarItem_timeElapsed
+            // 
+            statusBarItem_timeElapsed.Name = "statusBarItem_timeElapsed";
+            statusBarItem_timeElapsed.Size = new Size(15, 20);
+            statusBarItem_timeElapsed.Text = "-";
             // 
             // cancelOCRButton
             // 
@@ -221,6 +250,7 @@ namespace NewspaperOCR
             Controls.Add(exitButton);
             Controls.Add(folderBrowserTextBox);
             Controls.Add(folderBrowserButton);
+            MaximumSize = new Size(1280, 720);
             MinimumSize = new Size(1280, 720);
             Name = "MainForm";
             Text = "Newspaper OCR";
@@ -246,11 +276,17 @@ namespace NewspaperOCR
         public Button viewLogsButton;
         private OCR ocr;
 
+        private Stopwatch totalTimeElapsedStopwatch;
+        private Timer totalTimeElapsedTimer;
+
         private void CustomInitializations()
         {
             // Set MainForm start location :
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(200, (Screen.PrimaryScreen.Bounds.Height - this.Height) / 2 - 50);
+
+            // Adjust column width:
+            sourceFilesListView_filenameCol.Width = sourceFilesListView.Width - 270;
 
             // Initialize LogForm :
             logForm = new LogForm();
@@ -269,6 +305,15 @@ namespace NewspaperOCR
 
             // Initialize OCR :
             ocr = new OCR(this, logForm, optionsForm);
+
+            // Initialize Timer and Stopwatch :
+            totalTimeElapsedStopwatch = new Stopwatch();
+            totalTimeElapsedTimer = new Timer();
+            totalTimeElapsedTimer.Interval = 1000;
+            totalTimeElapsedTimer.Tick += (s, e) =>
+            {
+                statusBarItem_timeElapsed.Text = $"{totalTimeElapsedStopwatch.Elapsed:hh\\:mm\\:ss}";
+            };
 
             // Initialize MainForm UI :
             resetMainFormControls();
@@ -292,8 +337,12 @@ namespace NewspaperOCR
         internal StatusStrip statusBar;
         internal ToolStripStatusLabel statusBarItem_numberOfImagesLoaded;
         internal ToolStripStatusLabel statusBarItem_numberOfCompletedItems;
-        internal ToolStripStatusLabel statusBarItem_divider;
+        internal ToolStripStatusLabel statusBarItem_divider1;
         internal Button cancelOCRButton;
         internal ToolStripStatusLabel statusBarItem_numberOfCompletedItemsLabel;
+        private ColumnHeader sourceFilesListView_timeSpentCol;
+        private ToolStripStatusLabel statusBarItem_divider2;
+        private ToolStripStatusLabel statusBarItem_timeElapsedLabel;
+        private ToolStripStatusLabel statusBarItem_timeElapsed;
     }
 }
