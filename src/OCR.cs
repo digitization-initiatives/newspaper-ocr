@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using TesseractOCR.Enums;
 using TesseractOCR.Renderers;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Menu;
+using System.Diagnostics;
 
 namespace NewspaperOCR.src
 {
@@ -158,28 +159,27 @@ namespace NewspaperOCR.src
                 }
 
                 //Perform image compression and generate JP2 file:
+                string tiledJp2FileFullPath = outputJp2FileFullPath + tileSize;
+
                 using (var sourceImage = new MagickImage(sourceImageFileFullpath))
                 {
                     sourceImage.Format = MagickFormat.Jp2;
                     sourceImage.Settings.Compression = CompressionMethod.JPEG2000;
                     sourceImage.Settings.SetDefine(MagickFormat.Jp2, "progression-order", "RLCP");
                     sourceImage.Quality = Properties.Settings.Default.Jp2CompressionLevel;
-
-                    string tiledJp2FileFullPath = outputJp2FileFullPath + tileSize;
-
                     sourceImage.Write(tiledJp2FileFullPath);
-
-                    if (File.Exists(outputJp2FileFullPath))
-                    {
-                        File.Delete(outputJp2FileFullPath);
-                    }
-
-                    File.Move(tiledJp2FileFullPath, outputJp2FileFullPath);
                 }
+
+                if (File.Exists(outputJp2FileFullPath))
+                {
+                    File.Delete(outputJp2FileFullPath);
+                }
+
+                File.Move(tiledJp2FileFullPath, outputJp2FileFullPath);
             }
             catch (Exception ex)
             {
-                logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"Error trying to perform OCR on file \"{sourceImageFileFullpath}\" with message: {ex.Message}");
+                logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"Error trying to perform OCR on file \"{sourceImageFileFullpath}\" with message: {ex.ToString()}");
             }
         }
 
@@ -204,6 +204,8 @@ namespace NewspaperOCR.src
                     OCRTask ocrTask = new OCRTask();
 
                     ocrTask.OcrItem = ocrItem;
+                    ocrTask.OcrStopwatch = new Stopwatch();
+                    ocrTask.OcrStopwatch.Start();
                     ocrTask.OcrTask = Task.Run(() => Ocr(ocrItem.SourceImageFileFullPath, ocrItem.SourceImageFileName, ocrItem.OutputPdfFileFullPath, ocrItem.OutputAltoFileFullPath, ocrItem.OutputJp2ImageFileFullPath, tessdataLoc, ocrLang, tileSize));
 
                     ocrTasks.Add(ocrTask);
@@ -219,8 +221,10 @@ namespace NewspaperOCR.src
 
                         if (runningTask.OcrTask.Status == TaskStatus.RanToCompletion)
                         {
+                            runningTask.OcrStopwatch.Stop();
                             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"{runningTask.OcrItem.SourceImageFileFullPath} has completed OCR.");
                             sourceImageFileListViewItem.SubItems[1].Text = "Finished";
+                            sourceImageFileListViewItem.SubItems[2].Text = $"{runningTask.OcrStopwatch.Elapsed:hh\\:mm\\:ss}";
                             completedOcrJobs++;
                             mainForm.statusBarItem_numberOfCompletedItems.Text = completedOcrJobs.ToString();
 
@@ -228,8 +232,10 @@ namespace NewspaperOCR.src
                         }
                         else if (runningTask.OcrTask.Status == TaskStatus.Faulted)
                         {
+                            runningTask.OcrStopwatch.Stop();
                             logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"{runningTask.OcrItem.SourceImageFileFullPath} has faulted");
                             sourceImageFileListViewItem.SubItems[1].Text = "Faulted";
+                            sourceImageFileListViewItem.SubItems[2].Text = $"{runningTask.OcrStopwatch.Elapsed:hh\\:mm\\:ss}";
                             completedOcrJobs++;
 
                             ocrTasks.Remove(runningTask);
@@ -247,9 +253,10 @@ namespace NewspaperOCR.src
 
                             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"{runningTask.OcrItem.SourceImageFileFullPath} is being ocr'd ...");
                             sourceImageFileListViewItem.SubItems[1].Text = sourceImageFileListViewItem.SubItems[1].Text;
-
-                            await Task.Delay(2000);
+                            sourceImageFileListViewItem.SubItems[2].Text = $"{runningTask.OcrStopwatch.Elapsed:hh\\:mm\\:ss}";
                         }
+
+                        await Task.Delay(2000);
                     }
                 }
 
