@@ -281,6 +281,8 @@ namespace NewspaperOCR
 
         private void CustomInitializations()
         {
+            this.Click += MainForm_Click;
+
             // Set MainForm start location :
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(200, (Screen.PrimaryScreen.Bounds.Height - this.Height) / 2 - 50);

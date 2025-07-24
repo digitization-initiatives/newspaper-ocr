@@ -36,6 +36,41 @@ namespace NewspaperOCR.src
             ocrItemsList = new List<OCRItem>();
         }
 
+        public bool IsFileLocked(string filePath)
+        {
+            try
+            {
+                using (FileStream fileStream = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                {
+                    //File is accessible.
+                }
+                return false;
+            }
+            catch (IOException)
+            {
+                logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"File: {filePath} is locked or in use.");
+                return true;
+            }
+        }
+        public async Task WaitForFileRelease(string filePath, int maxRetries, int delay)
+        {
+            int retry = 0;
+
+            while (IsFileLocked(filePath) && retry < maxRetries)
+            {
+                await Task.Delay(delay);
+                retry++;
+            }
+
+            if (!IsFileLocked(filePath))
+            {
+                logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"File: {filePath} is accessible.");
+            } else
+            {
+                logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"File: {filePath} is still locked or in use after {maxRetries} retries.");
+            }
+        }
+
         public bool ValidateIssueFolderNames(string folderBrowserDialogSelectedPath)
         {
             Regex issueFolderNamePattern = new Regex(Properties.Settings.Default.IssueFolderNameValidationRegex);
@@ -175,7 +210,16 @@ namespace NewspaperOCR.src
                     File.Delete(outputJp2FileFullPath);
                 }
 
-                File.Move(tiledJp2FileFullPath, outputJp2FileFullPath);
+                if (File.Exists(tiledJp2FileFullPath))
+                {
+                    await WaitForFileRelease(tiledJp2FileFullPath, 10, 1000);
+                    File.Move(tiledJp2FileFullPath, outputJp2FileFullPath);
+                    logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"\"{tiledJp2FileFullPath}\" renamed to \"{outputJp2FileFullPath}\".");
+                }
+                else if (File.Exists(outputJp2FileFullPath) && !File.Exists(tiledJp2FileFullPath))
+                {
+                    logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"Tiled JP2 file \"{tiledJp2FileFullPath}\" already renamed to \"{outputJp2FileFullPath}\".");
+                }
             }
             catch (Exception ex)
             {
@@ -260,8 +304,8 @@ namespace NewspaperOCR.src
                     }
                 }
 
-                logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"Completed Jobs: {completedOcrJobs}, Total Jobs: {totalNumberOfImages}.");
-                logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"ocrTasks.Count: {ocrTasks.Count}, ocrItemsQueue.Count: {ocrItemsQueue.Count}.");
+                //logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"Completed Jobs: {completedOcrJobs}, Total Jobs: {totalNumberOfImages}.");
+                //logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"ocrTasks.Count: {ocrTasks.Count}, ocrItemsQueue.Count: {ocrItemsQueue.Count}.");
             }
 
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"All {completedOcrJobs} images have been processed.");

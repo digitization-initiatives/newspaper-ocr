@@ -123,6 +123,8 @@ namespace NewspaperOCR
 
             await ocr.ProcessOCRQueue();
 
+            cancelOCRButton.Enabled = false;
+
             totalTimeElapsedStopwatch.Stop();
             totalTimeElapsedTimer.Stop();
             statusBarItem_timeElapsed.Text = $"{totalTimeElapsedStopwatch.Elapsed:hh\\:mm\\:ss}";
@@ -190,7 +192,9 @@ namespace NewspaperOCR
         {
             this.Close();
         }
-
-
+        private void MainForm_Click(object sender, EventArgs e)
+        {
+            sourceFilesListView.SelectedItems.Clear();
+        }
     }
 }
