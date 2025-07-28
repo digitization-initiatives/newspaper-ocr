@@ -30,7 +30,7 @@ namespace NewspaperOCR
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             hideButton = new Button();
             clearButton = new Button();
             pauseLogMonitoringCheckbox = new CheckBox();
@@ -39,16 +39,16 @@ namespace NewspaperOCR
             logTypeCol = new DataGridViewTextBoxColumn();
             logMessageCol = new DataGridViewTextBoxColumn();
             ViewFullLogsButton = new Button();
-            statusStrip1 = new StatusStrip();
+            logFormStatusStrip = new StatusStrip();
             maxLogEntryStatusStripLabel = new ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)logEntryDataGridView).BeginInit();
-            statusStrip1.SuspendLayout();
+            logFormStatusStrip.SuspendLayout();
             SuspendLayout();
             // 
             // hideButton
             // 
             hideButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            hideButton.Location = new Point(874, 612);
+            hideButton.Location = new Point(874, 583);
             hideButton.Name = "hideButton";
             hideButton.Size = new Size(120, 29);
             hideButton.TabIndex = 3;
@@ -59,7 +59,7 @@ namespace NewspaperOCR
             // clearButton
             // 
             clearButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            clearButton.Location = new Point(748, 612);
+            clearButton.Location = new Point(748, 583);
             clearButton.Name = "clearButton";
             clearButton.Size = new Size(120, 29);
             clearButton.TabIndex = 4;
@@ -87,14 +87,14 @@ namespace NewspaperOCR
             logEntryDataGridView.BackgroundColor = Color.White;
             logEntryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             logEntryDataGridView.Columns.AddRange(new DataGridViewColumn[] { logTimestampCol, logTypeCol, logMessageCol });
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Window;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            logEntryDataGridView.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            logEntryDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
             logEntryDataGridView.Location = new Point(12, 12);
             logEntryDataGridView.Name = "logEntryDataGridView";
             logEntryDataGridView.ReadOnly = true;
@@ -131,7 +131,7 @@ namespace NewspaperOCR
             // ViewFullLogsButton
             // 
             ViewFullLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            ViewFullLogsButton.Location = new Point(582, 612);
+            ViewFullLogsButton.Location = new Point(582, 583);
             ViewFullLogsButton.Name = "ViewFullLogsButton";
             ViewFullLogsButton.Size = new Size(160, 29);
             ViewFullLogsButton.TabIndex = 7;
@@ -139,15 +139,15 @@ namespace NewspaperOCR
             ViewFullLogsButton.UseVisualStyleBackColor = true;
             ViewFullLogsButton.Click += viewLogFileButton_Click;
             // 
-            // statusStrip1
+            // logFormStatusStrip
             // 
-            statusStrip1.ImageScalingSize = new Size(20, 20);
-            statusStrip1.Items.AddRange(new ToolStripItem[] { maxLogEntryStatusStripLabel });
-            statusStrip1.Location = new Point(0, 647);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(1006, 26);
-            statusStrip1.TabIndex = 9;
-            statusStrip1.Text = "statusStrip1";
+            logFormStatusStrip.ImageScalingSize = new Size(20, 20);
+            logFormStatusStrip.Items.AddRange(new ToolStripItem[] { maxLogEntryStatusStripLabel });
+            logFormStatusStrip.Location = new Point(0, 647);
+            logFormStatusStrip.Name = "logFormStatusStrip";
+            logFormStatusStrip.Size = new Size(1006, 26);
+            logFormStatusStrip.TabIndex = 9;
+            logFormStatusStrip.Text = "logFormStatusStrip";
             // 
             // maxLogEntryStatusStripLabel
             // 
@@ -161,7 +161,7 @@ namespace NewspaperOCR
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1006, 673);
             ControlBox = false;
-            Controls.Add(statusStrip1);
+            Controls.Add(logFormStatusStrip);
             Controls.Add(ViewFullLogsButton);
             Controls.Add(logEntryDataGridView);
             Controls.Add(pauseLogMonitoringCheckbox);
@@ -172,8 +172,8 @@ namespace NewspaperOCR
             Name = "LogForm";
             Text = "View Logs";
             ((System.ComponentModel.ISupportInitialize)logEntryDataGridView).EndInit();
-            statusStrip1.ResumeLayout(false);
-            statusStrip1.PerformLayout();
+            logFormStatusStrip.ResumeLayout(false);
+            logFormStatusStrip.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -245,7 +245,7 @@ namespace NewspaperOCR
         private DataGridViewTextBoxColumn logTypeCol;
         private DataGridViewTextBoxColumn logMessageCol;
         private Button ViewFullLogsButton;
-        private StatusStrip statusStrip1;
+        private StatusStrip logFormStatusStrip;
         private ToolStripStatusLabel maxLogEntryStatusStripLabel;
     }
 }
