@@ -30,7 +30,7 @@ namespace NewspaperOCR
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             hideButton = new Button();
             clearButton = new Button();
             pauseLogMonitoringCheckbox = new CheckBox();
@@ -48,7 +48,7 @@ namespace NewspaperOCR
             // hideButton
             // 
             hideButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            hideButton.Location = new Point(874, 583);
+            hideButton.Location = new Point(874, 614);
             hideButton.Name = "hideButton";
             hideButton.Size = new Size(120, 29);
             hideButton.TabIndex = 3;
@@ -59,7 +59,7 @@ namespace NewspaperOCR
             // clearButton
             // 
             clearButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            clearButton.Location = new Point(748, 583);
+            clearButton.Location = new Point(748, 614);
             clearButton.Name = "clearButton";
             clearButton.Size = new Size(120, 29);
             clearButton.TabIndex = 4;
@@ -87,14 +87,14 @@ namespace NewspaperOCR
             logEntryDataGridView.BackgroundColor = Color.White;
             logEntryDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             logEntryDataGridView.Columns.AddRange(new DataGridViewColumn[] { logTimestampCol, logTypeCol, logMessageCol });
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            logEntryDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Window;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            logEntryDataGridView.DefaultCellStyle = dataGridViewCellStyle1;
             logEntryDataGridView.Location = new Point(12, 12);
             logEntryDataGridView.Name = "logEntryDataGridView";
             logEntryDataGridView.ReadOnly = true;
@@ -131,7 +131,7 @@ namespace NewspaperOCR
             // ViewFullLogsButton
             // 
             ViewFullLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            ViewFullLogsButton.Location = new Point(582, 583);
+            ViewFullLogsButton.Location = new Point(582, 614);
             ViewFullLogsButton.Name = "ViewFullLogsButton";
             ViewFullLogsButton.Size = new Size(160, 29);
             ViewFullLogsButton.TabIndex = 7;
