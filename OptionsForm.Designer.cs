@@ -40,7 +40,6 @@ namespace NewspaperOCR
             ocrOutputLocationBrowseButton = new Button();
             ocrOutputLocationTextBox = new TextBox();
             concurrentOCRJobsLabel = new Label();
-            concurrentOCRJobsComboBox = new ComboBox();
             closeButton = new Button();
             resetToDefaultButton = new Button();
             tessdataLocation_folderBrowserDialog = new FolderBrowserDialog();
@@ -63,7 +62,9 @@ namespace NewspaperOCR
             jp2CompressionLevelLabel = new Label();
             jp2CompressionLevelTrackbar = new TrackBar();
             jp2CompressionLevelValue = new Label();
+            concurrentOCRJobsNumericUpDown = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)jp2CompressionLevelTrackbar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)concurrentOCRJobsNumericUpDown).BeginInit();
             SuspendLayout();
             // 
             // tessdataLocationLabel
@@ -128,16 +129,6 @@ namespace NewspaperOCR
             concurrentOCRJobsLabel.Size = new Size(150, 20);
             concurrentOCRJobsLabel.TabIndex = 6;
             concurrentOCRJobsLabel.Text = "Concurrent OCR Jobs:";
-            // 
-            // concurrentOCRJobsComboBox
-            // 
-            concurrentOCRJobsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            concurrentOCRJobsComboBox.FormattingEnabled = true;
-            concurrentOCRJobsComboBox.Items.AddRange(new object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
-            concurrentOCRJobsComboBox.Location = new Point(270, 236);
-            concurrentOCRJobsComboBox.Name = "concurrentOCRJobsComboBox";
-            concurrentOCRJobsComboBox.Size = new Size(247, 28);
-            concurrentOCRJobsComboBox.TabIndex = 7;
             // 
             // closeButton
             // 
@@ -279,7 +270,7 @@ namespace NewspaperOCR
             // jp2CompressionLevelLabel
             // 
             jp2CompressionLevelLabel.AutoSize = true;
-            jp2CompressionLevelLabel.Location = new Point(17, 355);
+            jp2CompressionLevelLabel.Location = new Point(17, 358);
             jp2CompressionLevelLabel.Name = "jp2CompressionLevelLabel";
             jp2CompressionLevelLabel.Size = new Size(171, 20);
             jp2CompressionLevelLabel.TabIndex = 25;
@@ -288,7 +279,7 @@ namespace NewspaperOCR
             // jp2CompressionLevelTrackbar
             // 
             jp2CompressionLevelTrackbar.LargeChange = 10;
-            jp2CompressionLevelTrackbar.Location = new Point(225, 353);
+            jp2CompressionLevelTrackbar.Location = new Point(225, 356);
             jp2CompressionLevelTrackbar.Maximum = 100;
             jp2CompressionLevelTrackbar.Name = "jp2CompressionLevelTrackbar";
             jp2CompressionLevelTrackbar.Size = new Size(545, 56);
@@ -301,11 +292,21 @@ namespace NewspaperOCR
             // jp2CompressionLevelValue
             // 
             jp2CompressionLevelValue.AutoSize = true;
-            jp2CompressionLevelValue.Location = new Point(194, 355);
+            jp2CompressionLevelValue.Location = new Point(194, 358);
             jp2CompressionLevelValue.Name = "jp2CompressionLevelValue";
             jp2CompressionLevelValue.Size = new Size(25, 20);
             jp2CompressionLevelValue.TabIndex = 27;
             jp2CompressionLevelValue.Text = "40";
+            // 
+            // concurrentOCRJobsNumericUpDown
+            // 
+            concurrentOCRJobsNumericUpDown.Location = new Point(270, 236);
+            concurrentOCRJobsNumericUpDown.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
+            concurrentOCRJobsNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            concurrentOCRJobsNumericUpDown.Name = "concurrentOCRJobsNumericUpDown";
+            concurrentOCRJobsNumericUpDown.Size = new Size(247, 27);
+            concurrentOCRJobsNumericUpDown.TabIndex = 28;
+            concurrentOCRJobsNumericUpDown.Value = new decimal(new int[] { 5, 0, 0, 0 });
             // 
             // OptionsForm
             // 
@@ -313,6 +314,7 @@ namespace NewspaperOCR
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(782, 673);
             ControlBox = false;
+            Controls.Add(concurrentOCRJobsNumericUpDown);
             Controls.Add(jp2CompressionLevelValue);
             Controls.Add(jp2CompressionLevelTrackbar);
             Controls.Add(jp2CompressionLevelLabel);
@@ -330,7 +332,6 @@ namespace NewspaperOCR
             Controls.Add(saveChangesButton);
             Controls.Add(resetToDefaultButton);
             Controls.Add(closeButton);
-            Controls.Add(concurrentOCRJobsComboBox);
             Controls.Add(concurrentOCRJobsLabel);
             Controls.Add(ocrOutputLocationBrowseButton);
             Controls.Add(ocrOutputLocationTextBox);
@@ -343,6 +344,7 @@ namespace NewspaperOCR
             Name = "OptionsForm";
             Text = "Options";
             ((System.ComponentModel.ISupportInitialize)jp2CompressionLevelTrackbar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)concurrentOCRJobsNumericUpDown).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -381,7 +383,6 @@ namespace NewspaperOCR
         private Button ocrOutputLocationBrowseButton;
         private TextBox ocrOutputLocationTextBox;
         private Label concurrentOCRJobsLabel;
-        private ComboBox concurrentOCRJobsComboBox;
         private Button closeButton;
         private Button resetToDefaultButton;
         private FolderBrowserDialog tessdataLocation_folderBrowserDialog;
@@ -404,5 +405,6 @@ namespace NewspaperOCR
         private Label jp2CompressionLevelLabel;
         private TrackBar jp2CompressionLevelTrackbar;
         private Label jp2CompressionLevelValue;
+        private NumericUpDown concurrentOCRJobsNumericUpDown;
     }
 }

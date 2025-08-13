@@ -48,7 +48,7 @@ namespace NewspaperOCR
             // hideButton
             // 
             hideButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            hideButton.Location = new Point(874, 614);
+            hideButton.Location = new Point(874, 612);
             hideButton.Name = "hideButton";
             hideButton.Size = new Size(120, 29);
             hideButton.TabIndex = 3;
@@ -59,7 +59,7 @@ namespace NewspaperOCR
             // clearButton
             // 
             clearButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            clearButton.Location = new Point(748, 614);
+            clearButton.Location = new Point(748, 612);
             clearButton.Name = "clearButton";
             clearButton.Size = new Size(120, 29);
             clearButton.TabIndex = 4;
@@ -131,7 +131,7 @@ namespace NewspaperOCR
             // ViewFullLogsButton
             // 
             ViewFullLogsButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            ViewFullLogsButton.Location = new Point(582, 614);
+            ViewFullLogsButton.Location = new Point(582, 612);
             ViewFullLogsButton.Name = "ViewFullLogsButton";
             ViewFullLogsButton.Size = new Size(160, 29);
             ViewFullLogsButton.TabIndex = 7;
