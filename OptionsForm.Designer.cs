@@ -281,6 +281,7 @@ namespace NewspaperOCR
             jp2CompressionLevelTrackbar.LargeChange = 10;
             jp2CompressionLevelTrackbar.Location = new Point(225, 356);
             jp2CompressionLevelTrackbar.Maximum = 100;
+            jp2CompressionLevelTrackbar.Minimum = 1;
             jp2CompressionLevelTrackbar.Name = "jp2CompressionLevelTrackbar";
             jp2CompressionLevelTrackbar.Size = new Size(545, 56);
             jp2CompressionLevelTrackbar.SmallChange = 5;
@@ -342,6 +343,7 @@ namespace NewspaperOCR
             MaximumSize = new Size(800, 720);
             MinimumSize = new Size(800, 720);
             Name = "OptionsForm";
+            RightToLeft = RightToLeft.No;
             Text = "Options";
             ((System.ComponentModel.ISupportInitialize)jp2CompressionLevelTrackbar).EndInit();
             ((System.ComponentModel.ISupportInitialize)concurrentOCRJobsNumericUpDown).EndInit();

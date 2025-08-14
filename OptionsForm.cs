@@ -64,12 +64,12 @@ namespace NewspaperOCR
             ocrOutputLocationTextBox.Text = Properties.Settings.Default.OCROutputLocation;
 
             // Update OCR Settings UI:
-            concurrentOCRJobsComboBox.SelectedItem = Properties.Settings.Default.ConcurrentOCRJobs.ToString();
+            concurrentOCRJobsNumericUpDown.Value = Properties.Settings.Default.ConcurrentOCRJobs;
             ocrLangComboBox.SelectedItem = Properties.Settings.Default.OCRLang;
             tileSizeComboBox.SelectedItem = Properties.Settings.Default.TileSize;
             sourceImageFileFormatComboBox.SelectedItem = Properties.Settings.Default.SourceImageFileFormat;
             issueFolderNameValidationRegexTextBox.Text = Properties.Settings.Default.IssueFolderNameValidationRegex;
-            jp2CompressionLevelTrackbar.Value = Properties.Settings.Default.Jp2CompressionLevel;
+            jp2CompressionLevelTrackbar.Value = (int)Properties.Settings.Default.Jp2CompressionLevel;
         }
 
         public void setDefaultOptions()
@@ -102,12 +102,12 @@ namespace NewspaperOCR
             Properties.Settings.Default.TessdataLocation = tessdataLocationTextBox.Text;
             Properties.Settings.Default.OCROutputLocation = ocrOutputLocationTextBox.Text;
 
-            Properties.Settings.Default.ConcurrentOCRJobs = concurrentOCRJobsComboBox.SelectedIndex + 1;
+            Properties.Settings.Default.ConcurrentOCRJobs = (int) concurrentOCRJobsNumericUpDown.Value;
             Properties.Settings.Default.OCRLang = ocrLangComboBox.SelectedItem.ToString().Substring(0, 3);
             Properties.Settings.Default.TileSize = tileSizeComboBox.SelectedItem.ToString();
             Properties.Settings.Default.SourceImageFileFormat = sourceImageFileFormatComboBox.SelectedItem.ToString();
             Properties.Settings.Default.IssueFolderNameValidationRegex = issueFolderNameValidationRegexTextBox.Text;
-            Properties.Settings.Default.Jp2CompressionLevel = jp2CompressionLevelTrackbar.Value;
+            Properties.Settings.Default.Jp2CompressionLevel = (uint)jp2CompressionLevelTrackbar.Value;
 
             Properties.Settings.Default.Save();
 

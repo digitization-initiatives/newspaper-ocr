@@ -26,7 +26,7 @@
     <Setting Name="IssueFolderNameValidationRegex" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Jp2CompressionLevel" Type="System.Int32" Scope="User">
+    <Setting Name="Jp2CompressionLevel" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
