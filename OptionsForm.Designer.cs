@@ -126,9 +126,9 @@ namespace NewspaperOCR
             concurrentOCRJobsLabel.AutoSize = true;
             concurrentOCRJobsLabel.Location = new Point(270, 213);
             concurrentOCRJobsLabel.Name = "concurrentOCRJobsLabel";
-            concurrentOCRJobsLabel.Size = new Size(150, 20);
+            concurrentOCRJobsLabel.Size = new Size(212, 20);
             concurrentOCRJobsLabel.TabIndex = 6;
-            concurrentOCRJobsLabel.Text = "Concurrent OCR Jobs:";
+            concurrentOCRJobsLabel.Text = "Concurrent OCR Jobs: (max 20)";
             // 
             // closeButton
             // 
