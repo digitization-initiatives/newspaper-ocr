@@ -123,6 +123,8 @@ namespace NewspaperOCR
 
             await ocr.ProcessOCRQueue();
 
+            ocr.ValidateOutputFiles();
+
             cancelOCRButton.Enabled = false;
 
             totalTimeElapsedStopwatch.Stop();

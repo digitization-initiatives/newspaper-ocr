@@ -22,7 +22,7 @@ namespace NewspaperOCR.src
         public string OutputPdfFileFullPath { get; set; }
         public string OutputAltoFileName { get; set; }
         public string OutputAltoFileFullPath { get; set; }
-        public string OutputDirectoryFullPath { get; set; }
+        public string OutputIssueDirectoryFullPath { get; set; }
 
         public OCRItem(int index, string batchNameFolder, string issueDateFolder, string sourceImageFileName, string sourceImageFileFullpath, string outputDirectory)
         {
@@ -42,10 +42,10 @@ namespace NewspaperOCR.src
             OutputAltoFileName = SourceImageFileNameWithoutExtension;
             OutputAltoFileFullPath = Path.Combine(OutputDirectory, batchNameFolder, issueDateFolder, OutputAltoFileName);
 
-            OutputDirectoryFullPath = Path.Combine(OutputDirectory, batchNameFolder, issueDateFolder);
-            if (!Directory.Exists(OutputDirectoryFullPath))
+            OutputIssueDirectoryFullPath = Path.Combine(OutputDirectory, batchNameFolder, issueDateFolder);
+            if (!Directory.Exists(OutputIssueDirectoryFullPath))
             {
-                Directory.CreateDirectory(OutputDirectoryFullPath);
+                Directory.CreateDirectory(OutputIssueDirectoryFullPath);
             }
         }
     }

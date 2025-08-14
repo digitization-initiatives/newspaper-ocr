@@ -151,7 +151,7 @@ namespace NewspaperOCR.src
                 OCRItem ocrItem = new OCRItem(index, batchNameFolder, issueDateFolder, sourceImageFileName, sourceImageFileFullPath, outputDirectory);
                 ocrItemsList.Add(ocrItem);
                 
-                logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Output directory \"{ocrItem.OutputDirectoryFullPath}\" has been created.");
+                logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Output Issue Directory \"{ocrItem.OutputIssueDirectoryFullPath}\" has been created.");
             }
 
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Batch and issue folders in \"{outputDirectory}\" have been created.");
@@ -310,6 +310,57 @@ namespace NewspaperOCR.src
 
             logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"All {completedOcrJobs} images have been processed.");
         }
+
+        public void ValidateOutputFiles()
+        {
+            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Begin validating output files ... ");
+
+            int filesValidated = 0;
+            int totalFiles = ocrItemsList.Count * 3;
+
+            foreach (OCRItem ocrItem in ocrItemsList)
+            {
+                string pdfFileFullPath = ocrItem.OutputPdfFileFullPath + ".pdf";
+                string altoFileFUllPath = ocrItem.OutputAltoFileFullPath + ".xml";
+
+                if (!File.Exists(pdfFileFullPath))
+                {
+                    logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"{pdfFileFullPath} is missing, consider re-running the OCR job.");
+                }
+                else
+                {
+                    filesValidated++;
+                }
+
+                if (!File.Exists(altoFileFUllPath))
+                {
+                    logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"{altoFileFUllPath} is missing, consider re-running the OCR job.");
+                }
+                else
+                {
+                    filesValidated++;
+                }
+
+                if (!File.Exists(ocrItem.OutputJp2ImageFileFullPath))
+                {
+                    logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"{ocrItem.OutputJp2ImageFileFullPath} is missing, consider re-running the OCR job.");
+                }
+                else
+                {
+                    filesValidated++;
+                }
+            }
+
+            if (filesValidated == totalFiles)
+            {
+                logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Output files validation completed, all {filesValidated} files OCR'd successfully.");
+            }
+            else
+            {
+                logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"Output files validation completed, {filesValidated} of {totalFiles} OCR'd successfully. Consider re-running OCR for the failed/missing ones.");
+            }
+        }
+
 
         public async Task CancelQueue()
         {
