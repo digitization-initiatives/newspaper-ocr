@@ -101,7 +101,7 @@ namespace NewspaperOCR
             logEntryDataGridView.RowHeadersVisible = false;
             logEntryDataGridView.RowHeadersWidth = 51;
             logEntryDataGridView.ScrollBars = ScrollBars.Vertical;
-            logEntryDataGridView.Size = new Size(982, 596);
+            logEntryDataGridView.Size = new Size(982, 594);
             logEntryDataGridView.TabIndex = 6;
             // 
             // logTimestampCol

@@ -33,6 +33,7 @@ namespace NewspaperOCR
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             folderBrowserButton = new Button();
             folderBrowserTextBox = new TextBox();
             exitButton = new Button();
@@ -250,6 +251,9 @@ namespace NewspaperOCR
             Controls.Add(exitButton);
             Controls.Add(folderBrowserTextBox);
             Controls.Add(folderBrowserButton);
+            Font = new Font("Segoe UI", 9F);
+            ForeColor = SystemColors.ControlText;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximumSize = new Size(1280, 720);
             MinimumSize = new Size(1280, 720);
             Name = "MainForm";

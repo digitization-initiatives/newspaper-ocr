@@ -10,6 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="src\img\app-icon.ico" />
+    <None Remove="src\img\app-icon.png" />
     <None Remove="src\tessdata\eng.traineddata" />
     <None Remove="src\tessdata\fra.traineddata" />
     <None Remove="src\tessdata\jpn.traineddata" />
@@ -17,6 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="src\img\app-icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="src\tessdata\eng.traineddata">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
