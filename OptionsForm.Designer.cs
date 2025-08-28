@@ -302,7 +302,6 @@ namespace NewspaperOCR
             // concurrentOCRJobsNumericUpDown
             // 
             concurrentOCRJobsNumericUpDown.Location = new Point(270, 236);
-            concurrentOCRJobsNumericUpDown.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
             concurrentOCRJobsNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             concurrentOCRJobsNumericUpDown.Name = "concurrentOCRJobsNumericUpDown";
             concurrentOCRJobsNumericUpDown.Size = new Size(247, 27);

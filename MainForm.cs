@@ -101,7 +101,7 @@ namespace NewspaperOCR
                 else
                 {
                     MessageBox.Show($"\"{folderBrowserDialog.SelectedPath}\" is empty or contains invalid issue folders, see log for more details.", "Invalid Issue Folders Found!");
-                    logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"\"{folderBrowserDialog.SelectedPath}\" contains invalid issue folders, validation faild.");
+                    logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"\"{folderBrowserDialog.SelectedPath}\" contains either invalid issue folders or files, validation faild.");
                 }
             }
         }
