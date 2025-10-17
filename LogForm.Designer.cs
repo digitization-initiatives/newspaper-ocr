@@ -192,14 +192,7 @@ namespace NewspaperOCR
         internal MainForm mainForm;
 
         internal static readonly int MAX_LOG_ROWS = 500;
-        internal static readonly int INFO = 0, WARN = 1, ERROR = 2, DEBUG = 3;
-        internal static readonly Dictionary<int, string> LogType = new Dictionary<int, string>
-        {
-            { INFO, "[INFO]" },
-            { WARN, "[WARN]" },
-            { ERROR, "[ERROR]"},
-            { DEBUG, "[DEBUG]"}
-        };
+        internal static readonly (string INFO, string WARN, string ERROR, string DEBUG) LogType = ("[INFO]", "[WARN]", "[ERROR]", "[DEBUG]");
 
         internal string logFileName = String.Empty;
         internal string logFileFullPath = String.Empty;

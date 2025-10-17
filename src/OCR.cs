@@ -48,7 +48,7 @@ namespace NewspaperOCR.src
             }
             catch (IOException)
             {
-                logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"File: {filePath} is locked or in use.");
+                logForm.sendToLog(LogForm.LogType.WARN, $"File: {filePath} is locked or in use.");
                 return true;
             }
         }
@@ -64,10 +64,10 @@ namespace NewspaperOCR.src
 
             if (!IsFileLocked(filePath))
             {
-                logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"File: {filePath} is accessible.");
+                logForm.sendToLog(LogForm.LogType.INFO, $"File: {filePath} is accessible.");
             } else
             {
-                logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"File: {filePath} is still locked or in use after {maxRetries} retries.");
+                logForm.sendToLog(LogForm.LogType.ERROR, $"File: {filePath} is still locked or in use after {maxRetries} retries.");
             }
         }
 
@@ -86,10 +86,10 @@ namespace NewspaperOCR.src
             // Ensure there are no individual files in the folder besides issue folders.
             if (files.Count > 0)
             {
-                logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"The following invalid files found in \"{folderBrowserDialogSelectedPath}\". Only issue folders are allowed.");
+                logForm.sendToLog(LogForm.LogType.ERROR, $"The following invalid files found in \"{folderBrowserDialogSelectedPath}\". Only issue folders are allowed.");
                 foreach (string file in files)
                 {
-                    logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"Invalid file: \"{file}\"");
+                    logForm.sendToLog(LogForm.LogType.ERROR, $"Invalid file: \"{file}\"");
                 }
                 return false;
             }
@@ -97,7 +97,7 @@ namespace NewspaperOCR.src
             // Validate issue folders:
             if (issueFoldersPaths.Count == 0)
             {
-                logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"No Issues Found in \"{folderBrowserDialogSelectedPath}\"");
+                logForm.sendToLog(LogForm.LogType.WARN, $"No Issues Found in \"{folderBrowserDialogSelectedPath}\"");
                 return false;
             }
             else
@@ -108,18 +108,18 @@ namespace NewspaperOCR.src
 
                     if (!issueFolderNamePattern.IsMatch(issueFolderName))
                     {
-                        logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"\"{issueFolderPath}\" is not a valid issue folder name");
+                        logForm.sendToLog(LogForm.LogType.ERROR, $"\"{issueFolderPath}\" is not a valid issue folder name");
                         validFolders--;
                     }
                     else
                     {
-                        logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"\"{issueFolderPath}\" is a valid issue folder name");
+                        logForm.sendToLog(LogForm.LogType.INFO, $"\"{issueFolderPath}\" is a valid issue folder name");
                     }
                 }
 
                 if (validFolders < issueFoldersPaths.Count)
                 {
-                    logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"Some issue folder names in \"{folderBrowserDialogSelectedPath}\" are invalid, please see log for details.");
+                    logForm.sendToLog(LogForm.LogType.ERROR, $"Some issue folder names in \"{folderBrowserDialogSelectedPath}\" are invalid, please see log for details.");
                     return false;
                 }
                 else return true;
@@ -151,10 +151,10 @@ namespace NewspaperOCR.src
                 OCRItem ocrItem = new OCRItem(index, batchNameFolder, issueDateFolder, sourceImageFileName, sourceImageFileFullPath, outputDirectory);
                 ocrItemsList.Add(ocrItem);
                 
-                logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Output Issue Directory \"{ocrItem.OutputIssueDirectoryFullPath}\" has been created.");
+                logForm.sendToLog(LogForm.LogType.INFO, $"Output Issue Directory \"{ocrItem.OutputIssueDirectoryFullPath}\" has been created.");
             }
 
-            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Batch and issue folders in \"{outputDirectory}\" have been created.");
+            logForm.sendToLog(LogForm.LogType.INFO, $"Batch and issue folders in \"{outputDirectory}\" have been created.");
         }
 
         public async Task Ocr(string sourceImageFileFullpath, string sourceImageFileName, string outputPdfFileFullPath, string outputAltoFileFullPath, string outputJp2FileFullPath, string tessdataLoc, Language ocrLang, string tileSize)
@@ -214,16 +214,16 @@ namespace NewspaperOCR.src
                 {
                     await WaitForFileRelease(tiledJp2FileFullPath, 10, 1000);
                     File.Move(tiledJp2FileFullPath, outputJp2FileFullPath);
-                    logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"\"{tiledJp2FileFullPath}\" renamed to \"{outputJp2FileFullPath}\".");
+                    logForm.sendToLog(LogForm.LogType.INFO, $"\"{tiledJp2FileFullPath}\" renamed to \"{outputJp2FileFullPath}\".");
                 }
                 else if (File.Exists(outputJp2FileFullPath) && !File.Exists(tiledJp2FileFullPath))
                 {
-                    logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"Tiled JP2 file \"{tiledJp2FileFullPath}\" already renamed to \"{outputJp2FileFullPath}\".");
+                    logForm.sendToLog(LogForm.LogType.ERROR, $"Tiled JP2 file \"{tiledJp2FileFullPath}\" already renamed to \"{outputJp2FileFullPath}\".");
                 }
             }
             catch (Exception ex)
             {
-                logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"Error trying to perform OCR on file \"{sourceImageFileFullpath}\" with message: {ex.ToString()}");
+                logForm.sendToLog(LogForm.LogType.ERROR, $"Error trying to perform OCR on file \"{sourceImageFileFullpath}\" with message: {ex.ToString()}");
             }
         }
 
@@ -254,7 +254,7 @@ namespace NewspaperOCR.src
 
                     ocrTasks.Add(ocrTask);
 
-                    logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"{ocrItem.SourceImageFileFullPath} has been added to the OCR job queue.");
+                    logForm.sendToLog(LogForm.LogType.INFO, $"{ocrItem.SourceImageFileFullPath} has been added to the OCR job queue.");
                 }
 
                 if (ocrTasks.Count > 0)
@@ -266,7 +266,7 @@ namespace NewspaperOCR.src
                         if (runningTask.OcrTask.Status == TaskStatus.RanToCompletion)
                         {
                             runningTask.OcrStopwatch.Stop();
-                            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"{runningTask.OcrItem.SourceImageFileFullPath} has completed OCR.");
+                            logForm.sendToLog(LogForm.LogType.INFO, $"{runningTask.OcrItem.SourceImageFileFullPath} has completed OCR.");
                             sourceImageFileListViewItem.SubItems[1].Text = "Finished";
                             sourceImageFileListViewItem.SubItems[2].Text = $"{runningTask.OcrStopwatch.Elapsed:hh\\:mm\\:ss}";
                             completedOcrJobs++;
@@ -277,7 +277,7 @@ namespace NewspaperOCR.src
                         else if (runningTask.OcrTask.Status == TaskStatus.Faulted)
                         {
                             runningTask.OcrStopwatch.Stop();
-                            logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"{runningTask.OcrItem.SourceImageFileFullPath} has faulted");
+                            logForm.sendToLog(LogForm.LogType.ERROR, $"{runningTask.OcrItem.SourceImageFileFullPath} has faulted");
                             sourceImageFileListViewItem.SubItems[1].Text = "Faulted";
                             sourceImageFileListViewItem.SubItems[2].Text = $"{runningTask.OcrStopwatch.Elapsed:hh\\:mm\\:ss}";
                             completedOcrJobs++;
@@ -295,7 +295,7 @@ namespace NewspaperOCR.src
                                 sourceImageFileListViewItem.SubItems[1].Text = "...";
                             }
 
-                            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"{runningTask.OcrItem.SourceImageFileFullPath} is being ocr'd ...");
+                            logForm.sendToLog(LogForm.LogType.INFO, $"{runningTask.OcrItem.SourceImageFileFullPath} is being ocr'd ...");
                             sourceImageFileListViewItem.SubItems[1].Text = sourceImageFileListViewItem.SubItems[1].Text;
                             sourceImageFileListViewItem.SubItems[2].Text = $"{runningTask.OcrStopwatch.Elapsed:hh\\:mm\\:ss}";
                         }
@@ -308,12 +308,12 @@ namespace NewspaperOCR.src
                 //logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"ocrTasks.Count: {ocrTasks.Count}, ocrItemsQueue.Count: {ocrItemsQueue.Count}.");
             }
 
-            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"All {completedOcrJobs} images have been processed.");
+            logForm.sendToLog(LogForm.LogType.INFO, $"All {completedOcrJobs} images have been processed.");
         }
 
         public void ValidateOutputFiles()
         {
-            logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Begin validating output files ... ");
+            logForm.sendToLog(LogForm.LogType.INFO, $"Begin validating output files ... ");
 
             int filesValidated = 0;
             int totalFiles = ocrItemsList.Count * 3;
@@ -325,7 +325,7 @@ namespace NewspaperOCR.src
 
                 if (!File.Exists(pdfFileFullPath))
                 {
-                    logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"{pdfFileFullPath} is missing, consider re-running the OCR job.");
+                    logForm.sendToLog(LogForm.LogType.WARN, $"{pdfFileFullPath} is missing, consider re-running the OCR job.");
                 }
                 else
                 {
@@ -334,7 +334,7 @@ namespace NewspaperOCR.src
 
                 if (!File.Exists(altoFileFUllPath))
                 {
-                    logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"{altoFileFUllPath} is missing, consider re-running the OCR job.");
+                    logForm.sendToLog(LogForm.LogType.WARN, $"{altoFileFUllPath} is missing, consider re-running the OCR job.");
                 }
                 else
                 {
@@ -343,7 +343,7 @@ namespace NewspaperOCR.src
 
                 if (!File.Exists(ocrItem.OutputJp2ImageFileFullPath))
                 {
-                    logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"{ocrItem.OutputJp2ImageFileFullPath} is missing, consider re-running the OCR job.");
+                    logForm.sendToLog(LogForm.LogType.WARN, $"{ocrItem.OutputJp2ImageFileFullPath} is missing, consider re-running the OCR job.");
                 }
                 else
                 {
@@ -353,11 +353,11 @@ namespace NewspaperOCR.src
 
             if (filesValidated == totalFiles)
             {
-                logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"Output files validation completed, all {filesValidated} files OCR'd successfully.");
+                logForm.sendToLog(LogForm.LogType.INFO, $"Output files validation completed, all {filesValidated} files OCR'd successfully.");
             }
             else
             {
-                logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"Output files validation completed, {filesValidated} of {totalFiles} OCR'd successfully. Consider re-running OCR for the failed/missing ones.");
+                logForm.sendToLog(LogForm.LogType.WARN, $"Output files validation completed, {filesValidated} of {totalFiles} OCR'd successfully. Consider re-running OCR for the failed/missing ones.");
             }
         }
 
@@ -373,7 +373,7 @@ namespace NewspaperOCR.src
                 sourceImageFileListViewItem.SubItems[1].Text = "Cancelled";
                 completedOcrJobs++;
 
-                logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"{ocrItem.SourceImageFileFullPath} cancelled.");
+                logForm.sendToLog(LogForm.LogType.WARN, $"{ocrItem.SourceImageFileFullPath} cancelled.");
             }
         }
 
