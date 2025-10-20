@@ -57,12 +57,12 @@ namespace NewspaperOCR
             optionsFormStatusStrip = new StatusStrip();
             tessdataLocationTextBoxToolTip = new ToolTip(components);
             ocrOutputLocationTextBoxToolTip = new ToolTip(components);
-            issueFolderNameValidationRegexTextBoxLabel = new Label();
-            issueFolderNameValidationRegexTextBox = new TextBox();
+            issueFolderNameValidationPatternComboBoxLabel = new Label();
             jp2CompressionLevelLabel = new Label();
             jp2CompressionLevelTrackbar = new TrackBar();
             jp2CompressionLevelValue = new Label();
             concurrentOCRJobsNumericUpDown = new NumericUpDown();
+            issueFolderNameValidationPatternComboBox = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)jp2CompressionLevelTrackbar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)concurrentOCRJobsNumericUpDown).BeginInit();
             SuspendLayout();
@@ -250,22 +250,14 @@ namespace NewspaperOCR
             // 
             tessdataLocationTextBoxToolTip.ShowAlways = true;
             // 
-            // issueFolderNameValidationRegexTextBoxLabel
+            // issueFolderNameValidationPatternComboBoxLabel
             // 
-            issueFolderNameValidationRegexTextBoxLabel.AutoSize = true;
-            issueFolderNameValidationRegexTextBoxLabel.Location = new Point(270, 280);
-            issueFolderNameValidationRegexTextBoxLabel.Name = "issueFolderNameValidationRegexTextBoxLabel";
-            issueFolderNameValidationRegexTextBoxLabel.Size = new Size(250, 20);
-            issueFolderNameValidationRegexTextBoxLabel.TabIndex = 23;
-            issueFolderNameValidationRegexTextBoxLabel.Text = "Issue Folder Name Validation Regex:";
-            // 
-            // issueFolderNameValidationRegexTextBox
-            // 
-            issueFolderNameValidationRegexTextBox.Location = new Point(270, 303);
-            issueFolderNameValidationRegexTextBox.Name = "issueFolderNameValidationRegexTextBox";
-            issueFolderNameValidationRegexTextBox.Size = new Size(500, 27);
-            issueFolderNameValidationRegexTextBox.TabIndex = 24;
-            issueFolderNameValidationRegexTextBox.Text = "^[a-zA-Z0-9]+_\\d{4}-\\d{2}-\\d{2}$";
+            issueFolderNameValidationPatternComboBoxLabel.AutoSize = true;
+            issueFolderNameValidationPatternComboBoxLabel.Location = new Point(270, 280);
+            issueFolderNameValidationPatternComboBoxLabel.Name = "issueFolderNameValidationPatternComboBoxLabel";
+            issueFolderNameValidationPatternComboBoxLabel.Size = new Size(255, 20);
+            issueFolderNameValidationPatternComboBoxLabel.TabIndex = 23;
+            issueFolderNameValidationPatternComboBoxLabel.Text = "Issue Folder Name Validation Pattern:";
             // 
             // jp2CompressionLevelLabel
             // 
@@ -308,18 +300,28 @@ namespace NewspaperOCR
             concurrentOCRJobsNumericUpDown.TabIndex = 28;
             concurrentOCRJobsNumericUpDown.Value = new decimal(new int[] { 5, 0, 0, 0 });
             // 
+            // issueFolderNameValidationPatternComboBox
+            // 
+            issueFolderNameValidationPatternComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            issueFolderNameValidationPatternComboBox.FormattingEnabled = true;
+            issueFolderNameValidationPatternComboBox.Items.AddRange(new object[] { "\"newspapername_yyyy-mm-dd\" - ^[a-zA-Z0-9]+_\\d{4}-\\d{2}-\\d{2}$", "\"newspapername_yyyy-mm-dd_issuenumber\" - ^[a-zA-Z0-9]+_\\d{4}-\\d{2}-\\d{2}_\\d{2}$" });
+            issueFolderNameValidationPatternComboBox.Location = new Point(270, 303);
+            issueFolderNameValidationPatternComboBox.Name = "issueFolderNameValidationPatternComboBox";
+            issueFolderNameValidationPatternComboBox.Size = new Size(500, 28);
+            issueFolderNameValidationPatternComboBox.TabIndex = 29;
+            // 
             // OptionsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(782, 673);
             ControlBox = false;
+            Controls.Add(issueFolderNameValidationPatternComboBox);
             Controls.Add(concurrentOCRJobsNumericUpDown);
             Controls.Add(jp2CompressionLevelValue);
             Controls.Add(jp2CompressionLevelTrackbar);
             Controls.Add(jp2CompressionLevelLabel);
-            Controls.Add(issueFolderNameValidationRegexTextBox);
-            Controls.Add(issueFolderNameValidationRegexTextBoxLabel);
+            Controls.Add(issueFolderNameValidationPatternComboBoxLabel);
             Controls.Add(optionsFormStatusStrip);
             Controls.Add(sourceImageFileFormatComboBox);
             Controls.Add(sourceImageFileFormatLabel);
@@ -364,6 +366,10 @@ namespace NewspaperOCR
         public MainForm mainForm;
         public LogForm logForm;
 
+        internal static readonly (string REGEX0, string REGEX1) IssueFolderValidationPattern = (
+            @"^[a-zA-Z0-9]+_\d{4}-\d{2}-\d{2}$",
+            @"^[a-zA-Z0-9]+_\d{4}-\d{2}-\d{2}$_\d{2}$");
+
         private void CustomInitializations()
         {
             tessdataLocationTextBox.MouseHover += tessdataLocationTextBox_MouseHover;
@@ -401,11 +407,11 @@ namespace NewspaperOCR
         private StatusStrip optionsFormStatusStrip;
         private ToolTip tessdataLocationTextBoxToolTip;
         private ToolTip ocrOutputLocationTextBoxToolTip;
-        private Label issueFolderNameValidationRegexTextBoxLabel;
-        private TextBox issueFolderNameValidationRegexTextBox;
+        private Label issueFolderNameValidationPatternComboBoxLabel;
         private Label jp2CompressionLevelLabel;
         private TrackBar jp2CompressionLevelTrackbar;
         private Label jp2CompressionLevelValue;
         private NumericUpDown concurrentOCRJobsNumericUpDown;
+        private ComboBox issueFolderNameValidationPatternComboBox;
     }
 }

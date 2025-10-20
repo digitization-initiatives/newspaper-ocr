@@ -68,8 +68,16 @@ namespace NewspaperOCR
             ocrLangComboBox.SelectedItem = Properties.Settings.Default.OCRLang;
             tileSizeComboBox.SelectedItem = Properties.Settings.Default.TileSize;
             sourceImageFileFormatComboBox.SelectedItem = Properties.Settings.Default.SourceImageFileFormat;
-            issueFolderNameValidationRegexTextBox.Text = Properties.Settings.Default.IssueFolderNameValidationRegex;
             jp2CompressionLevelTrackbar.Value = (int)Properties.Settings.Default.Jp2CompressionLevel;
+
+            if (Properties.Settings.Default.IssueFolderNameValidationRegex == IssueFolderValidationPattern.REGEX0)
+            {
+                issueFolderNameValidationPatternComboBox.SelectedIndex = 0;
+            }
+            else if (Properties.Settings.Default.IssueFolderNameValidationRegex == IssueFolderValidationPattern.REGEX1)
+            {
+                issueFolderNameValidationPatternComboBox.SelectedIndex = 1;
+            }
         }
 
         public void setDefaultOptions()
@@ -82,7 +90,7 @@ namespace NewspaperOCR
             Properties.Settings.Default.OCRLang = "eng";
             Properties.Settings.Default.TileSize = "[1024x1024]";
             Properties.Settings.Default.SourceImageFileFormat = "tif";
-            Properties.Settings.Default.IssueFolderNameValidationRegex = @"^[a-zA-Z0-9]+_\d{4}-\d{2}-\d{2}$";
+            Properties.Settings.Default.IssueFolderNameValidationRegex = IssueFolderValidationPattern.REGEX0;
             Properties.Settings.Default.Jp2CompressionLevel = 40;
 
             Properties.Settings.Default.Save();
@@ -106,8 +114,18 @@ namespace NewspaperOCR
             Properties.Settings.Default.OCRLang = ocrLangComboBox.SelectedItem.ToString().Substring(0, 3);
             Properties.Settings.Default.TileSize = tileSizeComboBox.SelectedItem.ToString();
             Properties.Settings.Default.SourceImageFileFormat = sourceImageFileFormatComboBox.SelectedItem.ToString();
-            Properties.Settings.Default.IssueFolderNameValidationRegex = issueFolderNameValidationRegexTextBox.Text;
             Properties.Settings.Default.Jp2CompressionLevel = (uint)jp2CompressionLevelTrackbar.Value;
+
+            if (issueFolderNameValidationPatternComboBox.SelectedIndex == 0)
+            {
+                Properties.Settings.Default.IssueFolderNameValidationRegex = IssueFolderValidationPattern.REGEX0;
+            }
+            else if (issueFolderNameValidationPatternComboBox.SelectedIndex == 1)
+            {
+                Properties.Settings.Default.IssueFolderNameValidationRegex = IssueFolderValidationPattern.REGEX1;
+            }
+
+                Properties.Settings.Default.IssueFolderNameValidationRegex = issueFolderNameValidationRegexTextBox.Text;
 
             Properties.Settings.Default.Save();
 
