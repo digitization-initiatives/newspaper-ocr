@@ -40,6 +40,7 @@ namespace NewspaperOCR
         {
             statusBarItem_numberOfImagesLoaded.Text = "No Image Files Loaded";
             statusBarItem_numberOfCompletedItems.Text = "-";
+            statusBarItem_timeElapsed.Text = "-";
         }
 
         private void imageFilesListView_SizeChanged(object sender, EventArgs e)
@@ -58,7 +59,7 @@ namespace NewspaperOCR
                 folderBrowserTextBox.Text = folderBrowserDialog.SelectedPath;
                 loadImagesButton.Enabled = true;
 
-                logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"{folderBrowserDialog.SelectedPath} is selected.");
+                logForm.sendToLog(LogForm.LogType.INFO, $"{folderBrowserDialog.SelectedPath} is selected.");
             }
             else
             {
@@ -66,7 +67,7 @@ namespace NewspaperOCR
                 folderBrowserDialog.SelectedPath = String.Empty;
                 loadImagesButton.Enabled = false;
 
-                logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"No folder has been selected.");
+                logForm.sendToLog(LogForm.LogType.INFO, $"No folder has been selected.");
             }
         }
         private void loadImagesButton_Click(object sender, EventArgs e)
@@ -95,13 +96,14 @@ namespace NewspaperOCR
                     statusBarItem_numberOfCompletedItems.Text = $"{ocr.completedOcrJobs}";
 
                     beginOCRButton.Enabled = true;
+                    optionsButton.Enabled = false;
 
-                    logForm.sendToLog(LogForm.LogType[LogForm.INFO], $"All issue folders in \"{folderBrowserDialog.SelectedPath}\" have successfully passed validation.");
+                    logForm.sendToLog(LogForm.LogType.INFO, $"All issue folders in \"{folderBrowserDialog.SelectedPath}\" have successfully passed validation.");
                 }
                 else
                 {
                     MessageBox.Show($"\"{folderBrowserDialog.SelectedPath}\" is empty or contains invalid issue folders, see log for more details.", "Invalid Issue Folders Found!");
-                    logForm.sendToLog(LogForm.LogType[LogForm.ERROR], $"\"{folderBrowserDialog.SelectedPath}\" contains either invalid issue folders or files, validation faild.");
+                    logForm.sendToLog(LogForm.LogType.ERROR, $"\"{folderBrowserDialog.SelectedPath}\" contains either invalid issue folders or files, validation faild.");
                 }
             }
         }
@@ -148,7 +150,7 @@ namespace NewspaperOCR
             if (ocr.ocrTasks.Count > 0)
             {
                 MessageBox.Show("OCR tasks are currently running! Please cancel all jobs first and wait for the remaining {ocr.ocrTasks.Count} jobs to complete.", "OCR Tasks Are Running!");
-                logForm.sendToLog(LogForm.LogType[LogForm.WARN], $"OCR tasks are currently running! Please cancel all jobs first and wait for the remaining {ocr.ocrTasks.Count} jobs to complete.");
+                logForm.sendToLog(LogForm.LogType.WARN, $"OCR tasks are currently running! Please cancel all jobs first and wait for the remaining {ocr.ocrTasks.Count} jobs to complete.");
             }
             else
             {
