@@ -96,6 +96,7 @@ namespace NewspaperOCR
                     statusBarItem_numberOfCompletedItems.Text = $"{ocr.completedOcrJobs}";
 
                     beginOCRButton.Enabled = true;
+                    optionsButton.Enabled = false;
 
                     logForm.sendToLog(LogForm.LogType.INFO, $"All issue folders in \"{folderBrowserDialog.SelectedPath}\" have successfully passed validation.");
                 }

@@ -304,7 +304,7 @@ namespace NewspaperOCR
             // 
             issueFolderNameValidationPatternComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             issueFolderNameValidationPatternComboBox.FormattingEnabled = true;
-            issueFolderNameValidationPatternComboBox.Items.AddRange(new object[] { "\"newspapername_yyyy-mm-dd\" - ^[a-zA-Z0-9]+_\\d{4}-\\d{2}-\\d{2}$", "\"newspapername_yyyy-mm-dd_issuenumber\" - ^[a-zA-Z0-9]+_\\d{4}-\\d{2}-\\d{2}_\\d{2}$" });
+            issueFolderNameValidationPatternComboBox.Items.AddRange(new object[] { "\"newspaperName_yyyy-mm-dd\"", "\"newspaperName_yyyy-mm-dd_editionOrder\"" });
             issueFolderNameValidationPatternComboBox.Location = new Point(270, 303);
             issueFolderNameValidationPatternComboBox.Name = "issueFolderNameValidationPatternComboBox";
             issueFolderNameValidationPatternComboBox.Size = new Size(500, 28);

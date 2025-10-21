@@ -125,8 +125,6 @@ namespace NewspaperOCR
                 Properties.Settings.Default.IssueFolderNameValidationRegex = IssueFolderValidationPattern.REGEX1;
             }
 
-                Properties.Settings.Default.IssueFolderNameValidationRegex = issueFolderNameValidationRegexTextBox.Text;
-
             Properties.Settings.Default.Save();
 
             // Update OptionsForm UI :
