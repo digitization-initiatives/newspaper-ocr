@@ -57,12 +57,10 @@ namespace NewspaperOCR
             optionsFormStatusStrip = new StatusStrip();
             tessdataLocationTextBoxToolTip = new ToolTip(components);
             ocrOutputLocationTextBoxToolTip = new ToolTip(components);
-            issueFolderNameValidationPatternComboBoxLabel = new Label();
             jp2CompressionLevelLabel = new Label();
             jp2CompressionLevelTrackbar = new TrackBar();
             jp2CompressionLevelValue = new Label();
             concurrentOCRJobsNumericUpDown = new NumericUpDown();
-            issueFolderNameValidationPatternComboBox = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)jp2CompressionLevelTrackbar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)concurrentOCRJobsNumericUpDown).BeginInit();
             SuspendLayout();
@@ -250,19 +248,10 @@ namespace NewspaperOCR
             // 
             tessdataLocationTextBoxToolTip.ShowAlways = true;
             // 
-            // issueFolderNameValidationPatternComboBoxLabel
-            // 
-            issueFolderNameValidationPatternComboBoxLabel.AutoSize = true;
-            issueFolderNameValidationPatternComboBoxLabel.Location = new Point(270, 280);
-            issueFolderNameValidationPatternComboBoxLabel.Name = "issueFolderNameValidationPatternComboBoxLabel";
-            issueFolderNameValidationPatternComboBoxLabel.Size = new Size(255, 20);
-            issueFolderNameValidationPatternComboBoxLabel.TabIndex = 23;
-            issueFolderNameValidationPatternComboBoxLabel.Text = "Issue Folder Name Validation Pattern:";
-            // 
             // jp2CompressionLevelLabel
             // 
             jp2CompressionLevelLabel.AutoSize = true;
-            jp2CompressionLevelLabel.Location = new Point(17, 358);
+            jp2CompressionLevelLabel.Location = new Point(270, 280);
             jp2CompressionLevelLabel.Name = "jp2CompressionLevelLabel";
             jp2CompressionLevelLabel.Size = new Size(171, 20);
             jp2CompressionLevelLabel.TabIndex = 25;
@@ -271,11 +260,11 @@ namespace NewspaperOCR
             // jp2CompressionLevelTrackbar
             // 
             jp2CompressionLevelTrackbar.LargeChange = 10;
-            jp2CompressionLevelTrackbar.Location = new Point(225, 356);
+            jp2CompressionLevelTrackbar.Location = new Point(270, 303);
             jp2CompressionLevelTrackbar.Maximum = 100;
             jp2CompressionLevelTrackbar.Minimum = 1;
             jp2CompressionLevelTrackbar.Name = "jp2CompressionLevelTrackbar";
-            jp2CompressionLevelTrackbar.Size = new Size(545, 56);
+            jp2CompressionLevelTrackbar.Size = new Size(500, 56);
             jp2CompressionLevelTrackbar.SmallChange = 5;
             jp2CompressionLevelTrackbar.TabIndex = 26;
             jp2CompressionLevelTrackbar.TickFrequency = 5;
@@ -285,7 +274,7 @@ namespace NewspaperOCR
             // jp2CompressionLevelValue
             // 
             jp2CompressionLevelValue.AutoSize = true;
-            jp2CompressionLevelValue.Location = new Point(194, 358);
+            jp2CompressionLevelValue.Location = new Point(447, 280);
             jp2CompressionLevelValue.Name = "jp2CompressionLevelValue";
             jp2CompressionLevelValue.Size = new Size(25, 20);
             jp2CompressionLevelValue.TabIndex = 27;
@@ -300,28 +289,16 @@ namespace NewspaperOCR
             concurrentOCRJobsNumericUpDown.TabIndex = 28;
             concurrentOCRJobsNumericUpDown.Value = new decimal(new int[] { 5, 0, 0, 0 });
             // 
-            // issueFolderNameValidationPatternComboBox
-            // 
-            issueFolderNameValidationPatternComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            issueFolderNameValidationPatternComboBox.FormattingEnabled = true;
-            issueFolderNameValidationPatternComboBox.Items.AddRange(new object[] { "\"newspaperName_yyyy-mm-dd\"", "\"newspaperName_yyyy-mm-dd_editionOrder\"" });
-            issueFolderNameValidationPatternComboBox.Location = new Point(270, 303);
-            issueFolderNameValidationPatternComboBox.Name = "issueFolderNameValidationPatternComboBox";
-            issueFolderNameValidationPatternComboBox.Size = new Size(500, 28);
-            issueFolderNameValidationPatternComboBox.TabIndex = 29;
-            // 
             // OptionsForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(782, 673);
             ControlBox = false;
-            Controls.Add(issueFolderNameValidationPatternComboBox);
             Controls.Add(concurrentOCRJobsNumericUpDown);
             Controls.Add(jp2CompressionLevelValue);
             Controls.Add(jp2CompressionLevelTrackbar);
             Controls.Add(jp2CompressionLevelLabel);
-            Controls.Add(issueFolderNameValidationPatternComboBoxLabel);
             Controls.Add(optionsFormStatusStrip);
             Controls.Add(sourceImageFileFormatComboBox);
             Controls.Add(sourceImageFileFormatLabel);
@@ -366,9 +343,9 @@ namespace NewspaperOCR
         public MainForm mainForm;
         public LogForm logForm;
 
-        internal static readonly (string REGEX0, string REGEX1) IssueFolderValidationPattern = (
+        internal static readonly (string WITHOUT_EDITION_ORDER, string WITH_EDITION_ORDER) IssueFolderValidationPattern = (
             @"^[a-zA-Z0-9]+_\d{4}-\d{2}-\d{2}$",
-            @"^[a-zA-Z0-9]+_\d{4}-\d{2}-\d{2}$_\d{2}$");
+            @"^[a-zA-Z0-9]+_\d{4}-\d{2}-\d{2}_\d{2}$");
 
         private void CustomInitializations()
         {
@@ -407,11 +384,9 @@ namespace NewspaperOCR
         private StatusStrip optionsFormStatusStrip;
         private ToolTip tessdataLocationTextBoxToolTip;
         private ToolTip ocrOutputLocationTextBoxToolTip;
-        private Label issueFolderNameValidationPatternComboBoxLabel;
         private Label jp2CompressionLevelLabel;
         private TrackBar jp2CompressionLevelTrackbar;
         private Label jp2CompressionLevelValue;
         private NumericUpDown concurrentOCRJobsNumericUpDown;
-        private ComboBox issueFolderNameValidationPatternComboBox;
     }
 }
