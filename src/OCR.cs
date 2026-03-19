@@ -73,7 +73,8 @@ namespace NewspaperOCR.src
 
         public bool ValidateIssueFolderNames(string folderBrowserDialogSelectedPath)
         {
-            Regex issueFolderNamePattern = new Regex(Properties.Settings.Default.IssueFolderNameValidationRegex);
+            Regex issueFolderNamePatternWithoutEdtionOrder = new Regex(OptionsForm.IssueFolderValidationPattern.WITHOUT_EDITION_ORDER);
+            Regex issueFolderNamePatternWithEditionOrder = new Regex(OptionsForm.IssueFolderValidationPattern.WITH_EDITION_ORDER);
 
             List<string> issueFoldersPaths = new List<string>();
             List<string> files = new List<string>();
@@ -106,7 +107,7 @@ namespace NewspaperOCR.src
                 {
                     string issueFolderName = Path.GetFileName(issueFolderPath);
 
-                    if (!issueFolderNamePattern.IsMatch(issueFolderName))
+                    if (!issueFolderNamePatternWithoutEdtionOrder.IsMatch(issueFolderName) && !issueFolderNamePatternWithEditionOrder.IsMatch(issueFolderName))
                     {
                         logForm.sendToLog(LogForm.LogType.ERROR, $"\"{issueFolderPath}\" is not a valid issue folder name");
                         validFolders--;
@@ -254,6 +255,8 @@ namespace NewspaperOCR.src
 
                     ocrTasks.Add(ocrTask);
 
+                    await Task.Delay(2000);
+
                     logForm.sendToLog(LogForm.LogType.INFO, $"{ocrItem.SourceImageFileFullPath} has been added to the OCR job queue.");
                 }
 
@@ -303,9 +306,6 @@ namespace NewspaperOCR.src
                         await Task.Delay(2000);
                     }
                 }
-
-                //logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"Completed Jobs: {completedOcrJobs}, Total Jobs: {totalNumberOfImages}.");
-                //logForm.sendToLog(LogForm.LogType[LogForm.DEBUG], $"ocrTasks.Count: {ocrTasks.Count}, ocrItemsQueue.Count: {ocrItemsQueue.Count}.");
             }
 
             logForm.sendToLog(LogForm.LogType.INFO, $"All {completedOcrJobs} images have been processed.");

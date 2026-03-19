@@ -54,7 +54,6 @@ namespace NewspaperOCR
             logForm.sendToLog(LogForm.LogType.INFO, $"[OCR Language] has been changed to: {Properties.Settings.Default.OCRLang}");
             logForm.sendToLog(LogForm.LogType.INFO, $"[Tile Size] has been changed to: {Properties.Settings.Default.TileSize}");
             logForm.sendToLog(LogForm.LogType.INFO, $"[Source Image File Format] has been changed to: {Properties.Settings.Default.SourceImageFileFormat}");
-            logForm.sendToLog(LogForm.LogType.INFO, $"[Issue Folder Name Validation Regex] has been changed to: {Properties.Settings.Default.IssueFolderNameValidationRegex}");
             logForm.sendToLog(LogForm.LogType.INFO, $"[JPEG Compression Level:] has been changed to: {Properties.Settings.Default.Jp2CompressionLevel}");
         }
         private void updateOptionsFormUI()
@@ -69,15 +68,6 @@ namespace NewspaperOCR
             tileSizeComboBox.SelectedItem = Properties.Settings.Default.TileSize;
             sourceImageFileFormatComboBox.SelectedItem = Properties.Settings.Default.SourceImageFileFormat;
             jp2CompressionLevelTrackbar.Value = (int)Properties.Settings.Default.Jp2CompressionLevel;
-
-            if (Properties.Settings.Default.IssueFolderNameValidationRegex == IssueFolderValidationPattern.REGEX0)
-            {
-                issueFolderNameValidationPatternComboBox.SelectedIndex = 0;
-            }
-            else if (Properties.Settings.Default.IssueFolderNameValidationRegex == IssueFolderValidationPattern.REGEX1)
-            {
-                issueFolderNameValidationPatternComboBox.SelectedIndex = 1;
-            }
         }
 
         public void setDefaultOptions()
@@ -90,7 +80,6 @@ namespace NewspaperOCR
             Properties.Settings.Default.OCRLang = "eng";
             Properties.Settings.Default.TileSize = "[1024x1024]";
             Properties.Settings.Default.SourceImageFileFormat = "tif";
-            Properties.Settings.Default.IssueFolderNameValidationRegex = IssueFolderValidationPattern.REGEX0;
             Properties.Settings.Default.Jp2CompressionLevel = 40;
 
             Properties.Settings.Default.Save();
@@ -115,15 +104,6 @@ namespace NewspaperOCR
             Properties.Settings.Default.TileSize = tileSizeComboBox.SelectedItem.ToString();
             Properties.Settings.Default.SourceImageFileFormat = sourceImageFileFormatComboBox.SelectedItem.ToString();
             Properties.Settings.Default.Jp2CompressionLevel = (uint)jp2CompressionLevelTrackbar.Value;
-
-            if (issueFolderNameValidationPatternComboBox.SelectedIndex == 0)
-            {
-                Properties.Settings.Default.IssueFolderNameValidationRegex = IssueFolderValidationPattern.REGEX0;
-            }
-            else if (issueFolderNameValidationPatternComboBox.SelectedIndex == 1)
-            {
-                Properties.Settings.Default.IssueFolderNameValidationRegex = IssueFolderValidationPattern.REGEX1;
-            }
 
             Properties.Settings.Default.Save();
 
